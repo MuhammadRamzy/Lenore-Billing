@@ -20,6 +20,7 @@ import { createInvoiceAction, updateInvoiceAction } from "@/app/actions";
 import { formatCurrency, cn } from "@/lib/utils";
 import CustomerDialog from "./CustomerDialog";
 import QrScannerDialog from "./QrScannerDialog";
+import { resumeSharedAudio } from "@/lib/audio";
 
 // Standard unit list
 const UNITS = ["pcs", "set", "mtr", "box", "nos"];
@@ -617,6 +618,7 @@ export default function InvoiceForm({
                           <button
                             type="button"
                             onClick={() => {
+                              resumeSharedAudio();
                               setQrTargetLineIndex(index);
                               setIsQrScannerOpen(true);
                             }}
@@ -859,6 +861,7 @@ export default function InvoiceForm({
               <button
                 type="button"
                 onClick={() => {
+                  resumeSharedAudio();
                   setQrTargetLineIndex(null);
                   setIsQrScannerOpen(true);
                 }}

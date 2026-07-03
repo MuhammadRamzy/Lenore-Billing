@@ -11,5 +11,5 @@ export default async function ProductsPage() {
   // Sort products: alphabetically by name
   const sortedProducts = [...products].sort((a, b) => a.name.localeCompare(b.name));
 
-  return <ProductsList initialProducts={sortedProducts} lowStockLimit={company.lowStockLimit ?? 5} />;
+  return <ProductsList initialProducts={sortedProducts} company={company} lowStockLimit={company.lowStockLimit ?? 5} />;
 }

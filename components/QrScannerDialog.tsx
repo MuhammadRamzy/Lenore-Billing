@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { X, Camera, RefreshCw, AlertCircle } from "lucide-react";
 import jsQR from "jsqr";
+import { playSharedBeep, resumeSharedAudio } from "@/lib/audio";
 
 interface QrScannerDialogProps {
   isOpen: boolean;
@@ -24,58 +25,7 @@ export default function QrScannerDialog({
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [debugInfo, setDebugInfo] = useState<string>("Initializing...");
 
-  const audioCtxRef = useRef<AudioContext | null>(null);
 
-  const initAudio = () => {
-    if (audioCtxRef.current) return;
-    try {
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-      if (AudioCtx) {
-        audioCtxRef.current = new AudioCtx();
-      }
-    } catch (e) {
-      console.warn("Failed to init AudioContext:", e);
-    }
-  };
-
-  const resumeAudio = () => {
-    initAudio();
-    if (audioCtxRef.current && audioCtxRef.current.state === "suspended") {
-      audioCtxRef.current.resume();
-    }
-  };
-
-  // Play a beautiful POS scan beep using synthesized browser AudioContext
-  const playBeep = () => {
-    try {
-      initAudio();
-      const ctx = audioCtxRef.current;
-      if (!ctx) return;
-      
-      if (ctx.state === "suspended") {
-        ctx.resume();
-      }
-
-      const oscillator = ctx.createOscillator();
-      const gainNode = ctx.createGain();
-      
-      oscillator.connect(gainNode);
-      gainNode.connect(ctx.destination);
-      
-      oscillator.type = "sine";
-      oscillator.frequency.setValueAtTime(1400, ctx.currentTime); // High pitch chirp
-      gainNode.gain.setValueAtTime(0.18, ctx.currentTime); // Louder volume for audibility
-      
-      oscillator.start();
-      setTimeout(() => {
-        try {
-          oscillator.stop();
-        } catch (e) {}
-      }, 100);
-    } catch (e) {
-      console.warn("Could not play audio scan signal:", e);
-    }
-  };
 
   // Start video stream
   const startCamera = async () => {
@@ -223,7 +173,7 @@ export default function QrScannerDialog({
 
                 if (code && code.data) {
                   setDebugInfo(`Decoded: ${code.data}`);
-                  playBeep();
+                  playSharedBeep();
                   onScanSuccess(code.data);
                   stopCamera();
                   onClose();
@@ -257,8 +207,8 @@ export default function QrScannerDialog({
 
   return (
     <div
-      onClick={resumeAudio}
-      onTouchStart={resumeAudio}
+      onClick={resumeSharedAudio}
+      onTouchStart={resumeSharedAudio}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/75 backdrop-blur-sm"
     >
       <div className="bg-white w-full max-w-md rounded-3xl border border-slate-100 shadow-2xl overflow-hidden flex flex-col relative animate-in fade-in zoom-in-95 duration-200">

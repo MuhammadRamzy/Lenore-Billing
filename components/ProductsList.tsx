@@ -14,22 +14,24 @@ import {
   Printer,
   Trash2,
 } from "lucide-react";
-import { Product } from "@/lib/types";
+import { Product, Company } from "@/lib/types";
 import ProductDialog from "./ProductDialog";
 import { formatCurrency, exportToCsv, triggerServerDownload } from "@/lib/utils";
 import { ProductQrCode } from "./ProductQrCode";
 import { deleteProductAction } from "@/app/actions";
 import QRCode from "qrcode";
 import JSZip from "jszip";
+import StickerPrintDialog from "./StickerPrintDialog";
 
 interface ProductsListProps {
   initialProducts: Product[];
+  company: Company;
   lowStockLimit?: number;
 }
 
 const ITEMS_PER_PAGE = 20;
 
-export default function ProductsList({ initialProducts, lowStockLimit = 5 }: ProductsListProps) {
+export default function ProductsList({ initialProducts, company, lowStockLimit = 5 }: ProductsListProps) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -602,43 +604,12 @@ export default function ProductsList({ initialProducts, lowStockLimit = 5 }: Pro
 
       {/* QR Sticker Sheets Print View Overlay */}
       {isPrintingLabels && (
-        <div className="fixed inset-0 bg-white z-[9999] overflow-auto p-8 print:p-0 print:absolute print:inset-0">
-          <div className="flex justify-between items-center mb-6 print:hidden border-b pb-4">
-            <div>
-              <h3 className="font-extrabold text-lg text-slate-900">QR Sticker Sheets (Sticker Grid Preview)</h3>
-              <p className="text-xs text-slate-500 mt-1">Ready for 3x8 sticker sheets print layout.</p>
-            </div>
-            <div className="flex gap-3">
-              <button
-                onClick={() => window.print()}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-xl text-sm"
-              >
-                Print Stickers
-              </button>
-              <button
-                onClick={() => setIsPrintingLabels(false)}
-                className="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-xl text-sm"
-              >
-                Close Preview
-              </button>
-            </div>
-          </div>
-          
-          {/* Grid layout optimized for A4 print labels (e.g. 3x8 sticker sheets) */}
-          <div className="grid grid-cols-3 gap-4 w-full max-w-[800px] mx-auto print:max-w-full print:gap-2">
-            {filteredProducts.map((prod) => (
-              <div key={prod.id} className="border border-slate-200 rounded-lg p-3 text-center flex flex-col items-center justify-between min-h-[165px] bg-white print:border-slate-400 print:p-2 break-inside-avoid shadow-sm">
-                <div className="text-[8px] font-black tracking-widest text-slate-400 uppercase">LENORE</div>
-                <div className="font-bold text-xs text-slate-900 max-h-8 overflow-hidden line-clamp-2 mt-0.5">{prod.name}</div>
-                <div className="my-1.5">
-                  <ProductQrCode data={prod.code || prod.id} size={56} />
-                </div>
-                <div className="text-[9px] font-mono font-bold text-indigo-600">{prod.code || prod.id.slice(0, 8)}</div>
-                <div className="text-xs font-black text-slate-950 mt-0.5">{formatCurrency(prod.defaultRate * (1 + prod.defaultGstPercent / 100))} <span className="text-[8px] font-normal text-slate-400">(inc. GST)</span></div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <StickerPrintDialog
+          isOpen={isPrintingLabels}
+          onClose={() => setIsPrintingLabels(false)}
+          products={products}
+          company={company}
+        />
       )}
     </div>
   );
