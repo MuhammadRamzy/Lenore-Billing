@@ -131,9 +131,13 @@ export default function QrScannerDialog({
     };
   }, [isOpen, facingMode]);
 
-  // Frame decoding loop
+  // Frame decoding loop with time-throttling & proportional downscaling
   useEffect(() => {
     if (!isCameraActive) return;
+
+    // Create a single canvas instance in memory to reuse across tick frames
+    const canvas = document.createElement("canvas");
+    let lastScanTime = 0;
 
     const tick = () => {
       const video = videoRef.current;
@@ -150,52 +154,64 @@ export default function QrScannerDialog({
         return;
       }
 
-      if (video.videoWidth === 0 || video.videoHeight === 0) {
-        setDebugInfo("Awaiting resolution parameters...");
-        requestRef.current = requestAnimationFrame(tick);
-        return;
-      }
+      const now = performance.now();
+      // Throttle scanning to once every 200ms (5 FPS is instant but keeps CPU usage minimal)
+      if (now - lastScanTime >= 200) {
+        lastScanTime = now;
 
-      try {
-        // Offscreen in-memory canvas
-        const canvas = document.createElement("canvas");
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const ctx = canvas.getContext("2d", { willReadFrequently: true });
-        
-        if (ctx) {
-          // Draw frame
-          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-          
-          // Get pixels
-          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          
-          // Next.js ESM/CJS safe import fallback
-          const qrDecoder = typeof jsQR === "function" ? jsQR : (jsQR as any).default;
-          
-          if (typeof qrDecoder === "function") {
-            setDebugInfo(`Scanning ${video.videoWidth}x${video.videoHeight}...`);
-            
-            const code = qrDecoder(imageData.data, imageData.width, imageData.height, {
-              inversionAttempts: "attemptBoth",
-            });
+        if (video.videoWidth > 0 && video.videoHeight > 0) {
+          try {
+            // Proportional downscaling (limit width to max 600px for speed)
+            const maxDimension = 600;
+            let width = video.videoWidth;
+            let height = video.videoHeight;
 
-            if (code && code.data) {
-              setDebugInfo(`Decoded: ${code.data}`);
-              playBeep();
-              onScanSuccess(code.data);
-              stopCamera();
-              onClose();
-              return;
+            if (width > maxDimension) {
+              const ratio = maxDimension / width;
+              width = maxDimension;
+              height = Math.round(video.videoHeight * ratio);
             }
-          } else {
-            setDebugInfo("Error: jsQR decoder function is missing.");
+
+            canvas.width = width;
+            canvas.height = height;
+
+            const ctx = canvas.getContext("2d", { willReadFrequently: true });
+            
+            if (ctx) {
+              // Draw video frame downscaled
+              ctx.drawImage(video, 0, 0, width, height);
+              
+              // Get pixels
+              const imageData = ctx.getImageData(0, 0, width, height);
+              
+              // Next.js ESM/CJS safe import fallback
+              const qrDecoder = typeof jsQR === "function" ? jsQR : (jsQR as any).default;
+              
+              if (typeof qrDecoder === "function") {
+                setDebugInfo(`Scanning scaled ${width}x${height}...`);
+                
+                const code = qrDecoder(imageData.data, imageData.width, imageData.height, {
+                  inversionAttempts: "attemptBoth",
+                });
+
+                if (code && code.data) {
+                  setDebugInfo(`Decoded: ${code.data}`);
+                  playBeep();
+                  onScanSuccess(code.data);
+                  stopCamera();
+                  onClose();
+                  return;
+                }
+              } else {
+                setDebugInfo("Error: jsQR decoder function is missing.");
+              }
+            } else {
+              setDebugInfo("Error: Canvas context is null.");
+            }
+          } catch (err: any) {
+            setDebugInfo(`Loop Error: ${err.message || err}`);
           }
-        } else {
-          setDebugInfo("Error: Canvas context is null.");
         }
-      } catch (err: any) {
-        setDebugInfo(`Loop Error: ${err.message || err}`);
       }
       
       requestRef.current = requestAnimationFrame(tick);
