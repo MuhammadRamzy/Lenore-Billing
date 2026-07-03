@@ -5,6 +5,16 @@
   --foreground: #171717;
 }
 
+html {
+  font-size: 17px !important; /* Scales up all text sizes globally using rem */
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 15px !important; /* Stacked layout base for mobile screens */
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -24,3 +34,116 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm;
+  }
+  
+  html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  header, footer, nav, aside, .print\:hidden, [role="navigation"] {
+    display: none !important;
+  }
+
+  .print\:w-full {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  tr {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  
+  thead {
+    display: table-header-group !important;
+  }
+
+  .bg-slate-900 {
+    background-color: #0f172a !important;
+    color: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  .bg-slate-50 {
+    background-color: #f8fafc !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+/* Global Form Readability Overrides */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="email"],
+input[type="search"],
+select,
+textarea {
+  font-size: 1.05rem !important; /* Responsive scaling with root */
+  color: #1e293b !important; /* text-slate-800 */
+  padding-top: 0.55rem !important;
+  padding-bottom: 0.55rem !important;
+}
+
+label {
+  font-size: 0.85rem !important; /* Responsive scaling with root */
+  font-weight: 700 !important;
+  color: #334155 !important; /* text-slate-700 */
+  letter-spacing: 0.05em !important;
+}
+
+/* Typography Utility Scaling Overrides for Rugged / Industrial Readability */
+.text-\[9px\] {
+  font-size: 0.75rem !important;
+}
+.text-\[10px\] {
+  font-size: 0.8rem !important;
+}
+.text-\[11px\] {
+  font-size: 0.85rem !important;
+}
+.text-xs {
+  font-size: 0.9rem !important;
+}
+.text-sm {
+  font-size: 1.0rem !important;
+}
+.text-base {
+  font-size: 1.15rem !important;
+}
+.text-lg {
+  font-size: 1.3rem !important;
+}
+.text-xl {
+  font-size: 1.5rem !important;
+}
+.text-2xl {
+  font-size: 1.8rem !important;
+}
+.text-3xl {
+  font-size: 2.2rem !important;
+}
+
+
