@@ -16,7 +16,6 @@ export default function QrScannerDialog({
   onScanSuccess,
 }: QrScannerDialogProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const requestRef = useRef<number | null>(null);
 
@@ -61,12 +60,11 @@ export default function QrScannerDialog({
     }
 
     try {
-      // First try environment (back) camera
       const constraints: MediaStreamConstraints = {
         video: {
-          facingMode: facingMode,
-          width: { ideal: 640 },
-          height: { ideal: 640 },
+          facingMode: { ideal: facingMode },
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
         },
         audio: false,
       };
@@ -134,31 +132,34 @@ export default function QrScannerDialog({
 
     const tick = () => {
       const video = videoRef.current;
-      const canvas = canvasRef.current;
 
-      if (video && canvas && video.readyState === video.HAVE_ENOUGH_DATA) {
-        const ctx = canvas.getContext("2d", { willReadFrequently: true });
-        if (ctx) {
+      if (video && video.readyState >= 2) {
+        if (video.videoWidth > 0 && video.videoHeight > 0) {
+          // Offscreen in-memory canvas
+          const canvas = document.createElement("canvas");
           canvas.width = video.videoWidth;
           canvas.height = video.videoHeight;
+          const ctx = canvas.getContext("2d", { willReadFrequently: true });
           
-          // Draw the video frame on the canvas
-          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-          
-          // Fetch image pixels
-          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          
-          // Run jsQR decoder
-          const code = jsQR(imageData.data, imageData.width, imageData.height, {
-            inversionAttempts: "dontInvert",
-          });
+          if (ctx) {
+            // Draw frame
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Get pixels
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            
+            // Run decoder (attempt normal and inverted)
+            const code = jsQR(imageData.data, imageData.width, imageData.height, {
+              inversionAttempts: "attemptBoth",
+            });
 
-          if (code && code.data) {
-            playBeep();
-            onScanSuccess(code.data);
-            stopCamera();
-            onClose();
-            return;
+            if (code && code.data) {
+              playBeep();
+              onScanSuccess(code.data);
+              stopCamera();
+              onClose();
+              return;
+            }
           }
         }
       }
@@ -216,8 +217,6 @@ export default function QrScannerDialog({
                 autoPlay
                 className="w-full h-full object-cover"
               />
-              {/* Offscreen decoding Canvas */}
-              <canvas ref={canvasRef} className="hidden" />
 
               {/* Holographic targeting square & scan overlay */}
               {isCameraActive && (

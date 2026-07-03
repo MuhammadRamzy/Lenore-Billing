@@ -225,8 +225,9 @@ export default function InvoiceForm({
   };
 
   const handleQrScanSuccess = (scannedCode: string) => {
+    const normalized = scannedCode.trim().toLowerCase();
     const matchedProduct = products.find(
-      (p) => p.code === scannedCode || p.id === scannedCode
+      (p) => p.code?.trim().toLowerCase() === normalized || p.id.trim().toLowerCase() === normalized
     );
 
     if (matchedProduct) {
