@@ -13,11 +13,13 @@ import {
   Loader2,
   HelpCircle,
   FileSpreadsheet,
+  Camera,
 } from "lucide-react";
 import { Customer, Product, Company, Invoice } from "@/lib/types";
 import { createInvoiceAction, updateInvoiceAction } from "@/app/actions";
 import { formatCurrency, cn } from "@/lib/utils";
 import CustomerDialog from "./CustomerDialog";
+import QrScannerDialog from "./QrScannerDialog";
 
 // Standard unit list
 const UNITS = ["pcs", "set", "mtr", "box", "nos"];
@@ -53,6 +55,10 @@ export default function InvoiceForm({
   // Customers state (for inline additions)
   const [customers, setCustomers] = useState<Customer[]>(initialCustomers);
   const [isCustomerModalOpen, setIsCustomerModalOpen] = useState(false);
+
+  // QR Scanner States
+  const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
+  const [qrTargetLineIndex, setQrTargetLineIndex] = useState<number | null>(null);
 
   // Form States
   const [selectedCustomerId, setSelectedCustomerId] = useState(invoice?.customerId || "");
@@ -216,6 +222,36 @@ export default function InvoiceForm({
     };
     setLineItems(items);
     setActiveProductSearchIndex(null);
+  };
+
+  const handleQrScanSuccess = (scannedCode: string) => {
+    const matchedProduct = products.find(
+      (p) => p.code === scannedCode || p.id === scannedCode
+    );
+
+    if (matchedProduct) {
+      if (qrTargetLineIndex !== null) {
+        selectProductForLine(qrTargetLineIndex, matchedProduct);
+      } else {
+        const nextId = "item_" + Math.random().toString(36).substring(2, 9);
+        setLineItems([
+          ...lineItems,
+          {
+            id: nextId,
+            productId: matchedProduct.id,
+            description: matchedProduct.name,
+            hsnCode: matchedProduct.hsnCode || "",
+            quantity: 1,
+            unit: matchedProduct.unit,
+            rate: matchedProduct.defaultRate,
+            discountPercent: 0,
+            gstPercent: matchedProduct.defaultGstPercent,
+          },
+        ]);
+      }
+    } else {
+      alert(`No matching product found in catalog for barcode: "${scannedCode}"`);
+    }
   };
 
   // --- Dynamic Live Calculations ---
@@ -577,6 +613,17 @@ export default function InvoiceForm({
                             }}
                             className="w-full text-sm rounded-lg border border-slate-200 px-3 py-1.5 focus:border-indigo-500 focus:outline-none bg-white"
                           />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setQrTargetLineIndex(index);
+                              setIsQrScannerOpen(true);
+                            }}
+                            className="p-2 border border-slate-200 hover:border-indigo-400 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors bg-white shrink-0 flex items-center justify-center"
+                            title="Scan QR Code"
+                          >
+                            <Camera className="h-4 w-4" />
+                          </button>
                         </div>
 
                         {/* Search Autocomplete dropdown popup */}
@@ -797,14 +844,29 @@ export default function InvoiceForm({
               })}
             </div>
 
-            <button
-              type="button"
-              onClick={addLineItem}
-              className="w-full py-3 border border-dashed border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/20 text-slate-600 hover:text-indigo-600 rounded-xl text-sm font-semibold transition-all duration-150 flex items-center justify-center gap-1.5"
-            >
-              <Plus className="h-4.5 w-4.5" />
-              Add Another Line Item
-            </button>
+            {/* Add More Items Button and QR Scanner Button row */}
+            <div className="grid grid-cols-2 gap-3.5">
+              <button
+                type="button"
+                onClick={addLineItem}
+                className="py-3 border border-dashed border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/10 text-slate-700 hover:text-indigo-600 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-150 flex items-center justify-center gap-1.5 bg-white shadow-sm"
+              >
+                <Plus className="h-4.5 w-4.5" />
+                Add Line Item
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => {
+                  setQrTargetLineIndex(null);
+                  setIsQrScannerOpen(true);
+                }}
+                className="py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs sm:text-sm font-semibold transition-all duration-155 flex items-center justify-center gap-1.5 shadow-md shadow-indigo-600/10 active:scale-95"
+              >
+                <Camera className="h-4.5 w-4.5" />
+                Scan QR to Add
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1093,6 +1155,13 @@ export default function InvoiceForm({
         isOpen={isCustomerModalOpen}
         onClose={() => setIsCustomerModalOpen(false)}
         onSuccess={handleCustomerAdded}
+      />
+
+      {/* QR Scanner Dialog Overlay */}
+      <QrScannerDialog
+        isOpen={isQrScannerOpen}
+        onClose={() => setIsQrScannerOpen(false)}
+        onScanSuccess={handleQrScanSuccess}
       />
     </div>
   );
