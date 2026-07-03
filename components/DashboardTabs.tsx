@@ -386,13 +386,13 @@ export default function DashboardTabs({
       {/* MOBILE CONDITIONAL RENDERING */}
       <div className="lg:hidden space-y-6">
         {activeTab === "overview" && (
-          <div className="space-y-5 animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 animate-in fade-in slide-in-from-bottom-2 duration-200">
             {renderMonthlySalesTrend()}
             {renderTaxLiabilitySummary()}
           </div>
         )}
         {activeTab === "leaderboards" && (
-          <div className="space-y-5 animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 animate-in fade-in slide-in-from-bottom-2 duration-200">
             {renderTopCustomers()}
             {renderTopProducts()}
           </div>

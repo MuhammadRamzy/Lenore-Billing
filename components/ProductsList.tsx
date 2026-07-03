@@ -265,7 +265,7 @@ export default function ProductsList({ initialProducts, lowStockLimit = 5 }: Pro
         </div>
 
         {/* Filter controls row */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 pt-1">
           <div>
             <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
               Stock Status
@@ -422,7 +422,7 @@ export default function ProductsList({ initialProducts, lowStockLimit = 5 }: Pro
           </div>
 
           {/* Mobile Grid/Card View */}
-        <div className="md:hidden space-y-4">
+        <div className="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
           {paginatedProducts.map((prod) => (
             <div
               key={prod.id}
