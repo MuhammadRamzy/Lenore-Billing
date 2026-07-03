@@ -65,8 +65,8 @@ export default async function DashboardPage() {
       totalIgst += inv.igstTotal;
       totalTax += (inv.cgstTotal + inv.sgstTotal + inv.igstTotal);
       
-      // Monthly grouping (e.g. "Jul 26")
-      const monthKey = invDate.toLocaleString("default", { month: "short", year: "2-digit" });
+      // Monthly grouping using locale-independent YYYY-MM key
+      const monthKey = inv.invoiceDate.substring(0, 7); // "YYYY-MM"
       monthlySalesMap[monthKey] = (monthlySalesMap[monthKey] || 0) + inv.grandTotal;
       
       // Customer grouping
@@ -89,15 +89,24 @@ export default async function DashboardPage() {
     }
   }
 
-  // Build last 6 months list chronologically
+  // Build last 6 months list chronologically using standard date math and manual formatting
   const last6Months: { label: string; amount: number }[] = [];
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   for (let i = 5; i >= 0; i--) {
     const d = new Date();
+    d.setDate(1); // avoid end-of-month rollover bug
     d.setMonth(d.getMonth() - i);
-    const label = d.toLocaleString("default", { month: "short", year: "2-digit" });
+    
+    const year = d.getFullYear();
+    const monthNum = String(d.getMonth() + 1).padStart(2, "0");
+    const year2Digit = String(year).slice(-2);
+    
+    const key = `${year}-${monthNum}`; // e.g. "2026-07"
+    const label = `${monthNames[d.getMonth()]} ${year2Digit}`; // e.g. "Jul 26"
+    
     last6Months.push({
       label,
-      amount: monthlySalesMap[label] || 0
+      amount: monthlySalesMap[key] || 0
     });
   }
 

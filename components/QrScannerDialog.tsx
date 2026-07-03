@@ -24,27 +24,54 @@ export default function QrScannerDialog({
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [debugInfo, setDebugInfo] = useState<string>("Initializing...");
 
+  const audioCtxRef = useRef<AudioContext | null>(null);
+
+  const initAudio = () => {
+    if (audioCtxRef.current) return;
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (AudioCtx) {
+        audioCtxRef.current = new AudioCtx();
+      }
+    } catch (e) {
+      console.warn("Failed to init AudioContext:", e);
+    }
+  };
+
+  const resumeAudio = () => {
+    initAudio();
+    if (audioCtxRef.current && audioCtxRef.current.state === "suspended") {
+      audioCtxRef.current.resume();
+    }
+  };
+
   // Play a beautiful POS scan beep using synthesized browser AudioContext
   const playBeep = () => {
     try {
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-      if (!AudioCtx) return;
-      const audioCtx = new AudioCtx();
-      const oscillator = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
+      initAudio();
+      const ctx = audioCtxRef.current;
+      if (!ctx) return;
+      
+      if (ctx.state === "suspended") {
+        ctx.resume();
+      }
+
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
       
       oscillator.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
+      gainNode.connect(ctx.destination);
       
       oscillator.type = "sine";
-      oscillator.frequency.setValueAtTime(1200, audioCtx.currentTime); // High pitch beep
-      gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime); // Low volume
+      oscillator.frequency.setValueAtTime(1400, ctx.currentTime); // High pitch chirp
+      gainNode.gain.setValueAtTime(0.18, ctx.currentTime); // Louder volume for audibility
       
       oscillator.start();
       setTimeout(() => {
-        oscillator.stop();
-        audioCtx.close();
-      }, 120);
+        try {
+          oscillator.stop();
+        } catch (e) {}
+      }, 100);
     } catch (e) {
       console.warn("Could not play audio scan signal:", e);
     }
@@ -229,7 +256,11 @@ export default function QrScannerDialog({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/75 backdrop-blur-sm">
+    <div
+      onClick={resumeAudio}
+      onTouchStart={resumeAudio}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/75 backdrop-blur-sm"
+    >
       <div className="bg-white w-full max-w-md rounded-3xl border border-slate-100 shadow-2xl overflow-hidden flex flex-col relative animate-in fade-in zoom-in-95 duration-200">
         
         {/* Header */}
