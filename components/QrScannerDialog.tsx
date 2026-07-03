@@ -22,6 +22,7 @@ export default function QrScannerDialog({
   const [error, setError] = useState<string | null>(null);
   const [facingMode, setFacingMode] = useState<"environment" | "user">("environment");
   const [isCameraActive, setIsCameraActive] = useState(false);
+  const [debugInfo, setDebugInfo] = useState<string>("Initializing...");
 
   // Play a beautiful POS scan beep using synthesized browser AudioContext
   const playBeep = () => {
@@ -53,6 +54,7 @@ export default function QrScannerDialog({
   const startCamera = async () => {
     setError(null);
     setIsCameraActive(false);
+    setDebugInfo("Requesting camera permissions...");
     
     // Clean up any existing stream
     if (streamRef.current) {
@@ -75,10 +77,10 @@ export default function QrScannerDialog({
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         setIsCameraActive(true);
+        setDebugInfo("Camera active. Waiting for frames...");
       }
     } catch (err: any) {
       console.error("Camera access failed:", err);
-      // If exact environment camera fails, try any available video camera
       try {
         const fallbackStream = await navigator.mediaDevices.getUserMedia({
           video: true,
@@ -88,11 +90,13 @@ export default function QrScannerDialog({
         if (videoRef.current) {
           videoRef.current.srcObject = fallbackStream;
           setIsCameraActive(true);
+          setDebugInfo("Fallback camera active.");
         }
       } catch (fallbackErr) {
         setError(
           "Unable to access camera. Please ensure camera permissions are allowed."
         );
+        setDebugInfo("Error: Camera access denied.");
       }
     }
   };
@@ -113,6 +117,7 @@ export default function QrScannerDialog({
       streamRef.current = null;
     }
     setIsCameraActive(false);
+    setDebugInfo("Camera stopped.");
   };
 
   // Scanning loop using requestAnimationFrame
@@ -133,36 +138,66 @@ export default function QrScannerDialog({
     const tick = () => {
       const video = videoRef.current;
 
-      if (video && video.readyState >= 2) {
-        if (video.videoWidth > 0 && video.videoHeight > 0) {
-          // Offscreen in-memory canvas
-          const canvas = document.createElement("canvas");
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-          const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      if (!video) {
+        setDebugInfo("Waiting for video ref...");
+        requestRef.current = requestAnimationFrame(tick);
+        return;
+      }
+
+      if (video.readyState < 2) {
+        setDebugInfo(`Loading stream (ReadyState: ${video.readyState})...`);
+        requestRef.current = requestAnimationFrame(tick);
+        return;
+      }
+
+      if (video.videoWidth === 0 || video.videoHeight === 0) {
+        setDebugInfo("Awaiting resolution parameters...");
+        requestRef.current = requestAnimationFrame(tick);
+        return;
+      }
+
+      try {
+        // Offscreen in-memory canvas
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        
+        if (ctx) {
+          // Draw frame
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
           
-          if (ctx) {
-            // Draw frame
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          // Get pixels
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          
+          // Next.js ESM/CJS safe import fallback
+          const qrDecoder = typeof jsQR === "function" ? jsQR : (jsQR as any).default;
+          
+          if (typeof qrDecoder === "function") {
+            setDebugInfo(`Scanning ${video.videoWidth}x${video.videoHeight}...`);
             
-            // Get pixels
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            
-            // Run decoder (attempt normal and inverted)
-            const code = jsQR(imageData.data, imageData.width, imageData.height, {
+            const code = qrDecoder(imageData.data, imageData.width, imageData.height, {
               inversionAttempts: "attemptBoth",
             });
 
             if (code && code.data) {
+              setDebugInfo(`Decoded: ${code.data}`);
               playBeep();
               onScanSuccess(code.data);
               stopCamera();
               onClose();
               return;
             }
+          } else {
+            setDebugInfo("Error: jsQR decoder function is missing.");
           }
+        } else {
+          setDebugInfo("Error: Canvas context is null.");
         }
+      } catch (err: any) {
+        setDebugInfo(`Loop Error: ${err.message || err}`);
       }
+      
       requestRef.current = requestAnimationFrame(tick);
     };
 
@@ -217,6 +252,11 @@ export default function QrScannerDialog({
                 autoPlay
                 className="w-full h-full object-cover"
               />
+
+              {/* Live HUD overlay */}
+              <div className="absolute bottom-3 left-3 right-3 bg-slate-950/80 text-[10px] text-indigo-400 font-mono py-1 px-2.5 rounded-lg border border-slate-800 text-center select-none pointer-events-none z-30 tracking-tight">
+                {debugInfo}
+              </div>
 
               {/* Holographic targeting square & scan overlay */}
               {isCameraActive && (
