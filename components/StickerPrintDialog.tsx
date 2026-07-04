@@ -874,7 +874,7 @@ export default function StickerPrintDialog({
                                 />
                               )}
                               {showBrand && (
-                                <span className="text-[7.5px] font-black uppercase tracking-[0.2em] text-slate-900">
+                                <span className="text-[7.5px] font-black uppercase tracking-[0.2em] text-slate-900 truncate max-w-full">
                                   {brandName}
                                 </span>
                               )}
@@ -883,7 +883,7 @@ export default function StickerPrintDialog({
 
                           {/* Middle: Product Title & Badges */}
                           <div className="space-y-1">
-                            <h3 className="font-extrabold text-[10.5px] text-slate-950 leading-tight uppercase tracking-wide truncate">
+                            <h3 className="font-extrabold text-[10.5px] text-slate-950 leading-tight uppercase tracking-wide line-clamp-2 break-words">
                               {product.name}
                             </h3>
                             <div className="flex flex-wrap gap-1.5 items-center">

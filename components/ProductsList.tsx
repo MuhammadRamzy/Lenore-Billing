@@ -46,7 +46,7 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
 
   // Advanced Filter States
   const [stockFilter, setStockFilter] = useState<"all" | "low" | "out" | "available">("all");
-  const [priceFilter, setPriceFilter] = useState<"all" | "under_1000" | "1000_5000" | "over_5000">("all");
+  const [priceFilter, setPriceFilter] = useState<"all" | "under_500" | "500_1000" | "1000_2500" | "2500_5000" | "5000_10000" | "over_10000">("all");
   const [sortBy, setSortBy] = useState<"name_asc" | "name_desc" | "stock_asc" | "stock_desc" | "price_asc" | "price_desc">("name_asc");
 
   // Filter products by search query and advanced criteria
@@ -71,12 +71,18 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
     // 3. Price Filter
     let matchesPrice = true;
     const price = p.defaultRate;
-    if (priceFilter === "under_1000") {
-      matchesPrice = price < 1000;
-    } else if (priceFilter === "1000_5000") {
-      matchesPrice = price >= 1000 && price <= 5000;
-    } else if (priceFilter === "over_5000") {
-      matchesPrice = price > 5000;
+    if (priceFilter === "under_500") {
+      matchesPrice = price < 500;
+    } else if (priceFilter === "500_1000") {
+      matchesPrice = price >= 500 && price <= 1000;
+    } else if (priceFilter === "1000_2500") {
+      matchesPrice = price >= 1000 && price <= 2500;
+    } else if (priceFilter === "2500_5000") {
+      matchesPrice = price >= 2500 && price <= 5000;
+    } else if (priceFilter === "5000_10000") {
+      matchesPrice = price >= 5000 && price <= 10000;
+    } else if (priceFilter === "over_10000") {
+      matchesPrice = price > 10000;
     }
 
     return matchesSearch && matchesStock && matchesPrice;
@@ -294,9 +300,12 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
               className="w-full text-sm font-bold text-slate-700 bg-white border border-slate-200 rounded-xl px-3 py-2 focus:border-indigo-500 focus:outline-none cursor-pointer"
             >
               <option value="all">All Prices</option>
-              <option value="under_1000">Under ₹1,000</option>
-              <option value="1000_5000">₹1,000 - ₹5,000</option>
-              <option value="over_5000">Over ₹5,000</option>
+              <option value="under_500">Under ₹500</option>
+              <option value="500_1000">₹500 - ₹1,000</option>
+              <option value="1000_2500">₹1,000 - ₹2,500</option>
+              <option value="2500_5000">₹2,500 - ₹5,000</option>
+              <option value="5000_10000">₹5,000 - ₹10,000</option>
+              <option value="over_10000">Over ₹10,000</option>
             </select>
           </div>
 

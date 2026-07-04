@@ -24,6 +24,9 @@ export const CompanySchema = z.object({
   lowStockLimit: z.number().int().nonnegative().default(5),
   invoicePrefix: z.string().default("INV"),
   termsAndConditions: z.string().optional().nullable().or(z.literal("")),
+  discountCustomer: z.number().nonnegative().default(0),
+  discountSales: z.number().nonnegative().default(0),
+  discountWholesale: z.number().nonnegative().default(0),
 });
 
 export const CustomerSchema = z.object({

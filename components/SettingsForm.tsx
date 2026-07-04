@@ -42,6 +42,12 @@ export default function SettingsForm({ initialCompany }: SettingsFormProps) {
         ...prev,
         lowStockLimit: isNaN(parsedVal) ? 0 : parsedVal,
       }));
+    } else if (path === "discountCustomer" || path === "discountSales" || path === "discountWholesale") {
+      const parsedVal = parseFloat(value);
+      setFormData((prev) => ({
+        ...prev,
+        [path]: isNaN(parsedVal) ? 0 : parsedVal,
+      }));
     } else if (path.startsWith("bank.")) {
       const field = path.split(".")[1];
       setFormData((prev) => ({
@@ -506,6 +512,88 @@ export default function SettingsForm({ initialCompany }: SettingsFormProps) {
                 rows={3}
                 className="w-full text-sm rounded-lg border border-slate-200 px-3 py-2 bg-white focus:border-indigo-500 focus:outline-none text-slate-800"
               />
+            </div>
+          </div>
+        </div>
+
+        {/* Default Billing Discounts Section */}
+        <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm space-y-5 md:col-span-2">
+          <h2 className="text-base font-extrabold text-slate-900 border-b border-slate-50 pb-3 flex items-center gap-2">
+            <CreditCard className="h-5 w-5 text-indigo-600" />
+            Default Billing Discounts (%)
+          </h2>
+          <p className="text-xs text-slate-500">
+            Set pre-defined default discount rates for different customer segments. These rates can be toggled on-the-fly when creating invoices.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            <div>
+              <label className="block text-xs font-bold text-slate-650 uppercase tracking-wider mb-1.5">
+                Regular Customer Discount (%)
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                max="100"
+                required
+                value={formData.discountCustomer ?? 0}
+                onChange={(e) => handleChange("discountCustomer", e.target.value)}
+                placeholder="e.g. 5"
+                className={cn(
+                  "w-full text-sm rounded-lg border px-3 py-2 bg-white focus:border-indigo-500 focus:outline-none transition-colors text-slate-800 font-mono",
+                  errors.discountCustomer ? "border-rose-400" : "border-slate-200"
+                )}
+              />
+              {errors.discountCustomer && (
+                <span className="text-xs text-rose-500 mt-1 block">{errors.discountCustomer}</span>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-650 uppercase tracking-wider mb-1.5">
+                Sales/Promotion Discount (%)
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                max="100"
+                required
+                value={formData.discountSales ?? 0}
+                onChange={(e) => handleChange("discountSales", e.target.value)}
+                placeholder="e.g. 10"
+                className={cn(
+                  "w-full text-sm rounded-lg border px-3 py-2 bg-white focus:border-indigo-500 focus:outline-none transition-colors text-slate-800 font-mono",
+                  errors.discountSales ? "border-rose-400" : "border-slate-200"
+                )}
+              />
+              {errors.discountSales && (
+                <span className="text-xs text-rose-500 mt-1 block">{errors.discountSales}</span>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-650 uppercase tracking-wider mb-1.5">
+                Wholesale Discount (%)
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                max="100"
+                required
+                value={formData.discountWholesale ?? 0}
+                onChange={(e) => handleChange("discountWholesale", e.target.value)}
+                placeholder="e.g. 15"
+                className={cn(
+                  "w-full text-sm rounded-lg border px-3 py-2 bg-white focus:border-indigo-500 focus:outline-none transition-colors text-slate-800 font-mono",
+                  errors.discountWholesale ? "border-rose-400" : "border-slate-200"
+                )}
+              />
+              {errors.discountWholesale && (
+                <span className="text-xs text-rose-500 mt-1 block">{errors.discountWholesale}</span>
+              )}
             </div>
           </div>
         </div>

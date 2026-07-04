@@ -37,7 +37,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
   const [currentPage, setCurrentPage] = useState(1);
 
   // Advanced filter states
-  const [amountFilter, setAmountFilter] = useState<"all" | "under_10k" | "10k_50k" | "over_50k">("all");
+  const [amountFilter, setAmountFilter] = useState<"all" | "under_5k" | "5k_10k" | "10k_25k" | "25k_50k" | "50k_100k" | "over_100k">("all");
   const [gstFilter, setGstFilter] = useState<"all" | "gst" | "simple">("all");
   const [sortBy, setSortBy] = useState<"date_desc" | "date_asc" | "amount_desc" | "amount_asc" | "invoice_no">("date_desc");
 
@@ -74,12 +74,18 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
     // 5. Amount Filter
     let matchesAmount = true;
     const total = inv.grandTotal;
-    if (amountFilter === "under_10k") {
-      matchesAmount = total < 10000;
-    } else if (amountFilter === "10k_50k") {
-      matchesAmount = total >= 10000 && total <= 50000;
-    } else if (amountFilter === "over_50k") {
-      matchesAmount = total > 50000;
+    if (amountFilter === "under_5k") {
+      matchesAmount = total < 5000;
+    } else if (amountFilter === "5k_10k") {
+      matchesAmount = total >= 5000 && total <= 10000;
+    } else if (amountFilter === "10k_25k") {
+      matchesAmount = total >= 10000 && total <= 25000;
+    } else if (amountFilter === "25k_50k") {
+      matchesAmount = total >= 25000 && total <= 50000;
+    } else if (amountFilter === "50k_100k") {
+      matchesAmount = total >= 50000 && total <= 100000;
+    } else if (amountFilter === "over_100k") {
+      matchesAmount = total > 100000;
     }
 
     // 6. GST Filter
@@ -300,9 +306,12 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
               className="w-full text-sm rounded-lg border border-slate-200 px-3 py-2 bg-white focus:border-indigo-500 focus:outline-none transition-colors text-slate-700 cursor-pointer"
             >
               <option value="all">All Amounts</option>
-              <option value="under_10k">Under ₹10,000</option>
-              <option value="10k_50k">₹10,000 - ₹50,000</option>
-              <option value="over_50k">Over ₹50,000</option>
+              <option value="under_5k">Under ₹5,000</option>
+              <option value="5k_10k">₹5,000 - ₹10,000</option>
+              <option value="10k_25k">₹10,000 - ₹25,000</option>
+              <option value="25k_50k">₹25,000 - ₹50,000</option>
+              <option value="50k_100k">₹50,000 - ₹100,000</option>
+              <option value="over_100k">Over ₹100,000</option>
             </select>
           </div>
 

@@ -45,6 +45,9 @@ export async function getCompany(): Promise<Company> {
     lowStockLimit: 5,
     invoicePrefix: "INV",
     termsAndConditions: "We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct. Goods once sold will not be taken back.",
+    discountCustomer: 5,
+    discountSales: 10,
+    discountWholesale: 15,
   };
 
   if (cachedCompany && isCacheValid(lastCompanyFetch)) {
@@ -55,7 +58,14 @@ export async function getCompany(): Promise<Company> {
     const docRef = doc(db, "settings", "company");
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      cachedCompany = docSnap.data() as Company;
+      const data = docSnap.data();
+      cachedCompany = {
+        ...defaultCompany,
+        ...data,
+        discountCustomer: data.discountCustomer ?? 0,
+        discountSales: data.discountSales ?? 0,
+        discountWholesale: data.discountWholesale ?? 0,
+      } as Company;
       lastCompanyFetch = Date.now();
       return cachedCompany;
     }

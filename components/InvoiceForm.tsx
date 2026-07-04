@@ -124,6 +124,35 @@ export default function InvoiceForm({
     ];
   });
 
+  // Default Discount Segment state & handlers
+  const [defaultDiscountType, setDefaultDiscountType] = useState<"none" | "customer" | "sales" | "wholesale">("none");
+
+  const getDiscountValue = (type: "none" | "customer" | "sales" | "wholesale") => {
+    switch (type) {
+      case "customer":
+        return company.discountCustomer ?? 0;
+      case "sales":
+        return company.discountSales ?? 0;
+      case "wholesale":
+        return company.discountWholesale ?? 0;
+      default:
+        return 0;
+    }
+  };
+
+  const applyDefaultDiscount = (type: "none" | "customer" | "sales" | "wholesale") => {
+    setDefaultDiscountType(type);
+    if (type !== "none") {
+      const value = getDiscountValue(type);
+      setLineItems((prev) =>
+        prev.map((item) => ({
+          ...item,
+          discountPercent: value,
+        }))
+      );
+    }
+  };
+
   const [activeProductSearchIndex, setActiveProductSearchIndex] = useState<number | null>(null);
   const [productSearchQuery, setProductSearchQuery] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -193,7 +222,7 @@ export default function InvoiceForm({
         quantity: 1,
         unit: "pcs",
         rate: 0,
-        discountPercent: 0,
+        discountPercent: getDiscountValue(defaultDiscountType),
         gstPercent: 18,
       },
     ]);
@@ -246,7 +275,7 @@ export default function InvoiceForm({
             quantity: 1,
             unit: matchedProduct.unit,
             rate: matchedProduct.defaultRate,
-            discountPercent: 0,
+            discountPercent: getDiscountValue(defaultDiscountType),
             gstPercent: matchedProduct.defaultGstPercent,
           },
         ]);
@@ -509,6 +538,40 @@ export default function InvoiceForm({
                   className="w-full text-sm rounded-lg border border-slate-200 px-3 py-1.5 focus:border-indigo-500 focus:outline-none transition-colors text-slate-800"
                 />
               </div>
+            </div>
+
+            {/* Default Discount Toggle & Segment Select */}
+            <div className="border-t border-slate-100 pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="defaultDiscountToggle"
+                  checked={defaultDiscountType !== "none"}
+                  onChange={(e) => {
+                    const nextType = e.target.checked ? "customer" : "none";
+                    applyDefaultDiscount(nextType);
+                  }}
+                  className="rounded border-slate-350 text-indigo-605 focus:ring-indigo-500 h-4 w-4 cursor-pointer"
+                />
+                <label htmlFor="defaultDiscountToggle" className="text-xs font-bold text-slate-700 uppercase tracking-wider cursor-pointer select-none">
+                  Set Default Discount Profile
+                </label>
+              </div>
+
+              {defaultDiscountType !== "none" && (
+                <div className="flex items-center gap-2 shrink-0 animate-in fade-in duration-200">
+                  <span className="text-xs font-semibold text-slate-500">Discount Segment:</span>
+                  <select
+                    value={defaultDiscountType}
+                    onChange={(e) => applyDefaultDiscount(e.target.value as any)}
+                    className="text-xs font-bold text-slate-800 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none cursor-pointer"
+                  >
+                    <option value="customer">Customer Preset ({company.discountCustomer ?? 0}%)</option>
+                    <option value="sales">Sales Promo Preset ({company.discountSales ?? 0}%)</option>
+                    <option value="wholesale">Wholesale Preset ({company.discountWholesale ?? 0}%)</option>
+                  </select>
+                </div>
+              )}
             </div>
 
             {/* Quick snapshot of selected customer */}
