@@ -76,106 +76,51 @@ export default function Navbar({ company }: { company: Company }) {
   return (
     <>
       {/* Mobile Top Bar */}
-      <header className="flex items-center justify-between bg-slate-900 px-4 py-3 text-white lg:hidden border-b border-slate-800 print:hidden">
+      <header className="flex items-center justify-between bg-slate-900 px-4 py-3.5 text-white lg:hidden border-b border-slate-800 print:hidden h-14 shrink-0">
         <div className="flex items-center gap-2">
           <div className="bg-white p-1 rounded-lg shrink-0 flex items-center justify-center h-8 w-8">
             <img src="/logo.png" alt="Lenore Logo" className="h-6 w-auto object-contain" />
           </div>
-          <span className="font-bold text-lg tracking-wider text-slate-100">
-            {company.name.split(" ")[0]}
+          <span className="font-bold text-sm tracking-wider text-slate-100 uppercase">
+            {company.name.split(" ")[0]} Terminal
           </span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <button
             onClick={() => setIsHelpOpen(true)}
-            className="p-1 rounded text-slate-400 hover:bg-slate-800 hover:text-white"
+            className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white"
             title="Shortcuts Help"
           >
             <Keyboard className="h-5 w-5" />
           </button>
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="rounded p-1 text-slate-300 hover:bg-slate-800 hover:text-white focus:outline-none"
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
         </div>
       </header>
 
-      {/* Mobile Sidebar / Drawer Overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-slate-950/60 lg:hidden backdrop-blur-sm print:hidden"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
-
-      {/* Mobile Sidebar Drawer */}
-      <aside
-        className={cn(
-          "fixed bottom-0 top-0 left-0 z-50 w-72 transform bg-slate-900 text-white transition-transform duration-300 ease-in-out lg:hidden border-r border-slate-800 flex flex-col justify-between print:hidden",
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        )}
-      >
-        <div>
-          <div className="flex items-center justify-between px-6 py-5 border-b border-slate-800">
-            <div className="flex items-center gap-2">
-              <div className="bg-white p-1 rounded-lg shrink-0 flex items-center justify-center h-8 w-8">
-                <img src="/logo.png" alt="Lenore Logo" className="h-6 w-auto object-contain" />
-              </div>
-              <span className="font-bold text-lg tracking-wider text-slate-100">
-                {company.name.split(" ")[0]}
-              </span>
-            </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="rounded p-1 text-slate-400 hover:bg-slate-800 hover:text-white"
+      {/* Mobile Bottom Navigation Bar */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900 border-t border-slate-800 text-white lg:hidden flex justify-around items-center h-16 px-2 print:hidden safe-bottom">
+        {NAV_ITEMS.map((item) => {
+          const Icon = item.icon;
+          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "flex flex-col items-center justify-center flex-1 h-full py-1 relative text-slate-400 active:scale-95 transition-transform duration-100",
+                isActive ? "text-indigo-400 font-extrabold" : "hover:text-slate-200"
+              )}
             >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-
-          <nav className="mt-6 px-4 space-y-1">
-            {NAV_ITEMS.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-150",
-                    isActive
-                      ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/10"
-                      : "text-slate-300 hover:bg-slate-800/60 hover:text-white"
-                  )}
-                >
-                  <Icon className="h-5 w-5 shrink-0" />
-                  {item.label}
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
-
-        {/* Company Snapshot bottom mobile */}
-        <div className="p-4 border-t border-slate-800 bg-slate-950/40">
-          <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">
-            Active Terminal
-          </div>
-          <div className="text-sm font-bold text-slate-200">{company.name}</div>
-          <div className="text-xs text-indigo-400 mt-1 flex items-center gap-1 mb-2">
-            <CreditCard className="h-3 w-3" /> {company.bank.bankName} - *{company.bank.accountNo.slice(-4)}
-          </div>
-          <button
-            onClick={() => setIsHelpOpen(true)}
-            className="w-full flex items-center justify-center gap-1.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-[10px] text-slate-300 font-semibold rounded-lg transition-colors border border-slate-700"
-          >
-            <Keyboard className="h-3.5 w-3.5" /> Shortcuts (Alt+Shift+H)
-          </button>
-        </div>
-      </aside>
+              <Icon className="h-5 w-5 mb-0.5 shrink-0" />
+              <span className="text-[9px] uppercase tracking-wider leading-none">
+                {item.label}
+              </span>
+              {isActive && (
+                <span className="absolute bottom-1.5 h-1 w-1 rounded-full bg-indigo-400 animate-pulse" />
+              )}
+            </Link>
+          );
+        })}
+      </nav>
 
       {/* Desktop Sidebar (Permanent) */}
       <aside className="hidden lg:flex fixed inset-y-0 left-0 z-30 w-64 bg-slate-900 border-r border-slate-800 text-white flex-col justify-between print:hidden">
