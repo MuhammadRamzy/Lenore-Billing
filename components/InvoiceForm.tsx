@@ -20,6 +20,7 @@ import { createInvoiceAction, updateInvoiceAction } from "@/app/actions";
 import { formatCurrency, cn } from "@/lib/utils";
 import CustomerDialog from "./CustomerDialog";
 import QrScannerDialog from "./QrScannerDialog";
+import ProductDialog from "./ProductDialog";
 import { resumeSharedAudio } from "@/lib/audio";
 
 // Standard unit list
@@ -47,7 +48,7 @@ interface FormLineItem {
 export default function InvoiceForm({
   company,
   initialCustomers,
-  products,
+  products: initialProducts,
   invoice,
 }: InvoiceFormProps) {
   const router = useRouter();
@@ -56,6 +57,11 @@ export default function InvoiceForm({
   // Customers state (for inline additions)
   const [customers, setCustomers] = useState<Customer[]>(initialCustomers);
   const [isCustomerModalOpen, setIsCustomerModalOpen] = useState(false);
+
+  // Products state (for inline additions)
+  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [productModalTargetIndex, setProductModalTargetIndex] = useState<number | null>(null);
 
   // QR Scanner States
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
@@ -198,6 +204,14 @@ export default function InvoiceForm({
   const handleCustomerAdded = (newCust: Customer) => {
     setCustomers((prev) => [newCust, ...prev]);
     setSelectedCustomerId(newCust.id);
+  };
+
+  // Handle product added quick modal
+  const handleProductCreated = (newProd: Product) => {
+    setProducts((prev) => [newProd, ...prev]);
+    if (productModalTargetIndex !== null) {
+      selectProductForLine(productModalTargetIndex, newProd);
+    }
   };
 
   // Autocomplete products list
@@ -698,12 +712,32 @@ export default function InvoiceForm({
                             ref={dropdownRef}
                             className="absolute left-0 right-0 z-20 mt-1 bg-white border border-slate-100 rounded-xl shadow-lg overflow-hidden max-h-60 overflow-y-auto"
                           >
-                            <div className="p-2 border-b border-slate-50 bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                              Catalog Autocomplete
+                            <div className="p-2 border-b border-slate-100 bg-slate-50 text-[10px] font-bold text-slate-500 uppercase tracking-wider flex justify-between items-center">
+                              <span>Catalog Autocomplete</span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setProductModalTargetIndex(index);
+                                  setIsProductModalOpen(true);
+                                }}
+                                className="text-[10px] font-extrabold text-indigo-600 hover:text-indigo-700 bg-white border border-slate-200 px-2 py-0.5 rounded-md hover:border-indigo-400 transition-colors cursor-pointer"
+                              >
+                                + Add New Product
+                              </button>
                             </div>
                             {filteredProducts.length === 0 ? (
-                              <div className="p-3 text-xs text-slate-400 italic">
-                                No matching catalog items
+                              <div className="p-4 text-xs text-slate-400 italic flex flex-col gap-2 items-center justify-center">
+                                <span>No matching catalog items</span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setProductModalTargetIndex(index);
+                                    setIsProductModalOpen(true);
+                                  }}
+                                  className="text-[10px] font-bold text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded-lg transition-colors shadow-sm cursor-pointer"
+                                >
+                                  + Create New Product
+                                </button>
                               </div>
                             ) : (
                               filteredProducts.map((prod) => (
@@ -1229,6 +1263,16 @@ export default function InvoiceForm({
         isOpen={isQrScannerOpen}
         onClose={() => setIsQrScannerOpen(false)}
         onScanSuccess={handleQrScanSuccess}
+      />
+
+      {/* Product Quick Add Modal Dialog */}
+      <ProductDialog
+        isOpen={isProductModalOpen}
+        onClose={() => {
+          setIsProductModalOpen(false);
+          setProductModalTargetIndex(null);
+        }}
+        onSuccess={handleProductCreated}
       />
     </div>
   );

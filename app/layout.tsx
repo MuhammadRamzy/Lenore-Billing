@@ -21,8 +21,11 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
     title: "Lenore POS",
+  },
+  icons: {
+    apple: "/logo.png",
   },
 };
 

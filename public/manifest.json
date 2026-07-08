@@ -4,7 +4,8 @@
   "description": "Enterprise billing and invoicing system for bath fittings distributors",
   "start_url": "/dashboard",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "display_override": ["standalone", "window-controls-overlay", "minimal-ui"],
+  "background_color": "#0f172a",
   "theme_color": "#0f172a",
   "orientation": "portrait",
   "icons": [
@@ -19,6 +20,22 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Invoice",
+      "short_name": "Invoice",
+      "description": "Create a new commercial invoice",
+      "url": "/invoices/new",
+      "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Products Catalog",
+      "short_name": "Products",
+      "description": "Manage products catalog and stock",
+      "url": "/products",
+      "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
     }
   ]
 }
