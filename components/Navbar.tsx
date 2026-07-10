@@ -91,6 +91,13 @@ export default function Navbar({ company }: { company: Company }) {
       {/* Mobile Top Bar */}
       <header className="flex items-center justify-between bg-slate-900 px-4 py-3.5 text-white lg:hidden border-b border-slate-800 print:hidden h-14 shrink-0">
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => setIsOpen(true)}
+            className="p-1 rounded-lg text-slate-400 hover:text-white mr-1 active:scale-95 transition-transform"
+            aria-label="Open navigation menu"
+          >
+            <Menu className="h-5.5 w-5.5" />
+          </button>
           <div className="bg-white p-1 rounded-lg shrink-0 flex items-center justify-center h-8 w-8">
             <img src="/logo.png" alt="Lenore Logo" className="h-6 w-auto object-contain" />
           </div>
@@ -98,41 +105,135 @@ export default function Navbar({ company }: { company: Company }) {
             {company.name.split(" ")[0]} Terminal
           </span>
         </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setIsHelpOpen(true)}
-            className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white"
-            title="Shortcuts Help"
-          >
-            <Keyboard className="h-5 w-5" />
-          </button>
-        </div>
+        <div className="w-6" /> {/* Visual spacer */}
       </header>
+
+      {/* Mobile Drawer Overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 z-[100] bg-slate-950/60 backdrop-blur-sm lg:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* Mobile Side Drawer */}
+      <div className={cn(
+        "fixed inset-y-0 left-0 z-[110] w-72 bg-slate-900 text-white flex flex-col justify-between transition-transform duration-300 transform lg:hidden print:hidden shadow-2xl",
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
+        <div>
+          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800">
+            <div className="flex items-center gap-2.5">
+              <div className="bg-white p-1 rounded-lg shrink-0 flex items-center justify-center h-8 w-8">
+                <img src="/logo.png" alt="Lenore Logo" className="h-6 w-auto object-contain" />
+              </div>
+              <span className="font-extrabold text-base tracking-wider text-slate-100">
+                {company.name.split(" ")[0]} Terminal
+              </span>
+            </div>
+            <button 
+              onClick={() => setIsOpen(false)}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-white animate-pulse"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+
+          <nav className="mt-6 px-4 space-y-2">
+            {NAV_ITEMS.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className={cn(
+                    "flex items-center gap-4 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-150 min-h-[48px]",
+                    isActive
+                      ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/15"
+                      : "text-slate-350 hover:bg-slate-800/40 hover:text-white"
+                  )}
+                >
+                  <Icon className="h-5 w-5 shrink-0" />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+
+        {/* Company Snapshot bottom mobile drawer */}
+        <div className="p-4 border-t border-slate-800 bg-slate-950/40 m-4 rounded-xl">
+          <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">
+            Active Terminal
+          </div>
+          <div className="text-xs font-bold text-slate-200">{company.name}</div>
+          <div className="text-[10px] text-slate-400 mt-0.5">GST: {company.gstin}</div>
+        </div>
+      </div>
 
       {/* Mobile Bottom Navigation Bar */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900 border-t border-slate-800 text-white lg:hidden flex justify-around items-center h-16 px-2 print:hidden safe-bottom">
-        {NAV_ITEMS.map((item) => {
-          const Icon = item.icon;
-          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex flex-col items-center justify-center flex-1 h-full py-1 relative text-slate-400 active:scale-95 transition-transform duration-100",
-                isActive ? "text-indigo-400 font-extrabold" : "hover:text-slate-200"
-              )}
-            >
-              <Icon className="h-5 w-5 mb-0.5 shrink-0" />
-              <span className="text-[9px] uppercase tracking-wider leading-none">
-                {item.label}
-              </span>
-              {isActive && (
-                <span className="absolute bottom-1.5 h-1 w-1 rounded-full bg-indigo-400 animate-pulse" />
-              )}
-            </Link>
-          );
-        })}
+        {/* Dashboard Link */}
+        <Link
+          href="/dashboard"
+          className={cn(
+            "flex flex-col items-center justify-center flex-1 h-full py-1 relative text-slate-400 active:scale-95 transition-transform duration-100",
+            pathname === "/dashboard" ? "text-indigo-400 font-extrabold" : "hover:text-slate-200"
+          )}
+        >
+          <LayoutDashboard className="h-5 w-5 mb-0.5 shrink-0" />
+          <span className="text-[9px] uppercase tracking-wider leading-none">Dashboard</span>
+          {pathname === "/dashboard" && (
+            <span className="absolute bottom-1.5 h-1 w-1 rounded-full bg-indigo-400 animate-pulse" />
+          )}
+        </Link>
+
+        {/* Invoices Link */}
+        <Link
+          href="/invoices"
+          className={cn(
+            "flex flex-col items-center justify-center flex-1 h-full py-1 relative text-slate-400 active:scale-95 transition-transform duration-100",
+            pathname.startsWith("/invoices") ? "text-indigo-400 font-extrabold" : "hover:text-slate-200"
+          )}
+        >
+          <FileSpreadsheet className="h-5 w-5 mb-0.5 shrink-0" />
+          <span className="text-[9px] uppercase tracking-wider leading-none">Invoices</span>
+          {pathname.startsWith("/invoices") && (
+            <span className="absolute bottom-1.5 h-1 w-1 rounded-full bg-indigo-400 animate-pulse" />
+          )}
+        </Link>
+
+        {/* Products Link */}
+        <Link
+          href="/products"
+          className={cn(
+            "flex flex-col items-center justify-center flex-1 h-full py-1 relative text-slate-400 active:scale-95 transition-transform duration-100",
+            pathname.startsWith("/products") ? "text-indigo-400 font-extrabold" : "hover:text-slate-200"
+          )}
+        >
+          <Package className="h-5 w-5 mb-0.5 shrink-0" />
+          <span className="text-[9px] uppercase tracking-wider leading-none">Products</span>
+          {pathname.startsWith("/products") && (
+            <span className="absolute bottom-1.5 h-1 w-1 rounded-full bg-indigo-400 animate-pulse" />
+          )}
+        </Link>
+
+        {/* Menu Toggle */}
+        <button
+          onClick={() => setIsOpen((prev) => !prev)}
+          className={cn(
+            "flex flex-col items-center justify-center flex-1 h-full py-1 relative text-slate-400 active:scale-95 transition-transform duration-100",
+            isOpen ? "text-indigo-400 font-extrabold" : "hover:text-slate-200"
+          )}
+        >
+          <Menu className="h-5 w-5 mb-0.5 shrink-0" />
+          <span className="text-[9px] uppercase tracking-wider leading-none">Menu</span>
+          {isOpen && (
+            <span className="absolute bottom-1.5 h-1 w-1 rounded-full bg-indigo-400 animate-pulse" />
+          )}
+        </button>
       </nav>
 
       {/* Desktop Sidebar (Permanent) */}
