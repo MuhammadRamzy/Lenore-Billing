@@ -487,11 +487,11 @@ export default function DashboardTabs({
   return (
     <div className="space-y-6">
       {/* Tab Navigation */}
-      <div className="flex bg-slate-100 p-1 rounded-2xl border border-slate-200 w-full overflow-x-auto">
+      <div className="flex bg-slate-100 p-1 rounded-2xl border border-slate-200 w-full overflow-x-auto no-scrollbar">
         <button
           onClick={() => setActiveTab("overview")}
           className={cn(
-            "flex-1 min-w-[90px] flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95",
+            "flex-1 min-w-[90px] flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95 whitespace-nowrap",
             activeTab === "overview"
               ? "bg-white text-slate-900 shadow-sm border border-slate-200/50"
               : "text-slate-500 hover:text-slate-800"
@@ -504,20 +504,20 @@ export default function DashboardTabs({
         <button
           onClick={() => setActiveTab("profitability")}
           className={cn(
-            "flex-1 min-w-[120px] flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95",
+            "flex-1 min-w-[120px] flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95 whitespace-nowrap",
             activeTab === "profitability"
               ? "bg-white text-slate-900 shadow-sm border border-slate-200/50"
               : "text-slate-500 hover:text-slate-800"
           )}
         >
           <Percent className="h-4 w-4" />
-          Profitability Analysis
+          Profitability
         </button>
 
         <button
           onClick={() => setActiveTab("leaderboards")}
           className={cn(
-            "flex-1 min-w-[100px] flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95",
+            "flex-1 min-w-[100px] flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95 whitespace-nowrap",
             activeTab === "leaderboards"
               ? "bg-white text-slate-900 shadow-sm border border-slate-200/50"
               : "text-slate-500 hover:text-slate-800"
@@ -530,7 +530,7 @@ export default function DashboardTabs({
         <button
           onClick={() => setActiveTab("recent")}
           className={cn(
-            "flex-1 min-w-[80px] flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95",
+            "flex-1 min-w-[80px] flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95 whitespace-nowrap",
             activeTab === "recent"
               ? "bg-white text-slate-900 shadow-sm border border-slate-200/50"
               : "text-slate-500 hover:text-slate-800"
