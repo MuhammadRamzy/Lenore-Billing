@@ -14,8 +14,15 @@ import {
   getInvoices,
   saveInvoice,
   deleteInvoice,
+  getPurchases,
+  savePurchase,
+  deletePurchase,
   getCounters,
   saveCounters,
+  saveStockLog,
+  getExpenses,
+  saveExpense,
+  deleteExpense,
 } from "@/lib/db";
 import {
   Company,
@@ -26,9 +33,44 @@ import {
   ProductSchema,
   Invoice,
   InvoiceSchema,
+  Purchase,
+  PurchaseSchema,
+  Expense,
+  ExpenseSchema,
+  StockLog,
 } from "@/lib/types";
 import { calculateLineItem, calculateInvoiceTotals } from "@/lib/calculations";
 import { numberToWords } from "@/lib/numberToWords";
+
+// --- Stock Logging Helper ---
+async function logStockChange(
+  productId: string,
+  type: "inward" | "outward" | "adjustment",
+  quantity: number,
+  previousStock: number,
+  newStock: number,
+  referenceId: string,
+  referenceNo: string,
+  notes: string = ""
+) {
+  try {
+    await saveStockLog({
+      id: uuidv4(),
+      productId,
+      date: new Date().toISOString(),
+      type,
+      quantity,
+      previousStock,
+      newStock,
+      referenceId,
+      referenceNo,
+      notes,
+      createdAt: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error("Error logging stock change:", error);
+  }
+}
 
 // --- Company Actions ---
 export async function updateCompanyAction(data: Company) {
@@ -95,12 +137,30 @@ export async function createProductAction(data: Omit<Product, "id">) {
   const validated = ProductSchema.parse(product);
   await saveProduct(validated);
 
+  if (validated.stock > 0) {
+    await logStockChange(
+      id,
+      "adjustment",
+      validated.stock,
+      0,
+      validated.stock,
+      "manual",
+      "Manual",
+      "Initial stock on creation"
+    );
+  }
+
   revalidatePath("/products");
   revalidatePath("/invoices/new");
+  revalidatePath("/dashboard");
   return { success: true, product: validated };
 }
 
 export async function updateProductAction(id: string, data: Omit<Product, "id">) {
+  const products = await getProducts();
+  const existing = products.find((p) => p.id === id);
+  const oldStock = existing ? (existing.stock ?? 0) : 0;
+
   const product: Product = {
     ...data,
     id,
@@ -109,7 +169,22 @@ export async function updateProductAction(id: string, data: Omit<Product, "id">)
   const validated = ProductSchema.parse(product);
   await saveProduct(validated);
 
+  const newStock = validated.stock ?? 0;
+  if (oldStock !== newStock) {
+    await logStockChange(
+      id,
+      "adjustment",
+      newStock - oldStock,
+      oldStock,
+      newStock,
+      "manual",
+      "Manual",
+      "Manual adjustment during product edit"
+    );
+  }
+
   revalidatePath("/products");
+  revalidatePath("/dashboard");
   return { success: true, product: validated };
 }
 
@@ -280,8 +355,20 @@ export async function createInvoiceAction(data: {
       if (item.productId) {
         const prod = products.find((p) => p.id === item.productId);
         if (prod) {
-          prod.stock = (prod.stock ?? 0) - item.quantity;
+          const previousStock = prod.stock ?? 0;
+          prod.stock = previousStock - item.quantity;
           await saveProduct(prod);
+          
+          await logStockChange(
+            prod.id,
+            "outward",
+            -item.quantity,
+            previousStock,
+            prod.stock,
+            validated.id,
+            validated.invoiceNo,
+            "Invoice Issued"
+          );
         }
       }
     }
@@ -414,6 +501,23 @@ export async function updateInvoiceAction(
     const prod = products.find((p) => p.id === pid);
     if (prod) {
       await saveProduct(prod);
+      
+      const oldQty = (oldType === "invoice") ? (existingInvoice.lineItems.find((item) => item.productId === pid)?.quantity || 0) : 0;
+      const newQty = (newType === "invoice") ? (data.lineItems.find((item) => item.productId === pid)?.quantity || 0) : 0;
+      const netQtyChange = newQty - oldQty;
+
+      if (netQtyChange !== 0) {
+        await logStockChange(
+          prod.id,
+          "outward",
+          -netQtyChange,
+          prod.stock + netQtyChange,
+          prod.stock,
+          existingInvoice.id,
+          invoiceNo,
+          `Invoice Updated (Net Change: ${netQtyChange > 0 ? "+" : ""}${netQtyChange})`
+        );
+      }
     }
   }
 
@@ -509,8 +613,20 @@ export async function deleteInvoiceAction(id: string) {
       if (item.productId) {
         const prod = products.find((p) => p.id === item.productId);
         if (prod) {
-          prod.stock = (prod.stock ?? 0) + item.quantity;
+          const previousStock = prod.stock ?? 0;
+          prod.stock = previousStock + item.quantity;
           await saveProduct(prod);
+          
+          await logStockChange(
+            prod.id,
+            "inward",
+            item.quantity,
+            previousStock,
+            prod.stock,
+            existingInvoice.id,
+            existingInvoice.invoiceNo,
+            "Invoice Deleted (Stock Returned)"
+          );
         }
       }
     }
@@ -552,8 +668,20 @@ export async function convertQuotationToInvoiceAction(id: string) {
     if (item.productId) {
       const prod = products.find((p) => p.id === item.productId);
       if (prod) {
-        prod.stock = (prod.stock ?? 0) - item.quantity;
+        const previousStock = prod.stock ?? 0;
+        prod.stock = previousStock - item.quantity;
         await saveProduct(prod);
+        
+        await logStockChange(
+          prod.id,
+          "outward",
+          -item.quantity,
+          previousStock,
+          prod.stock,
+          existingInvoice.id,
+          invoiceNo,
+          "Converted from Quotation"
+        );
       }
     }
   }
@@ -574,4 +702,374 @@ export async function convertQuotationToInvoiceAction(id: string) {
   revalidatePath(`/invoices/${id}`);
 
   return { success: true, invoice: existingInvoice };
+}
+
+// --- Purchase Actions ---
+
+export async function createPurchaseAction(data: {
+  purchaseDate: string;
+  isGstPurchase: boolean;
+  supplierName: string;
+  supplierGstin?: string | null;
+  supplierAddress?: string | null;
+  supplierBillNo?: string | null;
+  lineItems: {
+    productId?: string | null;
+    description: string;
+    hsnCode?: string | null;
+    quantity: number;
+    unit: string;
+    rate: number;
+    discountPercent: number;
+    gstPercent: number;
+  }[];
+  freight: number;
+  status: "pending" | "paid";
+  remarks?: string | null;
+}) {
+  const company = await getCompany();
+
+  let isInterState = false;
+  if (data.supplierGstin && data.supplierGstin.length >= 2) {
+    const supplierStateCode = data.supplierGstin.substring(0, 2);
+    isInterState = supplierStateCode !== company.stateCode;
+  }
+
+  const processedLineItems = data.lineItems.map((item, index) =>
+    calculateLineItem(item, index + 1, data.isGstPurchase, isInterState)
+  );
+
+  const totals = calculateInvoiceTotals(processedLineItems, data.freight);
+
+  const fy = getFinancialYear(data.purchaseDate);
+  const counters = await getCounters();
+  if (!counters.purchaseCounters) {
+    counters.purchaseCounters = {};
+  }
+  if (!counters.purchaseCounters[fy]) {
+    counters.purchaseCounters[fy] = 0;
+  }
+  const nextSequence = counters.purchaseCounters[fy] + 1;
+  counters.purchaseCounters[fy] = nextSequence;
+  const formattedSeq = String(nextSequence).padStart(4, "0");
+  const purchaseNo = `PUR-${fy}/${formattedSeq}`;
+
+  const purchase: Purchase = {
+    id: uuidv4(),
+    purchaseNo,
+    supplierBillNo: data.supplierBillNo || "",
+    purchaseDate: data.purchaseDate,
+    isGstPurchase: data.isGstPurchase,
+    supplierName: data.supplierName,
+    supplierGstin: data.supplierGstin || "",
+    supplierAddress: data.supplierAddress || "",
+    lineItems: processedLineItems,
+    freight: data.freight,
+    subtotal: totals.subtotal,
+    totalDiscount: totals.totalDiscount,
+    taxableValueTotal: totals.taxableValueTotal,
+    cgstTotal: totals.cgstTotal,
+    sgstTotal: totals.sgstTotal,
+    igstTotal: totals.igstTotal,
+    roundOff: totals.roundOff,
+    grandTotal: totals.grandTotal,
+    status: data.status,
+    remarks: data.remarks || "",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  const validated = PurchaseSchema.parse(purchase);
+
+  const products = await getProducts();
+  for (const item of data.lineItems) {
+    if (item.productId) {
+      const prod = products.find((p) => p.id === item.productId);
+      if (prod) {
+        const previousStock = prod.stock ?? 0;
+        prod.stock = previousStock + item.quantity;
+        await saveProduct(prod);
+        
+        await logStockChange(
+          prod.id,
+          "inward",
+          item.quantity,
+          previousStock,
+          prod.stock,
+          validated.id,
+          validated.purchaseNo,
+          "Purchase Intake"
+        );
+      }
+    }
+  }
+
+  await savePurchase(validated);
+  await saveCounters(counters);
+
+  revalidatePath("/dashboard");
+  revalidatePath("/purchases");
+
+  return { success: true, purchase: validated };
+}
+
+export async function updatePurchaseAction(
+  id: string,
+  data: {
+    purchaseDate: string;
+    isGstPurchase: boolean;
+    supplierName: string;
+    supplierGstin?: string | null;
+    supplierAddress?: string | null;
+    supplierBillNo?: string | null;
+    lineItems: {
+      productId?: string | null;
+      description: string;
+      hsnCode?: string | null;
+      quantity: number;
+      unit: string;
+      rate: number;
+      discountPercent: number;
+      gstPercent: number;
+    }[];
+    freight: number;
+    status: "pending" | "paid";
+    remarks?: string | null;
+  }
+) {
+  const purchases = await getPurchases();
+  const existingPurchase = purchases.find((p) => p.id === id);
+  if (!existingPurchase) {
+    throw new Error("Purchase not found");
+  }
+
+  const company = await getCompany();
+
+  let isInterState = false;
+  if (data.supplierGstin && data.supplierGstin.length >= 2) {
+    const supplierStateCode = data.supplierGstin.substring(0, 2);
+    isInterState = supplierStateCode !== company.stateCode;
+  }
+
+  const processedLineItems = data.lineItems.map((item, index) =>
+    calculateLineItem(item, index + 1, data.isGstPurchase, isInterState)
+  );
+
+  const totals = calculateInvoiceTotals(processedLineItems, data.freight);
+
+  const products = await getProducts();
+  const modifiedProductIds = new Set<string>();
+  
+  for (const oldItem of existingPurchase.lineItems) {
+    if (oldItem.productId) {
+      const prod = products.find((p) => p.id === oldItem.productId);
+      if (prod) {
+        prod.stock = Math.max(0, (prod.stock ?? 0) - oldItem.quantity);
+        await saveProduct(prod);
+        modifiedProductIds.add(oldItem.productId);
+      }
+    }
+  }
+
+  for (const newItem of data.lineItems) {
+    if (newItem.productId) {
+      const prod = products.find((p) => p.id === newItem.productId);
+      if (prod) {
+        prod.stock = (prod.stock ?? 0) + newItem.quantity;
+        await saveProduct(prod);
+        modifiedProductIds.add(newItem.productId);
+      }
+    }
+  }
+
+  for (const pid of modifiedProductIds) {
+    const prod = products.find((p) => p.id === pid);
+    if (prod) {
+      const oldQty = existingPurchase.lineItems.find((item) => item.productId === pid)?.quantity || 0;
+      const newQty = data.lineItems.find((item) => item.productId === pid)?.quantity || 0;
+      const netQtyChange = newQty - oldQty;
+
+      if (netQtyChange !== 0) {
+        await logStockChange(
+          prod.id,
+          "inward",
+          netQtyChange,
+          prod.stock - netQtyChange,
+          prod.stock,
+          existingPurchase.id,
+          existingPurchase.purchaseNo,
+          `Purchase Updated (Net Change: ${netQtyChange > 0 ? "+" : ""}${netQtyChange})`
+        );
+      }
+    }
+  }
+
+  const fyOld = existingPurchase.purchaseNo.split("/")[0].replace("PUR-", "");
+  const fyNow = getFinancialYear(data.purchaseDate);
+  let purchaseNo = existingPurchase.purchaseNo;
+  let nextSeq = existingPurchase.purchaseNo.split("/")[1] ? parseInt(existingPurchase.purchaseNo.split("/")[1]) : 1;
+
+  if (fyOld !== fyNow) {
+    const counters = await getCounters();
+    if (!counters.purchaseCounters) {
+      counters.purchaseCounters = {};
+    }
+    if (!counters.purchaseCounters[fyNow]) {
+      counters.purchaseCounters[fyNow] = 0;
+    }
+    nextSeq = counters.purchaseCounters[fyNow] + 1;
+    counters.purchaseCounters[fyNow] = nextSeq;
+    const formattedSeq = String(nextSeq).padStart(4, "0");
+    purchaseNo = `PUR-${fyNow}/${formattedSeq}`;
+    await saveCounters(counters);
+  }
+
+  const purchase: Purchase = {
+    ...existingPurchase,
+    purchaseNo,
+    supplierBillNo: data.supplierBillNo || "",
+    purchaseDate: data.purchaseDate,
+    isGstPurchase: data.isGstPurchase,
+    supplierName: data.supplierName,
+    supplierGstin: data.supplierGstin || "",
+    supplierAddress: data.supplierAddress || "",
+    lineItems: processedLineItems,
+    freight: data.freight,
+    subtotal: totals.subtotal,
+    totalDiscount: totals.totalDiscount,
+    taxableValueTotal: totals.taxableValueTotal,
+    cgstTotal: totals.cgstTotal,
+    sgstTotal: totals.sgstTotal,
+    igstTotal: totals.igstTotal,
+    roundOff: totals.roundOff,
+    grandTotal: totals.grandTotal,
+    status: data.status,
+    remarks: data.remarks || "",
+    updatedAt: new Date().toISOString(),
+  };
+
+  const validated = PurchaseSchema.parse(purchase);
+  await savePurchase(validated);
+
+  revalidatePath("/dashboard");
+  revalidatePath("/purchases");
+  revalidatePath(`/purchases/${id}`);
+
+  return { success: true, purchase: validated };
+}
+
+export async function deletePurchaseAction(id: string) {
+  const purchases = await getPurchases();
+  const existingPurchase = purchases.find((p) => p.id === id);
+  if (!existingPurchase) {
+    throw new Error("Purchase not found");
+  }
+
+  const products = await getProducts();
+  for (const item of existingPurchase.lineItems) {
+    if (item.productId) {
+      const prod = products.find((p) => p.id === item.productId);
+      if (prod) {
+        const previousStock = prod.stock ?? 0;
+        prod.stock = Math.max(0, previousStock - item.quantity);
+        await saveProduct(prod);
+        
+        await logStockChange(
+          prod.id,
+          "outward",
+          -item.quantity,
+          previousStock,
+          prod.stock,
+          existingPurchase.id,
+          existingPurchase.purchaseNo,
+          "Purchase Deleted (Stock Removed)"
+        );
+      }
+    }
+  }
+
+  await deletePurchase(id);
+
+  revalidatePath("/dashboard");
+  revalidatePath("/purchases");
+
+  return { success: true };
+}
+
+// --- Expense Actions ---
+export async function createExpenseAction(data: Omit<Expense, "id" | "createdAt" | "updatedAt">) {
+  const id = uuidv4();
+  const now = new Date().toISOString();
+
+  const expense: Expense = {
+    ...data,
+    id,
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  const validated = ExpenseSchema.parse(expense);
+  await saveExpense(validated);
+
+  revalidatePath("/dashboard");
+  revalidatePath("/expenses");
+  return { success: true, expense: validated };
+}
+
+export async function updateExpenseAction(id: string, data: Omit<Expense, "id" | "createdAt" | "updatedAt">) {
+  const expenses = await getExpenses();
+  const existing = expenses.find((e) => e.id === id);
+  if (!existing) {
+    throw new Error("Expense not found");
+  }
+
+  const expense: Expense = {
+    ...data,
+    id,
+    createdAt: existing.createdAt,
+    updatedAt: new Date().toISOString(),
+  };
+
+  const validated = ExpenseSchema.parse(expense);
+  await saveExpense(validated);
+
+  revalidatePath("/dashboard");
+  revalidatePath("/expenses");
+  return { success: true, expense: validated };
+}
+
+export async function deleteExpenseAction(id: string) {
+  await deleteExpense(id);
+  revalidatePath("/dashboard");
+  revalidatePath("/expenses");
+  return { success: true };
+}
+
+// --- Manual Stock Adjustment Action ---
+export async function recordManualStockAdjustmentAction(productId: string, quantity: number, notes: string) {
+  const products = await getProducts();
+  const prod = products.find((p) => p.id === productId);
+  if (!prod) {
+    throw new Error("Product not found");
+  }
+
+  const previousStock = prod.stock ?? 0;
+  const newStock = Math.max(0, previousStock + quantity);
+  prod.stock = newStock;
+  await saveProduct(prod);
+
+  await logStockChange(
+    productId,
+    "adjustment",
+    quantity,
+    previousStock,
+    newStock,
+    "manual",
+    "Manual",
+    notes || "Manual stock adjustment"
+  );
+
+  revalidatePath("/products");
+  revalidatePath("/dashboard");
+  return { success: true, product: prod };
 }

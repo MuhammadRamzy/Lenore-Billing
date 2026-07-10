@@ -120,9 +120,63 @@ export const InvoiceSchema = z.object({
   updatedAt: z.string().datetime(),
 });
 
+export const PurchaseSchema = z.object({
+  id: z.string().uuid(),
+  purchaseNo: z.string(),
+  supplierBillNo: z.string().optional().nullable().or(z.literal("")),
+  purchaseDate: z.string(),
+  isGstPurchase: z.boolean(),
+  supplierName: z.string().min(1, "Supplier name is required"),
+  supplierGstin: z.string().optional().nullable().or(z.literal("")),
+  supplierAddress: z.string().optional().nullable().or(z.literal("")),
+  lineItems: z.array(LineItemSchema).min(1, "At least one line item is required"),
+  freight: z.number().nonnegative(),
+  subtotal: z.number(),
+  totalDiscount: z.number().default(0),
+  taxableValueTotal: z.number(),
+  cgstTotal: z.number(),
+  sgstTotal: z.number(),
+  igstTotal: z.number(),
+  roundOff: z.number(),
+  grandTotal: z.number(),
+  status: z.enum(["pending", "paid"]),
+  remarks: z.string().optional().nullable().or(z.literal("")),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+
 export const CountersSchema = z.object({
   invoiceCounters: z.record(z.string(), z.number()),
   quotationCounters: z.record(z.string(), z.number()).default({}),
+  purchaseCounters: z.record(z.string(), z.number()).default({}),
+});
+
+export const ExpenseSchema = z.object({
+  id: z.string().uuid(),
+  date: z.string(),
+  category: z.enum(["rent", "utilities", "salaries", "marketing", "freight", "travel", "miscellaneous"]),
+  amount: z.number().positive("Amount must be greater than 0"),
+  paymentMode: z.enum(["cash", "bank", "card", "upi", "other"]),
+  description: z.string().min(1, "Description is required"),
+  referenceNo: z.string().optional().nullable().or(z.literal("")),
+  gstin: z.string().optional().nullable().or(z.literal("")),
+  gstAmount: z.number().nonnegative().default(0),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+
+export const StockLogSchema = z.object({
+  id: z.string().uuid(),
+  productId: z.string().uuid(),
+  date: z.string(),
+  type: z.enum(["inward", "outward", "adjustment"]),
+  quantity: z.number().int(), // Positive for inward (purchase), negative for outward (sale), positive/negative for manual adjustments
+  previousStock: z.number().int().nonnegative(),
+  newStock: z.number().int().nonnegative(),
+  referenceId: z.string(), // Invoice ID, Purchase ID, or "manual"
+  referenceNo: z.string(), // Invoice No, Purchase No, or description
+  notes: z.string().optional().nullable().or(z.literal("")),
+  createdAt: z.string().datetime(),
 });
 
 // TypeScript type inference
@@ -133,4 +187,7 @@ export type Product = z.infer<typeof ProductSchema>;
 export type InvoiceMeta = z.infer<typeof InvoiceMetaSchema>;
 export type LineItem = z.infer<typeof LineItemSchema>;
 export type Invoice = z.infer<typeof InvoiceSchema>;
+export type Purchase = z.infer<typeof PurchaseSchema>;
 export type Counters = z.infer<typeof CountersSchema>;
+export type Expense = z.infer<typeof ExpenseSchema>;
+export type StockLog = z.infer<typeof StockLogSchema>;

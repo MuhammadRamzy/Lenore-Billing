@@ -1,6 +1,6 @@
 import { doc, getDoc, setDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
-import { Company, Customer, Product, Invoice, Counters } from "./types";
+import { Company, Customer, Product, Invoice, Counters, Purchase, Expense, StockLog } from "./types";
 
 // In-Memory Server Cache for Firestore Reads Optimization
 let cachedCompany: Company | null = null;
@@ -8,14 +8,16 @@ let cachedCustomers: Customer[] | null = null;
 let cachedProducts: Product[] | null = null;
 let cachedInvoices: Invoice[] | null = null;
 let cachedCounters: Counters | null = null;
+let cachedPurchases: Purchase[] | null = null;
 
 let lastCompanyFetch = 0;
 let lastCustomersFetch = 0;
 let lastProductsFetch = 0;
 let lastInvoicesFetch = 0;
 let lastCountersFetch = 0;
+let lastPurchasesFetch = 0;
 
-const CACHE_TTL = 30000; // 30 seconds cache TTL
+const CACHE_TTL = 300000; // 5 minutes cache TTL (saves Firestore read costs)
 
 // Helper to check if cache is valid
 const isCacheValid = (lastFetch: number) => {
@@ -198,6 +200,7 @@ export async function getCounters(): Promise<Counters> {
   const defaultCounters: Counters = {
     invoiceCounters: {},
     quotationCounters: {},
+    purchaseCounters: {},
   };
 
   if (cachedCounters && isCacheValid(lastCountersFetch)) {
@@ -212,6 +215,7 @@ export async function getCounters(): Promise<Counters> {
       cachedCounters = {
         invoiceCounters: data.invoiceCounters || {},
         quotationCounters: data.quotationCounters || {},
+        purchaseCounters: data.purchaseCounters || {},
       };
       lastCountersFetch = Date.now();
       return cachedCounters;
@@ -226,4 +230,113 @@ export async function saveCounters(counters: Counters): Promise<void> {
   await setDoc(doc(db, "settings", "counters"), counters);
   cachedCounters = counters;
   lastCountersFetch = Date.now();
+}
+
+// Purchases DB Operations
+export async function getPurchases(): Promise<Purchase[]> {
+  if (cachedPurchases && isCacheValid(lastPurchasesFetch)) {
+    return cachedPurchases;
+  }
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "purchases"));
+    const list: Purchase[] = [];
+    querySnapshot.forEach((doc) => {
+      list.push(doc.data() as Purchase);
+    });
+    
+    const sorted = list.sort((a, b) => new Date(b.purchaseDate).getTime() - new Date(a.purchaseDate).getTime());
+    cachedPurchases = sorted;
+    lastPurchasesFetch = Date.now();
+    return sorted;
+  } catch (error) {
+    console.error("Error reading purchases from Firestore:", error);
+    return cachedPurchases || [];
+  }
+}
+
+export async function savePurchase(purchase: Purchase): Promise<void> {
+  await setDoc(doc(db, "purchases", purchase.id), purchase);
+  // Clear cache to force next load to be fresh
+  cachedPurchases = null;
+  lastPurchasesFetch = 0;
+}
+
+export async function deletePurchase(id: string): Promise<void> {
+  await deleteDoc(doc(db, "purchases", id));
+  // Clear cache to force next load to be fresh
+  cachedPurchases = null;
+  lastPurchasesFetch = 0;
+}
+
+// Expenses DB Operations
+let cachedExpenses: Expense[] | null = null;
+let lastExpensesFetch = 0;
+
+export async function getExpenses(): Promise<Expense[]> {
+  if (cachedExpenses && isCacheValid(lastExpensesFetch)) {
+    return cachedExpenses;
+  }
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "expenses"));
+    const list: Expense[] = [];
+    querySnapshot.forEach((doc) => {
+      list.push(doc.data() as Expense);
+    });
+
+    const sorted = list.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    cachedExpenses = sorted;
+    lastExpensesFetch = Date.now();
+    return sorted;
+  } catch (error) {
+    console.error("Error reading expenses from Firestore:", error);
+    return cachedExpenses || [];
+  }
+}
+
+export async function saveExpense(expense: Expense): Promise<void> {
+  await setDoc(doc(db, "expenses", expense.id), expense);
+  cachedExpenses = null;
+  lastExpensesFetch = 0;
+}
+
+export async function deleteExpense(id: string): Promise<void> {
+  await deleteDoc(doc(db, "expenses", id));
+  cachedExpenses = null;
+  lastExpensesFetch = 0;
+}
+
+// StockLogs DB Operations
+let cachedStockLogs: StockLog[] | null = null;
+let lastStockLogsFetch = 0;
+
+export async function getStockLogs(productId?: string): Promise<StockLog[]> {
+  if (cachedStockLogs && isCacheValid(lastStockLogsFetch)) {
+    const logs = cachedStockLogs;
+    return productId ? logs.filter((log) => log.productId === productId) : logs;
+  }
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "stockLogs"));
+    const list: StockLog[] = [];
+    querySnapshot.forEach((doc) => {
+      list.push(doc.data() as StockLog);
+    });
+
+    const sorted = list.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    cachedStockLogs = sorted;
+    lastStockLogsFetch = Date.now();
+    return productId ? sorted.filter((log) => log.productId === productId) : sorted;
+  } catch (error) {
+    console.error("Error reading stock logs from Firestore:", error);
+    const fallback = cachedStockLogs || [];
+    return productId ? fallback.filter((log) => log.productId === productId) : fallback;
+  }
+}
+
+export async function saveStockLog(log: StockLog): Promise<void> {
+  await setDoc(doc(db, "stockLogs", log.id), log);
+  cachedStockLogs = null;
+  lastStockLogsFetch = 0;
 }

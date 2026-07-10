@@ -14,6 +14,8 @@ import {
   Keyboard,
   HelpCircle,
   Settings,
+  ShoppingCart,
+  Receipt,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Company } from "@/lib/types";
@@ -21,6 +23,8 @@ import { Company } from "@/lib/types";
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/invoices", label: "Invoices", icon: FileSpreadsheet },
+  { href: "/purchases", label: "Purchases", icon: ShoppingCart },
+  { href: "/expenses", label: "Expenses", icon: Receipt },
   { href: "/customers", label: "Customers", icon: Users },
   { href: "/products", label: "Products", icon: Package },
   { href: "/settings", label: "Settings", icon: Settings },
@@ -52,16 +56,25 @@ export default function Navbar({ company }: { company: Company }) {
           router.push("/invoices");
         } else if (key === "3") {
           e.preventDefault();
-          router.push("/customers");
+          router.push("/purchases");
         } else if (key === "4") {
           e.preventDefault();
-          router.push("/products");
+          router.push("/customers");
         } else if (key === "5") {
           e.preventDefault();
+          router.push("/products");
+        } else if (key === "6") {
+          e.preventDefault();
           router.push("/settings");
+        } else if (key === "7") {
+          e.preventDefault();
+          router.push("/expenses");
         } else if (key === "n") {
           e.preventDefault();
           router.push("/invoices/new");
+        } else if (key === "p") {
+          e.preventDefault();
+          router.push("/purchases/new");
         } else if (key === "h") {
           e.preventDefault();
           setIsHelpOpen((prev) => !prev);
@@ -206,20 +219,32 @@ export default function Navbar({ company }: { company: Company }) {
                 <kbd className="px-2 py-0.5 bg-slate-100 border border-slate-200 rounded font-mono text-[9px] text-slate-600 shadow-sm">Alt + Shift + 2</kbd>
               </div>
               <div className="flex justify-between items-center">
-                <span>Go to Customers</span>
+                <span>Go to Purchases</span>
                 <kbd className="px-2 py-0.5 bg-slate-100 border border-slate-200 rounded font-mono text-[9px] text-slate-600 shadow-sm">Alt + Shift + 3</kbd>
               </div>
               <div className="flex justify-between items-center">
-                <span>Go to Products</span>
+                <span>Go to Customers</span>
                 <kbd className="px-2 py-0.5 bg-slate-100 border border-slate-200 rounded font-mono text-[9px] text-slate-600 shadow-sm">Alt + Shift + 4</kbd>
               </div>
               <div className="flex justify-between items-center">
-                <span>Go to Settings</span>
+                <span>Go to Products</span>
                 <kbd className="px-2 py-0.5 bg-slate-100 border border-slate-200 rounded font-mono text-[9px] text-slate-600 shadow-sm">Alt + Shift + 5</kbd>
               </div>
-              <div className="flex justify-between items-center font-semibold text-slate-900">
+              <div className="flex justify-between items-center">
+                <span>Go to Settings</span>
+                <kbd className="px-2 py-0.5 bg-slate-100 border border-slate-200 rounded font-mono text-[9px] text-slate-600 shadow-sm">Alt + Shift + 6</kbd>
+              </div>
+              <div className="flex justify-between items-center">
+                <span>Go to Expenses</span>
+                <kbd className="px-2 py-0.5 bg-slate-100 border border-slate-200 rounded font-mono text-[9px] text-slate-600 shadow-sm">Alt + Shift + 7</kbd>
+              </div>
+              <div className="flex justify-between items-center font-semibold text-slate-900 border-t pt-2 mt-2">
                 <span>Create New Invoice</span>
                 <kbd className="px-2 py-0.5 bg-indigo-50 border border-indigo-100 rounded font-mono text-[9px] text-indigo-600 shadow-sm">Alt + Shift + N</kbd>
+              </div>
+              <div className="flex justify-between items-center font-semibold text-slate-900">
+                <span>Create New Purchase</span>
+                <kbd className="px-2 py-0.5 bg-indigo-50 border border-indigo-100 rounded font-mono text-[9px] text-indigo-600 shadow-sm">Alt + Shift + P</kbd>
               </div>
 
               <div className="text-slate-400 font-bold uppercase tracking-wider text-[10px] pt-2">Invoice Creator</div>

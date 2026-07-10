@@ -13,12 +13,13 @@ import {
   Download,
   Printer,
   Trash2,
+  History,
 } from "lucide-react";
 import { Product, Company } from "@/lib/types";
 import ProductDialog from "./ProductDialog";
-import { formatCurrency, exportToCsv, triggerServerDownload } from "@/lib/utils";
+import { formatCurrency, exportToCsv, triggerServerDownload, cn, formatDate } from "@/lib/utils";
 import { ProductQrCode } from "./ProductQrCode";
-import { deleteProductAction } from "@/app/actions";
+import { deleteProductAction, recordManualStockAdjustmentAction } from "@/app/actions";
 import QRCode from "qrcode";
 import JSZip from "jszip";
 import StickerPrintDialog from "./StickerPrintDialog";
@@ -27,12 +28,14 @@ interface ProductsListProps {
   initialProducts: Product[];
   company: Company;
   lowStockLimit?: number;
+  initialStockLogs?: any[];
 }
 
 const ITEMS_PER_PAGE = 20;
 
-export default function ProductsList({ initialProducts, company, lowStockLimit = 5 }: ProductsListProps) {
+export default function ProductsList({ initialProducts, company, lowStockLimit = 5, initialStockLogs }: ProductsListProps) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [stockLogs, setStockLogs] = useState<any[]>(initialStockLogs || []);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   
@@ -43,6 +46,15 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
   const [qrProduct, setQrProduct] = useState<Product | null>(null);
   const [isPrintingLabels, setIsPrintingLabels] = useState(false);
   const [isDownloadingZip, setIsDownloadingZip] = useState(false);
+
+  // Stock History Modal States
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+  const [historyProduct, setHistoryProduct] = useState<Product | null>(null);
+  const [adjType, setAdjType] = useState<"inward" | "outward">("inward");
+  const [adjQty, setAdjQty] = useState("");
+  const [adjNotes, setAdjNotes] = useState("");
+  const [isAdjusting, setIsAdjusting] = useState(false);
+  const [adjError, setAdjError] = useState("");
 
   // Advanced Filter States
   const [stockFilter, setStockFilter] = useState<"all" | "low" | "out" | "available">("all");
@@ -119,6 +131,61 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
       setCurrentPage(totalPages);
     }
   }, [totalPages, currentPage]);
+
+  const handleOpenHistory = (product: Product) => {
+    setHistoryProduct(product);
+    setAdjQty("");
+    setAdjNotes("");
+    setAdjType("inward");
+    setAdjError("");
+    setIsHistoryModalOpen(true);
+  };
+
+  const handleAdjustStock = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!historyProduct) return;
+    const qty = parseInt(adjQty);
+    if (isNaN(qty) || qty <= 0) {
+      setAdjError("Please enter a valid positive quantity.");
+      return;
+    }
+
+    setIsAdjusting(true);
+    setAdjError("");
+
+    try {
+      const finalQty = adjType === "inward" ? qty : -qty;
+      const res = await recordManualStockAdjustmentAction(historyProduct.id, finalQty, adjNotes || "Manual stock adjustment");
+      if (res.success && res.product) {
+        setProducts((prev) =>
+          prev.map((p) => (p.id === historyProduct.id ? res.product! : p))
+        );
+        const prevStock = historyProduct.stock ?? 0;
+        const newStock = res.product.stock ?? 0;
+        const newLog = {
+          id: Math.random().toString(),
+          productId: historyProduct.id,
+          date: new Date().toISOString(),
+          type: (finalQty > 0 ? "inward" : "outward") as any,
+          quantity: Math.abs(finalQty),
+          previousStock: prevStock,
+          newStock: newStock,
+          referenceId: "manual",
+          referenceNo: "Manual",
+          notes: adjNotes || "Manual stock adjustment",
+          createdAt: new Date().toISOString(),
+        };
+        setStockLogs((prev) => [newLog, ...prev]);
+        setHistoryProduct(res.product);
+        setAdjQty("");
+        setAdjNotes("");
+      }
+    } catch (err: any) {
+      setAdjError(err.message || "Failed to adjust stock.");
+    } finally {
+      setIsAdjusting(false);
+    }
+  };
 
   const handleEdit = (product: Product) => {
     setSelectedProduct(product);
@@ -410,6 +477,13 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
                             <QrCode className="h-4.5 w-4.5" />
                           </button>
                           <button
+                            onClick={() => handleOpenHistory(prod)}
+                            className="p-2 hover:bg-amber-50 hover:text-amber-600 rounded-lg text-slate-400 transition-colors"
+                            title="Stock History & Adjustment"
+                          >
+                            <History className="h-4.5 w-4.5" />
+                          </button>
+                          <button
                             onClick={() => handleEdit(prod)}
                             className="p-2 hover:bg-slate-100 hover:text-slate-800 rounded-lg text-slate-400 transition-colors"
                             title="Edit Product"
@@ -458,6 +532,13 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
               {/* Actions Box Absolute Top Right */}
               <div className="absolute top-4 right-4 flex gap-1">
                 <button
+                  onClick={() => handleOpenHistory(prod)}
+                  className="p-2 bg-slate-50 hover:bg-amber-50 text-slate-400 hover:text-amber-600 rounded-xl transition-colors"
+                  title="Stock History & Adjustment"
+                >
+                  <History className="h-4 w-4" />
+                </button>
+                <button
                   onClick={() => handleEdit(prod)}
                   className="p-2 bg-slate-50 hover:bg-indigo-50 text-slate-400 hover:text-indigo-600 rounded-xl transition-colors"
                   title="Edit Product"
@@ -488,7 +569,7 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
                       <span className="inline-flex items-center rounded-md bg-rose-50 px-2 py-0.5 text-[10px] font-bold text-rose-700">
                         Out of stock
                       </span>
-                    ) : prod.stock !== undefined && prod.stock <= 10 ? (
+                    ) : prod.stock !== undefined && prod.stock <= lowStockLimit ? (
                       <span className="inline-flex items-center rounded-md bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700">
                         Low stock ({prod.stock})
                       </span>
@@ -619,6 +700,142 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
           products={products}
           company={company}
         />
+      )}
+
+      {/* Stock History & Adjustment Modal */}
+      {isHistoryModalOpen && historyProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 space-y-6 relative max-h-[90vh] flex flex-col overflow-hidden">
+            <div className="flex justify-between items-center pb-3 border-b border-slate-100 bg-slate-50/50 -mx-6 -mt-6 px-6 py-4">
+              <div>
+                <h3 className="font-extrabold text-slate-900 text-sm">Stock Ledger & Auditing</h3>
+                <p className="text-[10px] text-slate-500 font-bold mt-0.5">{historyProduct.name} ({historyProduct.code || "No code"})</p>
+              </div>
+              <button 
+                onClick={() => setIsHistoryModalOpen(false)}
+                className="text-slate-400 hover:text-slate-650 text-sm font-bold"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto space-y-6 pr-1">
+              {/* Quick info */}
+              <div className="flex justify-between items-center p-3.5 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold">
+                <span className="text-slate-550">Current Available Stock:</span>
+                <span className="text-indigo-650">{historyProduct.stock ?? 0} {historyProduct.unit}</span>
+              </div>
+
+              {/* Adjust stock form */}
+              <form onSubmit={handleAdjustStock} className="p-4 bg-slate-50 rounded-xl border border-slate-150/80 space-y-3">
+                <h4 className="text-[10px] text-slate-450 font-bold uppercase tracking-wider">Manual Adjustment Form</h4>
+                
+                {adjError && (
+                  <div className="p-2.5 bg-rose-50 border border-rose-100 text-rose-600 rounded-lg text-xs font-bold">
+                    {adjError}
+                  </div>
+                )}
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[9px] text-slate-400 font-bold uppercase mb-1">Adjustment Type</label>
+                    <select
+                      value={adjType}
+                      onChange={(e: any) => setAdjType(e.target.value)}
+                      className="w-full text-xs font-bold text-slate-700 bg-white border border-slate-200 rounded-lg px-2.5 py-2 outline-none cursor-pointer"
+                    >
+                      <option value="inward">Inward (+ Stock)</option>
+                      <option value="outward">Outward (- Stock)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[9px] text-slate-400 font-bold uppercase mb-1">Quantity</label>
+                    <input
+                      type="number"
+                      min="1"
+                      placeholder="0"
+                      value={adjQty}
+                      onChange={(e) => setAdjQty(e.target.value)}
+                      className="w-full text-xs font-bold text-slate-800 bg-white border border-slate-200 rounded-lg px-2.5 py-2 outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[9px] text-slate-400 font-bold uppercase mb-1">Notes / Reason</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Stock count correction, Damaged item..."
+                    value={adjNotes}
+                    onChange={(e) => setAdjNotes(e.target.value)}
+                    className="w-full text-xs font-semibold text-slate-800 bg-white border border-slate-200 rounded-lg px-2.5 py-2 outline-none"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isAdjusting}
+                  className="w-full py-2 bg-indigo-650 hover:bg-indigo-600 text-white rounded-lg text-xs font-bold transition-all disabled:opacity-40"
+                >
+                  {isAdjusting ? "Saving..." : "Apply Adjustment"}
+                </button>
+              </form>
+
+              {/* History Timeline */}
+              <div className="space-y-3">
+                <h4 className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Audit Trail / History</h4>
+                
+                {stockLogs.filter((log) => log.productId === historyProduct.id).length === 0 ? (
+                  <p className="text-xs text-slate-400 italic py-2 text-center">No transaction logs available for this product.</p>
+                ) : (
+                  <div className="relative border-l border-slate-150 pl-4 ml-2 space-y-4">
+                    {stockLogs
+                      .filter((log) => log.productId === historyProduct.id)
+                      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                      .map((log) => {
+                        const isPlus = log.type === "inward" || (log.type === "adjustment" && log.quantity > 0);
+                        return (
+                          <div key={log.id} className="relative text-xs">
+                            <div className={cn(
+                              "absolute -left-[21px] mt-1 h-2.5 w-2.5 rounded-full border-2 border-white",
+                              isPlus ? "bg-emerald-500" : "bg-rose-500"
+                            )} />
+                            
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <span className={cn(
+                                  "font-bold",
+                                  isPlus ? "text-emerald-600" : "text-rose-600"
+                                )}>
+                                  {isPlus ? "+" : ""}{log.quantity} Units
+                                </span>
+                                <span className="text-[10px] text-slate-400 ml-2 font-medium">({log.referenceNo})</span>
+                              </div>
+                              <span className="text-[10px] text-slate-450 font-semibold">{formatDate(log.createdAt)}</span>
+                            </div>
+
+                            <p className="text-[11px] text-slate-600 mt-1 font-medium">{log.notes || "Stock transaction log"}</p>
+                            <p className="text-[9px] text-slate-400 font-semibold mt-0.5">
+                              Stock: {log.previousStock} &rarr; {log.newStock}
+                            </p>
+                          </div>
+                        );
+                      })}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-slate-100 flex justify-end">
+              <button
+                onClick={() => setIsHistoryModalOpen(false)}
+                className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all"
+              >
+                Close Ledger
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
