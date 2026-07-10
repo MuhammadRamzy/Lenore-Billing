@@ -123,7 +123,7 @@ export default function DashboardTabs({
 
         <div className="relative z-10 w-full h-full flex items-end justify-between px-1 sm:px-6">
           {monthlyData.map((m, idx) => (
-            <div key={idx} className="flex flex-col items-center flex-1 group">
+            <div key={idx} className="flex flex-col items-center flex-1 h-full justify-end group">
               <div className="opacity-0 group-hover:opacity-100 transition-all duration-200 bg-slate-950 text-white text-[10px] font-bold p-2.5 rounded-xl absolute -translate-y-20 shadow-lg z-25 pointer-events-none w-36 text-center space-y-1">
                 <div className="text-[9px] text-slate-400 font-semibold">{m.label}</div>
                 <div className="flex justify-between text-indigo-400"><span>Sales:</span> <span>{formatCurrency(m.sales)}</span></div>
@@ -131,7 +131,7 @@ export default function DashboardTabs({
                 <div className="flex justify-between text-rose-400"><span>Expenses:</span> <span>{formatCurrency(m.expenses)}</span></div>
               </div>
 
-              <div className="flex items-end justify-center gap-0.5 sm:gap-1.5 h-full w-full">
+              <div className="flex items-end justify-center gap-0.5 sm:gap-1.5 h-[140px] sm:h-[160px] w-full">
                 {/* Sales Bar */}
                 <div
                   style={{ height: `${m.sales > 0 ? Math.max((m.sales / maxVal) * 80, 4) : 2}%` }}
@@ -580,7 +580,7 @@ export default function DashboardTabs({
                 <Link href="/invoices" className="flex-1 py-2 px-4 bg-white border border-slate-200 hover:border-slate-300 text-slate-700 text-xs font-bold rounded-xl active:scale-95 transition-all">
                   Sales Ledger
                 </Link>
-                <Link href="/expenses" className="flex-1 py-2 px-4 bg-indigo-650 hover:bg-indigo-600 text-white text-xs font-bold rounded-xl active:scale-95 transition-all">
+                <Link href="/expenses" className="flex-1 py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl active:scale-95 transition-all">
                   Expense Ledger
                 </Link>
               </div>

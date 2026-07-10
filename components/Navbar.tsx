@@ -90,14 +90,7 @@ export default function Navbar({ company }: { company: Company }) {
     <>
       {/* Mobile Top Bar */}
       <header className="flex items-center justify-between bg-slate-900 px-4 py-3.5 text-white lg:hidden border-b border-slate-800 print:hidden h-14 shrink-0">
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setIsOpen(true)}
-            className="p-1 rounded-lg text-slate-400 hover:text-white mr-1 active:scale-95 transition-transform"
-            aria-label="Open navigation menu"
-          >
-            <Menu className="h-5.5 w-5.5" />
-          </button>
+        <div className="flex items-center gap-2.5">
           <div className="bg-white p-1 rounded-lg shrink-0 flex items-center justify-center h-8 w-8">
             <img src="/logo.png" alt="Lenore Logo" className="h-6 w-auto object-contain" />
           </div>
@@ -105,7 +98,6 @@ export default function Navbar({ company }: { company: Company }) {
             {company.name.split(" ")[0]} Terminal
           </span>
         </div>
-        <div className="w-6" /> {/* Visual spacer */}
       </header>
 
       {/* Mobile Drawer Overlay */}

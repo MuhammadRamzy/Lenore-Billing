@@ -222,7 +222,7 @@ export default async function DashboardPage() {
         </div>
         <Link
           href="/invoices/new"
-          className="inline-flex items-center justify-center gap-2 bg-indigo-650 hover:bg-indigo-600 text-white font-bold px-5 py-2.5 rounded-xl shadow-md transition-all active:scale-95 text-xs self-start sm:self-auto animate-fade-in"
+          className="inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl shadow-md transition-all active:scale-95 text-xs self-start sm:self-auto animate-fade-in"
         >
           <Plus className="h-4.5 w-4.5" />
           New Invoice
@@ -230,7 +230,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* KPI Cards Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         {/* Sales Card */}
         <div className="bg-white rounded-2xl border border-slate-100 p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
           <div className="flex items-center justify-between">

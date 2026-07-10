@@ -775,7 +775,7 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
                 <button
                   type="submit"
                   disabled={isAdjusting}
-                  className="w-full py-2 bg-indigo-650 hover:bg-indigo-600 text-white rounded-lg text-xs font-bold transition-all disabled:opacity-40"
+                  className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition-all disabled:opacity-40"
                 >
                   {isAdjusting ? "Saving..." : "Apply Adjustment"}
                 </button>

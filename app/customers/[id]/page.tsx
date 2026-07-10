@@ -138,7 +138,7 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
         <div className="flex flex-wrap items-center gap-2">
           <Link
             href={`/invoices/new?customerId=${customer.id}`}
-            className="inline-flex items-center justify-center gap-2 bg-indigo-650 hover:bg-indigo-755 text-white font-semibold px-4 py-2 rounded-xl transition-all duration-150 active:scale-95 text-xs shadow-md shadow-indigo-600/10"
+            className="inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-xl transition-all duration-150 active:scale-95 text-xs shadow-md shadow-indigo-600/10"
           >
             <Plus className="h-3.5 w-3.5" />
             New Sale / Quotation
@@ -474,7 +474,7 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
                               className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors"
                               title="Download PDF Invoice"
                             >
-                              <Download className="h-3.5 w-3.5 text-indigo-650" />
+                              <Download className="h-3.5 w-3.5 text-indigo-600" />
                             </a>
                           </div>
                         </td>
