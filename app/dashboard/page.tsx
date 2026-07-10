@@ -230,90 +230,90 @@ export default async function DashboardPage() {
       </div>
 
       {/* KPI Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
         {/* Sales Card */}
-        <div className="bg-white rounded-2xl border border-slate-100 p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+        <div className="bg-white rounded-2xl border border-slate-100 p-3 sm:p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider">Sales This Month</span>
-            <div className="p-2 bg-indigo-50 rounded-xl text-indigo-600 group-hover:scale-110 transition-transform duration-200">
-              <TrendingUp className="h-4 w-4" />
+            <span className="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider truncate">Sales This Month</span>
+            <div className="p-1.5 sm:p-2 bg-indigo-50 rounded-lg text-indigo-650 group-hover:scale-110 transition-transform duration-200 shrink-0">
+              <TrendingUp className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </div>
           </div>
-          <div className="mt-3">
-            <h3 className="text-lg sm:text-xl lg:text-2xl font-black text-slate-900 tracking-tight">
+          <div className="mt-2.5 sm:mt-3">
+            <h3 className="text-sm sm:text-xl lg:text-2xl font-black text-slate-900 tracking-tight truncate">
               {formatCurrency(totalBilledThisMonth)}
             </h3>
             <p className={cn(
-              "text-[9px] sm:text-[10px] font-bold mt-1.5 flex items-center gap-1",
+              "text-[8px] sm:text-[10px] font-bold mt-1 sm:mt-1.5 flex items-center gap-0.5 sm:gap-1",
               salesMoM >= 0 ? "text-emerald-600" : "text-rose-500"
             )}>
-              {salesMoM >= 0 ? "+" : ""}{salesMoM.toFixed(1)}% vs last month
+              {salesMoM >= 0 ? "+" : ""}{salesMoM.toFixed(1)}% MoM
             </p>
           </div>
         </div>
 
         {/* Purchases Card */}
-        <div className="bg-white rounded-2xl border border-slate-100 p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+        <div className="bg-white rounded-2xl border border-slate-100 p-3 sm:p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider">Purchased This Month</span>
-            <div className="p-2 bg-emerald-50 rounded-xl text-emerald-600 group-hover:scale-110 transition-transform duration-200">
-              <ShoppingCart className="h-4 w-4" />
+            <span className="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider truncate">Purchased</span>
+            <div className="p-1.5 sm:p-2 bg-emerald-50 rounded-lg text-emerald-600 group-hover:scale-110 transition-transform duration-200 shrink-0">
+              <ShoppingCart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </div>
           </div>
-          <div className="mt-3">
-            <h3 className="text-lg sm:text-xl lg:text-2xl font-black text-slate-900 tracking-tight">
+          <div className="mt-2.5 sm:mt-3">
+            <h3 className="text-sm sm:text-xl lg:text-2xl font-black text-slate-900 tracking-tight truncate">
               {formatCurrency(totalPurchasesThisMonth)}
             </h3>
             <p className={cn(
-              "text-[9px] sm:text-[10px] font-bold mt-1.5 flex items-center gap-1",
+              "text-[8px] sm:text-[10px] font-bold mt-1 sm:mt-1.5 flex items-center gap-0.5 sm:gap-1",
               purchasesMoM <= 0 ? "text-emerald-600" : "text-amber-500"
             )}>
-              {purchasesMoM >= 0 ? "+" : ""}{purchasesMoM.toFixed(1)}% vs last month
+              {purchasesMoM >= 0 ? "+" : ""}{purchasesMoM.toFixed(1)}% MoM
             </p>
           </div>
         </div>
 
         {/* Expenses Card */}
-        <div className="bg-white rounded-2xl border border-slate-100 p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+        <div className="bg-white rounded-2xl border border-slate-100 p-3 sm:p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider">Expenses This Month</span>
-            <div className="p-2 bg-rose-50 rounded-xl text-rose-600 group-hover:scale-110 transition-transform duration-200">
-              <TrendingDown className="h-4 w-4" />
+            <span className="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider truncate">Expenses</span>
+            <div className="p-1.5 sm:p-2 bg-rose-50 rounded-lg text-rose-600 group-hover:scale-110 transition-transform duration-200 shrink-0">
+              <TrendingDown className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </div>
           </div>
-          <div className="mt-3">
-            <h3 className="text-lg sm:text-xl lg:text-2xl font-black text-slate-900 tracking-tight">
+          <div className="mt-2.5 sm:mt-3">
+            <h3 className="text-sm sm:text-xl lg:text-2xl font-black text-slate-900 tracking-tight truncate">
               {formatCurrency(totalExpensesThisMonth)}
             </h3>
             <p className={cn(
-              "text-[9px] sm:text-[10px] font-bold mt-1.5 flex items-center gap-1",
+              "text-[8px] sm:text-[10px] font-bold mt-1 sm:mt-1.5 flex items-center gap-0.5 sm:gap-1",
               expensesMoM <= 0 ? "text-emerald-600" : "text-rose-500"
             )}>
-              {expensesMoM >= 0 ? "+" : ""}{expensesMoM.toFixed(1)}% vs last month
+              {expensesMoM >= 0 ? "+" : ""}{expensesMoM.toFixed(1)}% MoM
             </p>
           </div>
         </div>
 
         {/* Net GST Liability */}
-        <div className="bg-white rounded-2xl border border-slate-100 p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+        <div className="bg-white rounded-2xl border border-slate-100 p-3 sm:p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider">Net GST Liability</span>
+            <span className="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider truncate">Net GST Due</span>
             <div className={cn(
-              "p-2 rounded-xl group-hover:scale-110 transition-transform",
+              "p-1.5 sm:p-2 rounded-lg group-hover:scale-110 transition-transform shrink-0",
               netGstLiability >= 0 ? "bg-amber-50 text-amber-600" : "bg-emerald-50 text-emerald-600"
             )}>
-              <IndianRupee className="h-4 w-4" />
+              <IndianRupee className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </div>
           </div>
-          <div className="mt-3">
-            <h3 className="text-lg sm:text-xl lg:text-2xl font-black text-slate-900 tracking-tight">
+          <div className="mt-2.5 sm:mt-3">
+            <h3 className="text-sm sm:text-xl lg:text-2xl font-black text-slate-900 tracking-tight truncate">
               {formatCurrency(Math.abs(netGstLiability))}
             </h3>
             <p className={cn(
-              "text-[9px] sm:text-[10px] font-bold mt-1.5",
-              netGstLiability >= 0 ? "text-rose-650" : "text-emerald-600"
-            )}>
-              {netGstLiability >= 0 ? "To Pay (Sales > Purchase ITC)" : "Excess ITC Credit Claimable"}
+              "text-[8px] sm:text-[10px] font-bold mt-1 sm:mt-1.5 truncate",
+              netGstLiability >= 0 ? "text-rose-600" : "text-emerald-600"
+            )} title={netGstLiability >= 0 ? "To Pay (Sales > Purchase ITC)" : "Excess ITC Credit Claimable"}>
+              {netGstLiability >= 0 ? "To Pay (Sales > ITC)" : "Excess ITC Credit"}
             </p>
           </div>
         </div>
