@@ -12,9 +12,10 @@ import {
   CheckCircle,
   Loader2,
   FileText,
+  Key,
 } from "lucide-react";
 import { Company, CompanySchema } from "@/lib/types";
-import { updateCompanyAction } from "@/app/actions";
+import { updateCompanyAction, changePasswordAction } from "@/app/actions";
 import { cn } from "@/lib/utils";
 
 interface SettingsFormProps {
@@ -27,6 +28,49 @@ export default function SettingsForm({ initialCompany }: SettingsFormProps) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Password Change States
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [pwdLoading, setPwdLoading] = useState(false);
+  const [pwdSuccess, setPwdSuccess] = useState(false);
+  const [pwdError, setPwdError] = useState<string | null>(null);
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPwdLoading(true);
+    setPwdSuccess(false);
+    setPwdError(null);
+
+    if (newPassword !== confirmPassword) {
+      setPwdError("New passwords do not match");
+      setPwdLoading(false);
+      return;
+    }
+
+    if (newPassword.length < 4) {
+      setPwdError("Password must be at least 4 characters long");
+      setPwdLoading(false);
+      return;
+    }
+
+    try {
+      const res = await changePasswordAction(currentPassword, newPassword);
+      if (res.success) {
+        setPwdSuccess(true);
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      } else {
+        setPwdError(res.error || "Failed to update password");
+      }
+    } catch (err: any) {
+      setPwdError(err.message || "An unexpected error occurred");
+    } finally {
+      setPwdLoading(false);
+    }
+  };
 
   const handleChange = (path: string, value: string) => {
     setSuccess(false);
@@ -99,7 +143,8 @@ export default function SettingsForm({ initialCompany }: SettingsFormProps) {
   };
 
   return (
-    <form onSubmit={handleSave} className="space-y-8 max-w-4xl mx-auto pb-16">
+    <div className="space-y-8 max-w-4xl mx-auto pb-16">
+      <form onSubmit={handleSave} className="space-y-8">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
@@ -599,5 +644,91 @@ export default function SettingsForm({ initialCompany }: SettingsFormProps) {
         </div>
       </div>
     </form>
+
+      {/* Security Settings Card */}
+      <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm space-y-5">
+        <h2 className="text-base font-extrabold text-slate-900 border-b border-slate-50 pb-3 flex items-center gap-2">
+          <Key className="h-5 w-5 text-indigo-600" />
+          Terminal Access Settings
+        </h2>
+        <p className="text-xs text-slate-500">
+          Modify the access key used to authorize sessions on this billing terminal console. Keeping it updated prevents unauthorized transactions.
+        </p>
+
+        {pwdSuccess && (
+          <div className="p-4 bg-emerald-50 text-emerald-800 text-sm font-bold rounded-xl flex items-center gap-2 border border-emerald-100 animate-in fade-in duration-200">
+            <CheckCircle className="h-5 w-5 text-emerald-600 shrink-0" />
+            <span>Password updated successfully! Your current session is renewed.</span>
+          </div>
+        )}
+
+        {pwdError && (
+          <div className="p-4 bg-rose-50 text-rose-800 text-sm font-bold rounded-xl border border-rose-100 animate-in fade-in duration-200">
+            {pwdError}
+          </div>
+        )}
+
+        <form onSubmit={handlePasswordChange} className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            <div>
+              <label className="block text-xs font-bold text-slate-650 uppercase tracking-wider mb-1.5">
+                Current Password *
+              </label>
+              <input
+                type="password"
+                required
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full text-sm rounded-lg border border-slate-200 px-3 py-2 bg-white focus:border-indigo-500 focus:outline-none text-slate-800 font-semibold"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-650 uppercase tracking-wider mb-1.5">
+                New Password *
+              </label>
+              <input
+                type="password"
+                required
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full text-sm rounded-lg border border-slate-200 px-3 py-2 bg-white focus:border-indigo-500 focus:outline-none text-slate-800 font-semibold"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-650 uppercase tracking-wider mb-1.5">
+                Confirm New Password *
+              </label>
+              <input
+                type="password"
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full text-sm rounded-lg border border-slate-200 px-3 py-2 bg-white focus:border-indigo-500 focus:outline-none text-slate-800 font-semibold"
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end pt-3 border-t border-slate-50">
+            <button
+              type="submit"
+              disabled={pwdLoading}
+              className="inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl shadow-md transition-all duration-150 active:scale-95 text-xs disabled:opacity-75 cursor-pointer"
+            >
+              {pwdLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Key className="h-4 w-4" />
+              )}
+              Update Password
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }

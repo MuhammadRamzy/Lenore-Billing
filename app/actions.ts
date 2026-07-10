@@ -1,7 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { v4 as uuidv4 } from "uuid";
+import { hashPassword, signSession, verifySession } from "@/lib/auth";
 import {
   getCompany,
   saveCompany,
@@ -23,6 +25,8 @@ import {
   getExpenses,
   saveExpense,
   deleteExpense,
+  getPasswordHash,
+  savePasswordHash,
 } from "@/lib/db";
 import {
   Company,
@@ -72,8 +76,22 @@ async function logStockChange(
   }
 }
 
+
+async function verifyAuthSessionOrThrow() {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get("session")?.value;
+  if (!sessionCookie) {
+    throw new Error("Unauthorized. Please log in first.");
+  }
+  const session = await verifySession(sessionCookie);
+  if (!session || !session.authenticated) {
+    throw new Error("Unauthorized. Session invalid or expired.");
+  }
+}
+
 // --- Company Actions ---
 export async function updateCompanyAction(data: Company) {
+  await verifyAuthSessionOrThrow();
   const validated = CompanySchema.parse(data);
   await saveCompany(validated);
   revalidatePath("/", "layout");
@@ -82,6 +100,7 @@ export async function updateCompanyAction(data: Company) {
 
 // --- Customer Actions ---
 export async function createCustomerAction(data: Omit<Customer, "id" | "createdAt">) {
+  await verifyAuthSessionOrThrow();
   const id = uuidv4();
   const createdAt = new Date().toISOString();
   
@@ -100,6 +119,7 @@ export async function createCustomerAction(data: Omit<Customer, "id" | "createdA
 }
 
 export async function updateCustomerAction(id: string, data: Omit<Customer, "id" | "createdAt">) {
+  await verifyAuthSessionOrThrow();
   const customers = await getCustomers();
   const existing = customers.find((c) => c.id === id);
   if (!existing) {
@@ -120,6 +140,7 @@ export async function updateCustomerAction(id: string, data: Omit<Customer, "id"
 }
 
 export async function deleteCustomerAction(id: string) {
+  await verifyAuthSessionOrThrow();
   await deleteCustomer(id);
   revalidatePath("/customers");
   revalidatePath("/invoices/new");
@@ -128,6 +149,7 @@ export async function deleteCustomerAction(id: string) {
 
 // --- Product Actions ---
 export async function createProductAction(data: Omit<Product, "id">) {
+  await verifyAuthSessionOrThrow();
   const id = uuidv4();
   const product: Product = {
     ...data,
@@ -157,6 +179,7 @@ export async function createProductAction(data: Omit<Product, "id">) {
 }
 
 export async function updateProductAction(id: string, data: Omit<Product, "id">) {
+  await verifyAuthSessionOrThrow();
   const products = await getProducts();
   const existing = products.find((p) => p.id === id);
   const oldStock = existing ? (existing.stock ?? 0) : 0;
@@ -189,6 +212,7 @@ export async function updateProductAction(id: string, data: Omit<Product, "id">)
 }
 
 export async function deleteProductAction(id: string) {
+  await verifyAuthSessionOrThrow();
   await deleteProduct(id);
   revalidatePath("/products");
   revalidatePath("/invoices/new");
@@ -254,6 +278,7 @@ export async function createInvoiceAction(data: {
   remarks?: string | null;
   status: "draft" | "sent" | "paid" | "overdue";
 }) {
+  await verifyAuthSessionOrThrow();
   const company = await getCompany();
   const customers = await getCustomers();
   const customer = customers.find((c) => c.id === data.customerId);
@@ -419,6 +444,7 @@ export async function updateInvoiceAction(
     status: "draft" | "sent" | "paid" | "overdue";
   }
 ) {
+  await verifyAuthSessionOrThrow();
   const invoices = await getInvoices();
   const index = invoices.findIndex((inv) => inv.id === id);
   if (index === -1) {
@@ -581,6 +607,7 @@ export async function updateInvoiceStatusAction(
   id: string,
   status: "draft" | "sent" | "paid" | "overdue"
 ) {
+  await verifyAuthSessionOrThrow();
   const invoices = await getInvoices();
   const existing = invoices.find((inv) => inv.id === id);
   if (!existing) {
@@ -600,6 +627,7 @@ export async function updateInvoiceStatusAction(
 }
 
 export async function deleteInvoiceAction(id: string) {
+  await verifyAuthSessionOrThrow();
   const invoices = await getInvoices();
   const existingInvoice = invoices.find((inv) => inv.id === id);
   if (!existingInvoice) {
@@ -640,6 +668,7 @@ export async function deleteInvoiceAction(id: string) {
 }
 
 export async function convertQuotationToInvoiceAction(id: string) {
+  await verifyAuthSessionOrThrow();
   const invoices = await getInvoices();
   const existingInvoice = invoices.find((inv) => inv.id === id);
   if (!existingInvoice) {
@@ -727,6 +756,7 @@ export async function createPurchaseAction(data: {
   status: "pending" | "paid";
   remarks?: string | null;
 }) {
+  await verifyAuthSessionOrThrow();
   const company = await getCompany();
 
   let isInterState = false;
@@ -837,6 +867,7 @@ export async function updatePurchaseAction(
     remarks?: string | null;
   }
 ) {
+  await verifyAuthSessionOrThrow();
   const purchases = await getPurchases();
   const existingPurchase = purchases.find((p) => p.id === id);
   if (!existingPurchase) {
@@ -959,6 +990,7 @@ export async function updatePurchaseAction(
 }
 
 export async function deletePurchaseAction(id: string) {
+  await verifyAuthSessionOrThrow();
   const purchases = await getPurchases();
   const existingPurchase = purchases.find((p) => p.id === id);
   if (!existingPurchase) {
@@ -998,6 +1030,7 @@ export async function deletePurchaseAction(id: string) {
 
 // --- Expense Actions ---
 export async function createExpenseAction(data: Omit<Expense, "id" | "createdAt" | "updatedAt">) {
+  await verifyAuthSessionOrThrow();
   const id = uuidv4();
   const now = new Date().toISOString();
 
@@ -1017,6 +1050,7 @@ export async function createExpenseAction(data: Omit<Expense, "id" | "createdAt"
 }
 
 export async function updateExpenseAction(id: string, data: Omit<Expense, "id" | "createdAt" | "updatedAt">) {
+  await verifyAuthSessionOrThrow();
   const expenses = await getExpenses();
   const existing = expenses.find((e) => e.id === id);
   if (!existing) {
@@ -1039,6 +1073,7 @@ export async function updateExpenseAction(id: string, data: Omit<Expense, "id" |
 }
 
 export async function deleteExpenseAction(id: string) {
+  await verifyAuthSessionOrThrow();
   await deleteExpense(id);
   revalidatePath("/dashboard");
   revalidatePath("/expenses");
@@ -1047,6 +1082,7 @@ export async function deleteExpenseAction(id: string) {
 
 // --- Manual Stock Adjustment Action ---
 export async function recordManualStockAdjustmentAction(productId: string, quantity: number, notes: string) {
+  await verifyAuthSessionOrThrow();
   const products = await getProducts();
   const prod = products.find((p) => p.id === productId);
   if (!prod) {
@@ -1073,3 +1109,81 @@ export async function recordManualStockAdjustmentAction(productId: string, quant
   revalidatePath("/dashboard");
   return { success: true, product: prod };
 }
+
+// --- Auth Actions ---
+export async function loginAction(password: string) {
+  try {
+    const savedHash = await getPasswordHash();
+    const enteredHash = await hashPassword(password);
+    
+    if (savedHash === enteredHash) {
+      const payload = {
+        authenticated: true,
+        exp: Date.now() + 30 * 24 * 60 * 60 * 1000, // 30 days
+      };
+      
+      const token = await signSession(payload);
+      const cookieStore = await cookies();
+      cookieStore.set("session", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+        path: "/",
+      });
+      
+      return { success: true };
+    }
+    
+    return { success: false, error: "Incorrect password" };
+  } catch (error: any) {
+    console.error("Login action error:", error);
+    return { success: false, error: error.message || "Authentication failed" };
+  }
+}
+
+export async function logoutAction() {
+  try {
+    const cookieStore = await cookies();
+    cookieStore.delete("session");
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: "Failed to logout" };
+  }
+}
+
+export async function changePasswordAction(oldPassword: string, newPassword: string) {
+  try {
+    const savedHash = await getPasswordHash();
+    const oldHash = await hashPassword(oldPassword);
+    
+    if (savedHash !== oldHash) {
+      return { success: false, error: "Incorrect current password" };
+    }
+    
+    const newHash = await hashPassword(newPassword);
+    await savePasswordHash(newHash);
+    
+    // Renew the session cookie with the new password signature
+    const payload = {
+      authenticated: true,
+      exp: Date.now() + 30 * 24 * 60 * 60 * 1000, // 30 days
+    };
+    
+    const token = await signSession(payload);
+    const cookieStore = await cookies();
+    cookieStore.set("session", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 30 * 24 * 60 * 60, // 30 days
+      path: "/",
+    });
+    
+    return { success: true };
+  } catch (error: any) {
+    console.error("Change password action error:", error);
+    return { success: false, error: error.message || "Failed to update password" };
+  }
+}
+

@@ -16,8 +16,10 @@ import {
   Settings,
   ShoppingCart,
   Receipt,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { logoutAction } from "@/app/actions";
 import { Company } from "@/lib/types";
 
 const NAV_ITEMS = [
@@ -35,6 +37,14 @@ export default function Navbar({ company }: { company: Company }) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+
+  const handleLogout = async () => {
+    const res = await logoutAction();
+    if (res.success) {
+      router.push("/login");
+      router.refresh();
+    }
+  };
 
   // Close mobile drawer when pathname changes
   useEffect(() => {
@@ -152,6 +162,14 @@ export default function Navbar({ company }: { company: Company }) {
                 </Link>
               );
             })}
+
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-sm font-semibold text-rose-450 hover:bg-rose-950/20 hover:text-rose-400 transition-colors mt-2 cursor-pointer"
+            >
+              <LogOut className="h-5 w-5 shrink-0" />
+              Logout Session
+            </button>
           </nav>
         </div>
 
@@ -260,6 +278,14 @@ export default function Navbar({ company }: { company: Company }) {
                 </Link>
               );
             })}
+
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold text-rose-450 hover:bg-rose-950/20 hover:text-rose-400 transition-colors mt-2 cursor-pointer"
+            >
+              <LogOut className="h-5 w-5 shrink-0" />
+              Logout Session
+            </button>
           </nav>
         </div>
 

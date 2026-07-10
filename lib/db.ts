@@ -340,3 +340,24 @@ export async function saveStockLog(log: StockLog): Promise<void> {
   cachedStockLogs = null;
   lastStockLogsFetch = 0;
 }
+
+// Authentication Password Hash Operations
+export async function getPasswordHash(): Promise<string> {
+  try {
+    const docRef = doc(db, "settings", "auth");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists() && docSnap.data().passwordHash) {
+      return docSnap.data().passwordHash;
+    }
+  } catch (error) {
+    console.error("Error reading password hash from Firestore:", error);
+  }
+  // Default fallback password hash for "admin123"
+  const defaultHash = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9";
+  return defaultHash;
+}
+
+export async function savePasswordHash(hash: string): Promise<void> {
+  await setDoc(doc(db, "settings", "auth"), { passwordHash: hash });
+}
+

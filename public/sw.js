@@ -1,6 +1,7 @@
 const CACHE_NAME = "lenore-pos-cache-v1";
 const OFFLINE_URLS = [
   "/dashboard",
+  "/login",
   "/logo.png",
   "/manifest.json"
 ];
