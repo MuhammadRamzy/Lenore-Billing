@@ -5,10 +5,20 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Lock, Eye, EyeOff, ShieldCheck, AlertCircle, Loader2 } from "lucide-react";
 import { loginAction } from "@/app/actions";
 
+// Only same-origin paths may be redirected to after login. An absolute URL or
+// a protocol-relative "//host" path would let a crafted login link bounce the
+// user to an attacker's site once they have signed in.
+function safeRedirect(target: string | null): string {
+  if (!target || !target.startsWith("/") || target.startsWith("//")) {
+    return "/dashboard";
+  }
+  return target;
+}
+
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/dashboard";
+  const redirectTo = safeRedirect(searchParams.get("redirect"));
 
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);

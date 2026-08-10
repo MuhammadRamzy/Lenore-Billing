@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isAuthenticated } from "@/lib/api-auth";
 import React from "react";
 import { pdf, Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
 import QRCode from "qrcode";
@@ -9,6 +10,10 @@ export const revalidate = 0;
 
 export async function POST(request: NextRequest) {
   try {
+    if (!(await isAuthenticated())) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json();
     const { products, quantities, config, custom, toggles } = body;
 

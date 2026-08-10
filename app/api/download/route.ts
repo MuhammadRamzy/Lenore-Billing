@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isAuthenticated } from "@/lib/api-auth";
 
 export const revalidate = 0;
 
 export async function POST(request: NextRequest) {
   try {
+    if (!(await isAuthenticated())) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const formData = await request.formData();
     const filename = formData.get("filename") as string;
     const contentType = formData.get("contentType") as string;

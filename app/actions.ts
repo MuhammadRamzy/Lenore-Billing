@@ -1,9 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { v4 as uuidv4 } from "uuid";
 import { hashPassword, signSession, verifySession } from "@/lib/auth";
+import { consumeAttempt, clearAttempts } from "@/lib/ratelimit";
 import {
   getCompany,
   saveCompany,
@@ -1111,12 +1112,31 @@ export async function recordManualStockAdjustmentAction(productId: string, quant
 }
 
 // --- Auth Actions ---
+// Rate limiting keys on the caller's IP rather than a single global counter,
+// so a flood of guesses cannot lock the real owner out of their own app.
+async function getClientIp(): Promise<string> {
+  const headerList = await headers();
+  const forwarded = headerList.get("x-forwarded-for");
+  return forwarded?.split(",")[0].trim() || headerList.get("x-real-ip") || "unknown";
+}
+
 export async function loginAction(password: string) {
   try {
+    const ip = await getClientIp();
+    const limit = await consumeAttempt("login", ip);
+    if (!limit.allowed) {
+      const minutes = Math.ceil(limit.retryAfterSeconds / 60);
+      return {
+        success: false,
+        error: `Too many failed attempts. Try again in ${minutes} minute${minutes === 1 ? "" : "s"}.`,
+      };
+    }
+
     const savedHash = await getPasswordHash();
     const enteredHash = await hashPassword(password);
-    
+
     if (savedHash === enteredHash) {
+      await clearAttempts("login", ip);
       const payload = {
         authenticated: true,
         exp: Date.now() + 30 * 24 * 60 * 60 * 1000, // 30 days
@@ -1154,13 +1174,34 @@ export async function logoutAction() {
 
 export async function changePasswordAction(oldPassword: string, newPassword: string) {
   try {
+    // Requires a live session as well as the current password: without the
+    // session check this action is a second, unauthenticated way to test
+    // password guesses against the account.
+    await verifyAuthSessionOrThrow();
+
+    const ip = await getClientIp();
+    const limit = await consumeAttempt("password-change", ip);
+    if (!limit.allowed) {
+      const minutes = Math.ceil(limit.retryAfterSeconds / 60);
+      return {
+        success: false,
+        error: `Too many failed attempts. Try again in ${minutes} minute${minutes === 1 ? "" : "s"}.`,
+      };
+    }
+
     const savedHash = await getPasswordHash();
     const oldHash = await hashPassword(oldPassword);
-    
+
     if (savedHash !== oldHash) {
       return { success: false, error: "Incorrect current password" };
     }
-    
+
+    await clearAttempts("password-change", ip);
+
+    if (newPassword.length < 8) {
+      return { success: false, error: "New password must be at least 8 characters." };
+    }
+
     const newHash = await hashPassword(newPassword);
     await savePasswordHash(newHash);
     

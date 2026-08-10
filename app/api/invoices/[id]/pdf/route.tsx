@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import React from "react";
 import { pdf, Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
 import { getInvoices, getCompany } from "@/lib/db";
+import { isAuthenticated } from "@/lib/api-auth";
 import path from "path";
 
 export const revalidate = 0;
@@ -725,6 +726,10 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!(await isAuthenticated())) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
     const invoices = await getInvoices();
     const invoice = invoices.find((inv) => inv.id === id);
