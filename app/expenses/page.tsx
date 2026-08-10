@@ -1,11 +1,11 @@
 import React from "react";
-import { getExpenses } from "@/lib/db";
-import ExpensesList from "@/components/ExpensesList";
+import { getExpenses, getTrips } from "@/lib/db";
+import ExpensesTabs from "@/components/ExpensesTabs";
 
 export const revalidate = 0;
 
 export default async function ExpensesPage() {
-  const expenses = await getExpenses();
+  const [expenses, trips] = await Promise.all([getExpenses(), getTrips()]);
 
-  return <ExpensesList initialExpenses={expenses} />;
+  return <ExpensesTabs expenses={expenses} trips={trips} />;
 }
