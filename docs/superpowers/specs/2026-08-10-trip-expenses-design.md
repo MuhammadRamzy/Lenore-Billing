@@ -57,8 +57,13 @@ parties; trip totals in the dashboard; PDF export of a trip.
   section, which is exactly how the team already writes it.
 - Advances and settlement (money handed out before a trip, balance returned after).
 - Parsing inline arithmetic such as `1436+1530`. The user enters the total.
-- The trailing `(25,000)` on the Delhi sheet, read as a manual round-down at settlement
-  rather than a system rule.
+- A rounding feature. The trailing `(25,000)` on the Delhi sheet is a deliberate
+  round-down from 25,347 that feeds the final 27,100, so it is load-bearing rather than
+  cosmetic. It is recorded as an ordinary negative line item in an "Adjustment" section,
+  which keeps the round-down explicit and auditable without adding a rounding rule to the
+  model. Note also that the sheet's transport subtotal is 100 short of its own line items
+  (13,689, written as 13,589); the round-down absorbs the difference, so the settled
+  27,100 stands either way.
 - GST, payment mode, and reference numbers on trip line items. Trip entry is deliberately
   fast; a cost needing full tax treatment belongs in the ordinary expense ledger.
 
