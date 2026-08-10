@@ -97,11 +97,11 @@ export default function DashboardTabs({
             <BarChart3 className="h-5 w-5 text-indigo-600" />
             Cash Flow & Trend Chart
           </h2>
-          <p className="text-[10px] text-slate-400 font-semibold mt-0.5">
+          <p className="text-[0.72rem] text-slate-500 font-semibold mt-0.5">
             Compare monthly Sales inflows, Purchases, and operational Expenses.
           </p>
         </div>
-        <div className="flex items-center gap-3 text-[9px] font-extrabold uppercase">
+        <div className="flex items-center gap-3 text-[0.68rem] font-extrabold uppercase">
           <span className="flex items-center gap-1">
             <span className="h-2 w-2 rounded bg-indigo-600" /> Inflows (Sales)
           </span>
@@ -124,8 +124,8 @@ export default function DashboardTabs({
         <div className="relative z-10 w-full h-full flex items-end justify-between px-1 sm:px-6">
           {monthlyData.map((m, idx) => (
             <div key={idx} className="flex flex-col items-center flex-1 h-full justify-end group">
-              <div className="opacity-0 group-hover:opacity-100 transition-all duration-200 bg-slate-950 text-white text-[10px] font-bold p-2.5 rounded-xl absolute -translate-y-20 shadow-lg z-25 pointer-events-none w-36 text-center space-y-1">
-                <div className="text-[9px] text-slate-400 font-semibold">{m.label}</div>
+              <div className="opacity-0 group-hover:opacity-100 transition-all duration-200 bg-slate-950 text-white text-[0.72rem] font-bold p-2.5 rounded-xl absolute -translate-y-20 shadow-lg z-25 pointer-events-none w-36 text-center space-y-1">
+                <div className="text-[0.68rem] text-slate-500 font-semibold">{m.label}</div>
                 <div className="flex justify-between text-indigo-400"><span>Sales:</span> <span>{formatCurrency(m.sales)}</span></div>
                 <div className="flex justify-between text-emerald-400"><span>Purchases:</span> <span>{formatCurrency(m.purchases)}</span></div>
                 <div className="flex justify-between text-rose-400"><span>Expenses:</span> <span>{formatCurrency(m.expenses)}</span></div>
@@ -148,7 +148,7 @@ export default function DashboardTabs({
                   className="w-1.5 sm:w-3 bg-gradient-to-t from-rose-500 to-rose-400 rounded-t-sm shadow-sm transition-all duration-300"
                 />
               </div>
-              <span className="text-[9px] sm:text-[10px] font-bold text-slate-500 mt-2 tracking-tight">
+              <span className="text-[0.68rem] sm:text-[0.72rem] font-bold text-slate-500 mt-2 tracking-tight">
                 {m.label}
               </span>
             </div>
@@ -167,19 +167,19 @@ export default function DashboardTabs({
 
       <div className="space-y-4 pt-2">
         <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-2">
-          <div className="flex justify-between text-[11px] font-semibold">
+          <div className="flex justify-between text-[0.76rem] font-semibold">
             <span className="text-slate-500">Invoice Taxable Value:</span>
             <span className="font-bold text-slate-800">{formatCurrency(totalTaxableValue)}</span>
           </div>
-          <div className="flex justify-between text-[11px] font-semibold">
+          <div className="flex justify-between text-[0.76rem] font-semibold">
             <span className="text-slate-500">Collected Sales Tax:</span>
             <span className="font-bold text-slate-800">{formatCurrency(totalTax)}</span>
           </div>
-          <div className="flex justify-between text-[11px] font-semibold border-t pt-1.5 mt-1 border-slate-200">
+          <div className="flex justify-between text-[0.76rem] font-semibold border-t pt-1.5 mt-1 border-slate-200">
             <span className="text-slate-500">Less: Purchase ITC Credit:</span>
             <span className="font-bold text-slate-800">- {formatCurrency(totalTax - netGstLiability - totalExpenseGst)}</span>
           </div>
-          <div className="flex justify-between text-[11px] font-semibold">
+          <div className="flex justify-between text-[0.76rem] font-semibold">
             <span className="text-slate-500">Less: Expense ITC Credit:</span>
             <span className="font-bold text-slate-800">- {formatCurrency(totalExpenseGst)}</span>
           </div>
@@ -207,7 +207,7 @@ export default function DashboardTabs({
               title={`IGST: ${formatCurrency(totalIgst)}`}
             />
           </div>
-          <div className="flex justify-between text-[9px] text-slate-400 font-bold">
+          <div className="flex justify-between text-[0.68rem] text-slate-500 font-bold">
             <span className="flex items-center gap-1">
               <span className="h-2 w-2 rounded-full bg-indigo-500" /> CGST ({totalCgst > 0 && totalTax > 0 ? ((totalCgst / totalTax) * 100).toFixed(0) : 0}%)
             </span>
@@ -232,28 +232,28 @@ export default function DashboardTabs({
             <Percent className="h-5 w-5 text-indigo-650" />
             Operating Cash Profitability (All-Time)
           </h2>
-          <p className="text-[10px] text-slate-400 font-bold mt-0.5">
+          <p className="text-[0.72rem] text-slate-500 font-bold mt-0.5">
             General ledger performance summarizing sales inflows minus purchasing and operational costs.
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="p-4 bg-slate-50 border border-slate-100 rounded-xl space-y-1">
-            <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Gross Operating Profit</div>
+            <div className="text-[0.72rem] text-slate-500 font-bold uppercase tracking-wider">Gross Operating Profit</div>
             <div className={cn("text-lg font-black", operatingProfit >= 0 ? "text-emerald-600" : "text-rose-600")}>
               {formatCurrency(operatingProfit)}
             </div>
           </div>
 
           <div className="p-4 bg-slate-50 border border-slate-100 rounded-xl space-y-1">
-            <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Operational Profit Margin</div>
+            <div className="text-[0.72rem] text-slate-500 font-bold uppercase tracking-wider">Operational Profit Margin</div>
             <div className={cn("text-lg font-black", profitMarginPercent >= 0 ? "text-emerald-600" : "text-rose-600")}>
               {profitMarginPercent.toFixed(1)}%
             </div>
           </div>
 
           <div className="p-4 bg-slate-50 border border-slate-100 rounded-xl space-y-1">
-            <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Operating Cost Ratio</div>
+            <div className="text-[0.72rem] text-slate-500 font-bold uppercase tracking-wider">Operating Cost Ratio</div>
             <div className="text-lg font-black text-slate-900">
               {monthlyData.reduce((acc, c) => acc + c.sales, 0) > 0
                 ? (((totalPurchases + totalExpenses) / monthlyData.reduce((acc, c) => acc + c.sales, 0)) * 100).toFixed(1)
@@ -265,7 +265,7 @@ export default function DashboardTabs({
         <div className="space-y-4">
           <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider">Business Expenses Ledger Breakdown</h3>
           {expenseCategoriesBreakdown.length === 0 ? (
-            <p className="text-xs text-slate-400 italic">No business expenses recorded yet.</p>
+            <p className="text-xs text-slate-500 italic">No business expenses recorded yet.</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {expenseCategoriesBreakdown.map((cat, idx) => (
@@ -284,7 +284,7 @@ export default function DashboardTabs({
                       className="bg-rose-500 h-full rounded-full"
                     />
                   </div>
-                  <div className="text-[9px] text-slate-400 font-semibold text-right">
+                  <div className="text-[0.68rem] text-slate-500 font-semibold text-right">
                     {cat.percent.toFixed(1)}% of total expenses
                   </div>
                 </div>
@@ -304,7 +304,7 @@ export default function DashboardTabs({
       </h2>
 
       {topCustomers.length === 0 ? (
-        <p className="text-xs text-slate-400 italic">No customer sales data available.</p>
+        <p className="text-xs text-slate-500 italic">No customer sales data available.</p>
       ) : (
         <div className="space-y-4">
           {topCustomers.map((c, idx) => {
@@ -323,7 +323,7 @@ export default function DashboardTabs({
                     />
                   </div>
                 </div>
-                <div className="text-[10px] text-slate-400">
+                <div className="text-[0.72rem] text-slate-500">
                   Billed <span className="font-bold text-slate-600">{c.count}</span> times
                 </div>
               </div>
@@ -342,7 +342,7 @@ export default function DashboardTabs({
       </h2>
 
       {topProducts.length === 0 ? (
-        <p className="text-xs text-slate-400 italic">No product sales data available.</p>
+        <p className="text-xs text-slate-500 italic">No product sales data available.</p>
       ) : (
         <div className="space-y-4">
           {topProducts.map((p, idx) => {
@@ -361,7 +361,7 @@ export default function DashboardTabs({
                     />
                   </div>
                 </div>
-                <div className="text-[10px] text-slate-400">
+                <div className="text-[0.72rem] text-slate-500">
                   Total sales: <span className="font-bold text-slate-600">{formatCurrency(p.total)}</span>
                 </div>
               </div>
@@ -383,7 +383,7 @@ export default function DashboardTabs({
           <button
             onClick={() => setActiveActivityTab("invoices")}
             className={cn(
-              "px-3 py-1 rounded text-[10px] font-bold transition-all",
+              "px-3 py-1 rounded text-[0.72rem] font-bold transition-all",
               activeActivityTab === "invoices" ? "bg-white text-slate-950 shadow-sm" : "text-slate-500 hover:text-slate-850"
             )}
           >
@@ -392,7 +392,7 @@ export default function DashboardTabs({
           <button
             onClick={() => setActiveActivityTab("purchases")}
             className={cn(
-              "px-3 py-1 rounded text-[10px] font-bold transition-all",
+              "px-3 py-1 rounded text-[0.72rem] font-bold transition-all",
               activeActivityTab === "purchases" ? "bg-white text-slate-950 shadow-sm" : "text-slate-500 hover:text-slate-850"
             )}
           >
@@ -401,7 +401,7 @@ export default function DashboardTabs({
           <button
             onClick={() => setActiveActivityTab("expenses")}
             className={cn(
-              "px-3 py-1 rounded text-[10px] font-bold transition-all",
+              "px-3 py-1 rounded text-[0.72rem] font-bold transition-all",
               activeActivityTab === "expenses" ? "bg-white text-slate-950 shadow-sm" : "text-slate-500 hover:text-slate-850"
             )}
           >
@@ -414,7 +414,7 @@ export default function DashboardTabs({
         {activeActivityTab === "invoices" && (
           <div className="divide-y divide-slate-100">
             {recentInvoices.length === 0 ? (
-              <p className="text-xs text-slate-400 italic py-4">No recent invoices.</p>
+              <p className="text-xs text-slate-500 italic py-4">No recent invoices.</p>
             ) : (
               recentInvoices.map((inv) => (
                 <div key={inv.id} className="py-3 flex justify-between items-center text-xs">
@@ -422,7 +422,7 @@ export default function DashboardTabs({
                     <Link href={`/invoices/${inv.id}`} className="font-bold text-slate-900 hover:underline">
                       {inv.invoiceNo}
                     </Link>
-                    <div className="text-[10px] text-slate-400 mt-0.5">
+                    <div className="text-[0.72rem] text-slate-500 mt-0.5">
                       {inv.customerSnapshot.name} &bull; {formatDate(inv.invoiceDate)}
                     </div>
                   </div>
@@ -438,7 +438,7 @@ export default function DashboardTabs({
         {activeActivityTab === "purchases" && (
           <div className="divide-y divide-slate-100">
             {recentPurchases.length === 0 ? (
-              <p className="text-xs text-slate-400 italic py-4">No recent purchases.</p>
+              <p className="text-xs text-slate-500 italic py-4">No recent purchases.</p>
             ) : (
               recentPurchases.map((pur) => (
                 <div key={pur.id} className="py-3 flex justify-between items-center text-xs">
@@ -446,7 +446,7 @@ export default function DashboardTabs({
                     <Link href={`/purchases/${pur.id}`} className="font-bold text-slate-900 hover:underline">
                       {pur.purchaseNo}
                     </Link>
-                    <div className="text-[10px] text-slate-400 mt-0.5">
+                    <div className="text-[0.72rem] text-slate-500 mt-0.5">
                       {pur.supplierName} &bull; {formatDate(pur.purchaseDate)}
                     </div>
                   </div>
@@ -462,13 +462,13 @@ export default function DashboardTabs({
         {activeActivityTab === "expenses" && (
           <div className="divide-y divide-slate-100">
             {recentExpenses.length === 0 ? (
-              <p className="text-xs text-slate-400 italic py-4">No recent expenses.</p>
+              <p className="text-xs text-slate-500 italic py-4">No recent expenses.</p>
             ) : (
               recentExpenses.map((exp) => (
                 <div key={exp.id} className="py-3 flex justify-between items-center text-xs">
                   <div>
                     <div className="font-bold text-slate-950">{exp.description}</div>
-                    <div className="text-[10px] text-slate-400 mt-0.5 capitalize">
+                    <div className="text-[0.72rem] text-slate-500 mt-0.5 capitalize">
                       {CATEGORIES.find((c) => c.value === exp.category)?.label} &bull; {formatDate(exp.date)}
                     </div>
                   </div>
@@ -570,10 +570,10 @@ export default function DashboardTabs({
             {renderActivityLogs()}
             <div className="bg-slate-50 border border-slate-150 p-6 rounded-2xl flex flex-col justify-between items-center text-center text-slate-500">
               <div className="space-y-2 mt-4">
-                <Receipt className="h-10 w-10 text-slate-300 mx-auto" />
+                <Receipt className="h-10 w-10 text-slate-400 mx-auto" />
                 <h3 className="font-bold text-slate-900 text-sm">Printable Ledger Reports</h3>
-                <p className="text-xs text-slate-400 max-w-xs mx-auto">
-                  View and export all transactions directly. Press <kbd className="px-1.5 py-0.5 bg-white border rounded text-[10px]">Alt + Shift + 1-7</kbd> to quick-navigate.
+                <p className="text-xs text-slate-500 max-w-xs mx-auto">
+                  View and export all transactions directly. Press <kbd className="px-1.5 py-0.5 bg-white border rounded text-[0.72rem]">Alt + Shift + 1-7</kbd> to quick-navigate.
                 </p>
               </div>
               <div className="flex gap-2 w-full mt-8">

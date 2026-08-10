@@ -204,7 +204,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
       <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-4">
         {/* Search */}
         <div className="flex items-center gap-3 border border-slate-200 rounded-xl px-3 py-2 text-slate-600 focus-within:border-indigo-500 transition-colors">
-          <Search className="h-5 w-5 text-slate-400 shrink-0" />
+          <Search className="h-5 w-5 text-slate-500 shrink-0" />
           <input
             type="text"
             placeholder="Search by invoice number or customer name..."
@@ -218,7 +218,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 pt-2">
           {/* Customer filter */}
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
               Filter by Customer
             </label>
             <select
@@ -237,7 +237,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
 
           {/* Document Type filter */}
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
               Document Type
             </label>
             <select
@@ -253,7 +253,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
 
           {/* Status filter */}
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
               Payment Status
             </label>
             <select
@@ -271,7 +271,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
 
           {/* Start Date */}
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
               From Date
             </label>
             <input
@@ -284,7 +284,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
 
           {/* End Date */}
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
               To Date
             </label>
             <input
@@ -297,7 +297,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
 
           {/* Amount Bracket */}
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
               Amount Range
             </label>
             <select
@@ -317,7 +317,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
 
           {/* Billing Type */}
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
               Tax Invoice Type
             </label>
             <select
@@ -333,7 +333,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
 
           {/* Sort By */}
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
               Sort By
             </label>
             <select
@@ -372,7 +372,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
 
       {/* Invoice List Table / Cards */}
       {paginatedInvoices.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center text-slate-400 flex flex-col items-center justify-center shadow-sm">
+        <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center text-slate-500 flex flex-col items-center justify-center shadow-sm">
           <FileSpreadsheet className="h-12 w-12 text-slate-200 mb-3" />
           <p className="font-semibold text-slate-500">No invoices matched filters</p>
           <p className="text-xs mt-1">Try resetting the filters or create a new invoice.</p>
@@ -383,7 +383,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
           <div className="hidden md:block bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
             <div className="overflow-x-auto w-full">
               <table className="w-full border-collapse text-left text-sm text-slate-600">
-                <thead className="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
+                <thead className="bg-slate-50 text-[0.76rem] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
                   <tr>
                     <th className="py-3.5 px-5">Invoice No.</th>
                     <th className="py-3.5 px-5">Customer</th>
@@ -407,7 +407,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
                         <div className="flex flex-col gap-1 items-start">
                           <span
                             className={cn(
-                              "inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider",
+                              "inline-flex items-center rounded-md px-2 py-0.5 text-[0.72rem] font-bold uppercase tracking-wider",
                               inv.type === "quotation"
                                 ? "bg-amber-50 text-amber-700 border border-amber-250"
                                 : "bg-emerald-50 text-emerald-700 border border-emerald-250"
@@ -416,7 +416,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
                             {inv.type === "quotation" ? "Quotation" : "Tax Invoice"}
                           </span>
                           <span
-                            className="inline-flex items-center rounded-md px-1.5 py-0.2 text-[9px] font-medium uppercase text-slate-500"
+                            className="inline-flex items-center rounded-md px-1.5 py-0.2 text-[0.68rem] font-medium uppercase text-slate-500"
                           >
                             {inv.isGstInvoice ? "GST (18%)" : "Simple Bill"}
                           </span>
@@ -454,7 +454,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
                           </Link>
                           <button
                             onClick={() => handleDelete(inv.id, inv.invoiceNo)}
-                            className="p-1.5 hover:bg-rose-50 hover:text-rose-600 rounded-lg text-slate-400 transition-colors"
+                            className="p-1.5 hover:bg-rose-50 hover:text-rose-600 rounded-lg text-slate-500 transition-colors"
                             title="Delete Invoice"
                           >
                             <Trash2 className="h-4.5 w-4.5" />
@@ -493,7 +493,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
                 {/* Delete button top right for mobile */}
                 <button
                   onClick={() => handleDelete(inv.id, inv.invoiceNo)}
-                  className="absolute top-4 right-4 p-1.5 bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-lg transition-colors"
+                  className="absolute top-4 right-4 p-1.5 bg-slate-50 hover:bg-rose-50 text-slate-500 hover:text-rose-600 rounded-lg transition-colors"
                   title="Delete Invoice"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -501,7 +501,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
 
                 <div>
                   <h3 className="font-bold text-slate-800 leading-snug">{inv.customerSnapshot.name}</h3>
-                  <div className="text-xs text-slate-400 mt-1">
+                  <div className="text-xs text-slate-500 mt-1">
                     Date: <span className="font-medium text-slate-700">{formatDate(inv.invoiceDate)}</span>
                   </div>
                 </div>
@@ -511,7 +511,7 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
                     <div className="flex flex-col gap-1 items-start">
                       <span
                         className={cn(
-                          "inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider",
+                          "inline-flex items-center rounded-md px-2 py-0.5 text-[0.72rem] font-bold uppercase tracking-wider",
                           inv.type === "quotation"
                             ? "bg-amber-50 text-amber-700 border border-amber-250"
                             : "bg-emerald-50 text-emerald-700 border border-emerald-250"
@@ -520,14 +520,14 @@ export default function InvoicesList({ initialInvoices, customers }: InvoicesLis
                         {inv.type === "quotation" ? "Quotation" : "Tax Invoice"}
                       </span>
                       <span
-                        className="inline-flex items-center rounded-md px-1.5 py-0.2 text-[9px] font-medium uppercase text-slate-500"
+                        className="inline-flex items-center rounded-md px-1.5 py-0.2 text-[0.68rem] font-medium uppercase text-slate-500"
                       >
                         {inv.isGstInvoice ? "GST Invoice" : "Simple Bill"}
                       </span>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-xs text-slate-400">Total Billed</div>
+                    <div className="text-xs text-slate-500">Total Billed</div>
                     <div className="font-black text-slate-950 text-lg leading-none mt-1">
                       {formatCurrency(inv.grandTotal)}
                     </div>

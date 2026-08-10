@@ -259,7 +259,7 @@ export default async function DashboardPage() {
         {/* Sales Card */}
         <div className="bg-white rounded-2xl border border-slate-100 p-3 sm:p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
           <div className="flex items-center justify-between">
-            <span className="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider truncate">Sales This Month</span>
+            <span className="text-[0.68rem] sm:text-xs font-bold text-slate-500 uppercase tracking-wider truncate">Sales This Month</span>
             <div className="p-1.5 sm:p-2 bg-indigo-50 rounded-lg text-indigo-650 group-hover:scale-110 transition-transform duration-200 shrink-0">
               <TrendingUp className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </div>
@@ -269,7 +269,7 @@ export default async function DashboardPage() {
               {formatCurrency(totalBilledThisMonth)}
             </h3>
             <p className={cn(
-              "text-[8px] sm:text-[10px] font-bold mt-1 sm:mt-1.5 flex items-center gap-0.5 sm:gap-1",
+              "text-[8px] sm:text-[0.72rem] font-bold mt-1 sm:mt-1.5 flex items-center gap-0.5 sm:gap-1",
               salesMoM >= 0 ? "text-emerald-600" : "text-rose-500"
             )}>
               {salesMoM >= 0 ? "+" : ""}{salesMoM.toFixed(1)}% MoM
@@ -280,7 +280,7 @@ export default async function DashboardPage() {
         {/* Purchases Card */}
         <div className="bg-white rounded-2xl border border-slate-100 p-3 sm:p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
           <div className="flex items-center justify-between">
-            <span className="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider truncate">Purchased</span>
+            <span className="text-[0.68rem] sm:text-xs font-bold text-slate-500 uppercase tracking-wider truncate">Purchased</span>
             <div className="p-1.5 sm:p-2 bg-emerald-50 rounded-lg text-emerald-600 group-hover:scale-110 transition-transform duration-200 shrink-0">
               <ShoppingCart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </div>
@@ -290,7 +290,7 @@ export default async function DashboardPage() {
               {formatCurrency(totalPurchasesThisMonth)}
             </h3>
             <p className={cn(
-              "text-[8px] sm:text-[10px] font-bold mt-1 sm:mt-1.5 flex items-center gap-0.5 sm:gap-1",
+              "text-[8px] sm:text-[0.72rem] font-bold mt-1 sm:mt-1.5 flex items-center gap-0.5 sm:gap-1",
               purchasesMoM <= 0 ? "text-emerald-600" : "text-amber-500"
             )}>
               {purchasesMoM >= 0 ? "+" : ""}{purchasesMoM.toFixed(1)}% MoM
@@ -301,7 +301,7 @@ export default async function DashboardPage() {
         {/* Expenses Card */}
         <div className="bg-white rounded-2xl border border-slate-100 p-3 sm:p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
           <div className="flex items-center justify-between">
-            <span className="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider truncate">Expenses</span>
+            <span className="text-[0.68rem] sm:text-xs font-bold text-slate-500 uppercase tracking-wider truncate">Expenses</span>
             <div className="p-1.5 sm:p-2 bg-rose-50 rounded-lg text-rose-600 group-hover:scale-110 transition-transform duration-200 shrink-0">
               <TrendingDown className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </div>
@@ -311,7 +311,7 @@ export default async function DashboardPage() {
               {formatCurrency(totalExpensesThisMonth)}
             </h3>
             <p className={cn(
-              "text-[8px] sm:text-[10px] font-bold mt-1 sm:mt-1.5 flex items-center gap-0.5 sm:gap-1",
+              "text-[8px] sm:text-[0.72rem] font-bold mt-1 sm:mt-1.5 flex items-center gap-0.5 sm:gap-1",
               expensesMoM <= 0 ? "text-emerald-600" : "text-rose-500"
             )}>
               {expensesMoM >= 0 ? "+" : ""}{expensesMoM.toFixed(1)}% MoM
@@ -322,7 +322,7 @@ export default async function DashboardPage() {
         {/* Net GST Liability */}
         <div className="bg-white rounded-2xl border border-slate-100 p-3 sm:p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
           <div className="flex items-center justify-between">
-            <span className="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider truncate">Net GST Due</span>
+            <span className="text-[0.68rem] sm:text-xs font-bold text-slate-500 uppercase tracking-wider truncate">Net GST Due</span>
             <div className={cn(
               "p-1.5 sm:p-2 rounded-lg group-hover:scale-110 transition-transform shrink-0",
               netGstLiability >= 0 ? "bg-amber-50 text-amber-600" : "bg-emerald-50 text-emerald-600"
@@ -335,7 +335,7 @@ export default async function DashboardPage() {
               {formatCurrency(Math.abs(netGstLiability))}
             </h3>
             <p className={cn(
-              "text-[8px] sm:text-[10px] font-bold mt-1 sm:mt-1.5 truncate",
+              "text-[8px] sm:text-[0.72rem] font-bold mt-1 sm:mt-1.5 truncate",
               netGstLiability >= 0 ? "text-rose-600" : "text-emerald-600"
             )} title={netGstLiability >= 0 ? "To Pay (Sales > Purchase ITC)" : "Excess ITC Credit Claimable"}>
               {netGstLiability >= 0 ? "To Pay (Sales > ITC)" : "Excess ITC Credit"}

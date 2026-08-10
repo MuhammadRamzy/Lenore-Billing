@@ -196,7 +196,7 @@ export default function PurchasesList({ initialPurchases }: PurchasesListProps) 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {/* Search Input */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-slate-500" />
             <input
               type="text"
               placeholder="Search by Purchase No, Supplier or Bill No..."
@@ -212,7 +212,7 @@ export default function PurchasesList({ initialPurchases }: PurchasesListProps) 
           {/* Date range picker */}
           <div className="grid grid-cols-2 gap-2">
             <div className="relative">
-              <Calendar className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+              <Calendar className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
               <input
                 type="date"
                 value={startDate}
@@ -224,7 +224,7 @@ export default function PurchasesList({ initialPurchases }: PurchasesListProps) 
               />
             </div>
             <div className="relative">
-              <Calendar className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+              <Calendar className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
               <input
                 type="date"
                 value={endDate}
@@ -256,7 +256,7 @@ export default function PurchasesList({ initialPurchases }: PurchasesListProps) 
 
         {/* Advanced Filters */}
         <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-50">
-          <div className="flex items-center gap-1.5 text-slate-400 text-xs font-bold mr-2">
+          <div className="flex items-center gap-1.5 text-slate-500 text-xs font-bold mr-2">
             <Filter className="h-3.5 w-3.5" />
             Filters:
           </div>
@@ -295,7 +295,7 @@ export default function PurchasesList({ initialPurchases }: PurchasesListProps) 
 
           {/* Sort selection */}
           <div className="ml-auto flex items-center gap-1.5">
-            <span className="text-slate-400 text-xs">Sort:</span>
+            <span className="text-slate-500 text-xs">Sort:</span>
             <select
               value={sortBy}
               onChange={(e) => {
@@ -316,10 +316,10 @@ export default function PurchasesList({ initialPurchases }: PurchasesListProps) 
 
       {/* Purchases List Table & Mobile Cards */}
       {filteredPurchases.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-100 p-16 text-center text-slate-400 flex flex-col items-center justify-center shadow-sm">
+        <div className="bg-white rounded-2xl border border-slate-100 p-16 text-center text-slate-500 flex flex-col items-center justify-center shadow-sm">
           <ShoppingCart className="h-14 w-14 text-slate-200 mb-3" />
           <h3 className="font-extrabold text-slate-700 text-lg">No purchases found</h3>
-          <p className="text-slate-400 text-xs sm:text-sm mt-1 max-w-md">
+          <p className="text-slate-500 text-xs sm:text-sm mt-1 max-w-md">
             Try adjusting your search queries, removing active filters, or creating your first purchase record.
           </p>
         </div>
@@ -333,7 +333,7 @@ export default function PurchasesList({ initialPurchases }: PurchasesListProps) 
                   <span className="font-bold text-slate-900 text-sm">{pur.purchaseNo}</span>
                   <span
                     className={cn(
-                      "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider",
+                      "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[0.68rem] font-bold uppercase tracking-wider",
                       pur.status === "paid" && "bg-emerald-50 text-emerald-700 border border-emerald-200",
                       pur.status === "pending" && "bg-amber-50 text-amber-700 border border-amber-200"
                     )}
@@ -344,14 +344,14 @@ export default function PurchasesList({ initialPurchases }: PurchasesListProps) 
                 <div className="space-y-1">
                   <div className="flex justify-between text-xs text-slate-700">
                     <span className="font-semibold text-slate-800">{pur.supplierName}</span>
-                    <span className="text-slate-400">{formatDate(pur.purchaseDate)}</span>
+                    <span className="text-slate-500">{formatDate(pur.purchaseDate)}</span>
                   </div>
                   {pur.supplierBillNo && (
-                    <div className="text-[10px] text-slate-500">
+                    <div className="text-[0.72rem] text-slate-500">
                       Bill No: <span className="font-medium text-slate-700">{pur.supplierBillNo}</span>
                     </div>
                   )}
-                  <div className="text-[10px] text-slate-400">
+                  <div className="text-[0.72rem] text-slate-500">
                     {pur.isGstPurchase ? "Tax Invoice (GST)" : "Simple Bill (No GST)"}
                   </div>
                 </div>
@@ -362,13 +362,13 @@ export default function PurchasesList({ initialPurchases }: PurchasesListProps) 
                   <div className="flex gap-2">
                     <Link
                       href={`/purchases/${pur.id}`}
-                      className="text-[10px] font-bold text-indigo-650 hover:underline px-2 py-1 bg-slate-50 rounded"
+                      className="text-[0.72rem] font-bold text-indigo-650 hover:underline px-2 py-1 bg-slate-50 rounded"
                     >
                       Manage &rarr;
                     </Link>
                     <button
                       onClick={() => handleDelete(pur.id, pur.purchaseNo)}
-                      className="text-[10px] font-bold text-red-500 hover:text-red-700 px-2 py-1 bg-rose-50 rounded"
+                      className="text-[0.72rem] font-bold text-red-500 hover:text-red-700 px-2 py-1 bg-rose-50 rounded"
                     >
                       Delete
                     </button>
@@ -380,7 +380,7 @@ export default function PurchasesList({ initialPurchases }: PurchasesListProps) 
 
           {/* Desktop view table layout */}
           <table className="hidden sm:table w-full border-collapse text-left text-sm text-slate-600">
-            <thead className="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
+            <thead className="bg-slate-50 text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
               <tr>
                 <th className="py-4 px-5">Purchase No.</th>
                 <th className="py-4 px-5">Supplier</th>
@@ -402,10 +402,10 @@ export default function PurchasesList({ initialPurchases }: PurchasesListProps) 
                   <td className="py-4 px-5">{formatDate(pur.purchaseDate)}</td>
                   <td className="py-4 px-5">
                     <div className="flex flex-col gap-1 items-start">
-                      <span className="text-[11px] font-semibold text-slate-700">
+                      <span className="text-[0.76rem] font-semibold text-slate-700">
                         {pur.supplierBillNo ? `Bill: ${pur.supplierBillNo}` : "No Bill No."}
                       </span>
-                      <span className="inline-flex items-center rounded-md px-1.5 py-0.2 text-[9px] font-medium uppercase text-slate-400">
+                      <span className="inline-flex items-center rounded-md px-1.5 py-0.2 text-[0.68rem] font-medium uppercase text-slate-500">
                         {pur.isGstPurchase ? "GST Purchase" : "Simple"}
                       </span>
                     </div>

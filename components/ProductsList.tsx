@@ -342,7 +342,7 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
         {/* Filter controls row */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 pt-1">
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
               Stock Status
             </label>
             <select
@@ -358,7 +358,7 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
           </div>
 
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
               Price Range
             </label>
             <select
@@ -377,7 +377,7 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
           </div>
 
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
               Sort By
             </label>
             <select
@@ -398,7 +398,7 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
 
       {/* Products Table / Cards */}
       {paginatedProducts.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center text-slate-400 flex flex-col items-center justify-center shadow-sm">
+        <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center text-slate-500 flex flex-col items-center justify-center shadow-sm">
           <Search className="h-12 w-12 text-slate-200 mb-3" />
           <p className="font-semibold text-slate-500">No products found</p>
           <p className="text-xs mt-1">Try refining your search query or add a new catalog item.</p>
@@ -409,7 +409,7 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
           <div className="hidden md:block bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
             <div className="overflow-x-auto w-full">
               <table className="w-full border-collapse text-left text-sm text-slate-600">
-                <thead className="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
+                <thead className="bg-slate-50 text-[0.76rem] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
                   <tr>
                     <th className="py-3.5 px-5 w-16 text-center">QR</th>
                     <th className="py-3.5 px-5 w-24">Code</th>
@@ -435,11 +435,11 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
                         </button>
                       </td>
                       <td className="py-4 px-5 font-mono text-xs font-bold text-indigo-600">
-                        {prod.code || <span className="text-slate-300 italic font-sans font-normal">-</span>}
+                        {prod.code || <span className="text-slate-400 italic font-sans font-normal">-</span>}
                       </td>
                       <td className="py-4 px-5 font-bold text-slate-900">{prod.name}</td>
                       <td className="py-4 px-5 font-mono text-xs font-semibold text-slate-600">
-                        {prod.hsnCode || <span className="text-slate-300 italic font-sans font-normal">-</span>}
+                        {prod.hsnCode || <span className="text-slate-400 italic font-sans font-normal">-</span>}
                       </td>
                       <td className="py-4 px-5">
                         <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-800">
@@ -471,28 +471,28 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
                         <div className="flex items-center justify-center gap-1">
                           <button
                             onClick={() => handleViewQr(prod)}
-                            className="p-2 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg text-slate-400 transition-colors"
+                            className="p-2 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg text-slate-500 transition-colors"
                             title="View QR Code"
                           >
                             <QrCode className="h-4.5 w-4.5" />
                           </button>
                           <button
                             onClick={() => handleOpenHistory(prod)}
-                            className="p-2 hover:bg-amber-50 hover:text-amber-600 rounded-lg text-slate-400 transition-colors"
+                            className="p-2 hover:bg-amber-50 hover:text-amber-600 rounded-lg text-slate-500 transition-colors"
                             title="Stock History & Adjustment"
                           >
                             <History className="h-4.5 w-4.5" />
                           </button>
                           <button
                             onClick={() => handleEdit(prod)}
-                            className="p-2 hover:bg-slate-100 hover:text-slate-800 rounded-lg text-slate-400 transition-colors"
+                            className="p-2 hover:bg-slate-100 hover:text-slate-800 rounded-lg text-slate-500 transition-colors"
                             title="Edit Product"
                           >
                             <Edit className="h-4.5 w-4.5" />
                           </button>
                           <button
                             onClick={() => handleDelete(prod)}
-                            className="p-2 hover:bg-rose-50 hover:text-rose-600 rounded-lg text-slate-400 transition-colors"
+                            className="p-2 hover:bg-rose-50 hover:text-rose-600 rounded-lg text-slate-500 transition-colors"
                             title="Remove Product"
                           >
                             <Trash2 className="h-4.5 w-4.5" />
@@ -522,7 +522,7 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
                   <ProductQrCode data={prod.code || prod.id} size={48} />
                 </button>
                 <div className="pr-12">
-                  <span className="text-[10px] font-mono font-bold bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md">
+                  <span className="text-[0.72rem] font-mono font-bold bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md">
                     {prod.code || "NO CODE"}
                   </span>
                   <h3 className="font-bold text-slate-900 leading-snug mt-1">{prod.name}</h3>
@@ -533,21 +533,21 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
               <div className="absolute top-4 right-4 flex gap-1">
                 <button
                   onClick={() => handleOpenHistory(prod)}
-                  className="p-2 bg-slate-50 hover:bg-amber-50 text-slate-400 hover:text-amber-600 rounded-xl transition-colors"
+                  className="p-2 bg-slate-50 hover:bg-amber-50 text-slate-500 hover:text-amber-600 rounded-xl transition-colors"
                   title="Stock History & Adjustment"
                 >
                   <History className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => handleEdit(prod)}
-                  className="p-2 bg-slate-50 hover:bg-indigo-50 text-slate-400 hover:text-indigo-600 rounded-xl transition-colors"
+                  className="p-2 bg-slate-50 hover:bg-indigo-50 text-slate-500 hover:text-indigo-600 rounded-xl transition-colors"
                   title="Edit Product"
                 >
                   <Edit className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => handleDelete(prod)}
-                  className="p-2 bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-xl transition-colors"
+                  className="p-2 bg-slate-50 hover:bg-rose-50 text-slate-500 hover:text-rose-600 rounded-xl transition-colors"
                   title="Remove Product"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -557,7 +557,7 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
               <div className="flex justify-between items-end pt-3 border-t border-slate-50">
                 <div className="space-y-1">
                   {prod.hsnCode && (
-                    <div className="text-[11px] font-mono text-slate-400">
+                    <div className="text-[0.76rem] font-mono text-slate-500">
                       HSN: <span className="font-semibold text-slate-600">{prod.hsnCode}</span>
                     </div>
                   )}
@@ -566,26 +566,26 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
                   </div>
                   <div className="mt-1">
                     {prod.stock !== undefined && prod.stock <= 0 ? (
-                      <span className="inline-flex items-center rounded-md bg-rose-50 px-2 py-0.5 text-[10px] font-bold text-rose-700">
+                      <span className="inline-flex items-center rounded-md bg-rose-50 px-2 py-0.5 text-[0.72rem] font-bold text-rose-700">
                         Out of stock
                       </span>
                     ) : prod.stock !== undefined && prod.stock <= lowStockLimit ? (
-                      <span className="inline-flex items-center rounded-md bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700">
+                      <span className="inline-flex items-center rounded-md bg-amber-50 px-2 py-0.5 text-[0.72rem] font-bold text-amber-700">
                         Low stock ({prod.stock})
                       </span>
                     ) : (
-                      <span className="inline-flex items-center rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+                      <span className="inline-flex items-center rounded-md bg-emerald-50 px-2 py-0.5 text-[0.72rem] font-bold text-emerald-700">
                         {prod.stock ?? 100} available
                       </span>
                     )}
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-xs text-slate-400">Base Price (ex. GST)</div>
+                  <div className="text-xs text-slate-500">Base Price (ex. GST)</div>
                   <div className="font-black text-slate-900 text-lg leading-none mt-1">
                     {formatCurrency(prod.defaultRate)}
                   </div>
-                  <div className="text-[10px] font-bold text-indigo-500 mt-1">
+                  <div className="text-[0.72rem] font-bold text-indigo-500 mt-1">
                     GST {prod.defaultGstPercent}%
                   </div>
                 </div>
@@ -644,21 +644,21 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
               <h3 className="font-extrabold text-slate-900 text-sm">Product Barcode QR</h3>
               <button 
                 onClick={() => setIsQrModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 text-sm font-bold"
+                className="text-slate-500 hover:text-slate-600 text-sm font-bold"
               >
                 ✕
               </button>
             </div>
             
             <div className="flex flex-col items-center py-4 bg-slate-50 rounded-xl border border-slate-100">
-              <span className="text-[10px] tracking-widest font-black text-slate-400 uppercase">LENORE</span>
+              <span className="text-[0.72rem] tracking-widest font-black text-slate-500 uppercase">LENORE</span>
               <h4 className="font-bold text-slate-800 text-sm mt-1 px-4 truncate w-full">{qrProduct.name}</h4>
               <div className="my-4">
                 <ProductQrCode data={qrProduct.code || qrProduct.id} size={150} />
               </div>
               <span className="font-mono text-xs font-bold text-indigo-600">{qrProduct.code || qrProduct.id}</span>
               <span className="text-sm font-black text-slate-900 mt-1">
-                {formatCurrency(qrProduct.defaultRate * (1 + qrProduct.defaultGstPercent / 100))} <span className="text-[9px] font-normal text-slate-500">(inc. GST)</span>
+                {formatCurrency(qrProduct.defaultRate * (1 + qrProduct.defaultGstPercent / 100))} <span className="text-[0.68rem] font-normal text-slate-500">(inc. GST)</span>
               </span>
             </div>
 
@@ -709,11 +709,11 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
             <div className="flex justify-between items-center pb-3 border-b border-slate-100 bg-slate-50/50 -mx-6 -mt-6 px-6 py-4">
               <div>
                 <h3 className="font-extrabold text-slate-900 text-sm">Stock Ledger & Auditing</h3>
-                <p className="text-[10px] text-slate-500 font-bold mt-0.5">{historyProduct.name} ({historyProduct.code || "No code"})</p>
+                <p className="text-[0.72rem] text-slate-500 font-bold mt-0.5">{historyProduct.name} ({historyProduct.code || "No code"})</p>
               </div>
               <button 
                 onClick={() => setIsHistoryModalOpen(false)}
-                className="text-slate-400 hover:text-slate-650 text-sm font-bold"
+                className="text-slate-500 hover:text-slate-650 text-sm font-bold"
               >
                 ✕
               </button>
@@ -728,7 +728,7 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
 
               {/* Adjust stock form */}
               <form onSubmit={handleAdjustStock} className="p-4 bg-slate-50 rounded-xl border border-slate-150/80 space-y-3">
-                <h4 className="text-[10px] text-slate-450 font-bold uppercase tracking-wider">Manual Adjustment Form</h4>
+                <h4 className="text-[0.72rem] text-slate-450 font-bold uppercase tracking-wider">Manual Adjustment Form</h4>
                 
                 {adjError && (
                   <div className="p-2.5 bg-rose-50 border border-rose-100 text-rose-600 rounded-lg text-xs font-bold">
@@ -738,7 +738,7 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[9px] text-slate-400 font-bold uppercase mb-1">Adjustment Type</label>
+                    <label className="block text-[0.68rem] text-slate-500 font-bold uppercase mb-1">Adjustment Type</label>
                     <select
                       value={adjType}
                       onChange={(e: any) => setAdjType(e.target.value)}
@@ -749,7 +749,7 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[9px] text-slate-400 font-bold uppercase mb-1">Quantity</label>
+                    <label className="block text-[0.68rem] text-slate-500 font-bold uppercase mb-1">Quantity</label>
                     <input
                       type="number"
                       min="1"
@@ -762,7 +762,7 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
                 </div>
 
                 <div>
-                  <label className="block text-[9px] text-slate-400 font-bold uppercase mb-1">Notes / Reason</label>
+                  <label className="block text-[0.68rem] text-slate-500 font-bold uppercase mb-1">Notes / Reason</label>
                   <input
                     type="text"
                     placeholder="e.g. Stock count correction, Damaged item..."
@@ -783,10 +783,10 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
 
               {/* History Timeline */}
               <div className="space-y-3">
-                <h4 className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Audit Trail / History</h4>
+                <h4 className="text-[0.72rem] text-slate-500 font-bold uppercase tracking-wider">Audit Trail / History</h4>
                 
                 {stockLogs.filter((log) => log.productId === historyProduct.id).length === 0 ? (
-                  <p className="text-xs text-slate-400 italic py-2 text-center">No transaction logs available for this product.</p>
+                  <p className="text-xs text-slate-500 italic py-2 text-center">No transaction logs available for this product.</p>
                 ) : (
                   <div className="relative border-l border-slate-150 pl-4 ml-2 space-y-4">
                     {stockLogs
@@ -809,13 +809,13 @@ export default function ProductsList({ initialProducts, company, lowStockLimit =
                                 )}>
                                   {isPlus ? "+" : ""}{log.quantity} Units
                                 </span>
-                                <span className="text-[10px] text-slate-400 ml-2 font-medium">({log.referenceNo})</span>
+                                <span className="text-[0.72rem] text-slate-500 ml-2 font-medium">({log.referenceNo})</span>
                               </div>
-                              <span className="text-[10px] text-slate-450 font-semibold">{formatDate(log.createdAt)}</span>
+                              <span className="text-[0.72rem] text-slate-450 font-semibold">{formatDate(log.createdAt)}</span>
                             </div>
 
-                            <p className="text-[11px] text-slate-600 mt-1 font-medium">{log.notes || "Stock transaction log"}</p>
-                            <p className="text-[9px] text-slate-400 font-semibold mt-0.5">
+                            <p className="text-[0.76rem] text-slate-600 mt-1 font-medium">{log.notes || "Stock transaction log"}</p>
+                            <p className="text-[0.68rem] text-slate-500 font-semibold mt-0.5">
                               Stock: {log.previousStock} &rarr; {log.newStock}
                             </p>
                           </div>

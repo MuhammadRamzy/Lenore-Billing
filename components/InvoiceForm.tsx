@@ -438,7 +438,7 @@ export default function InvoiceForm({
         <div className="flex items-center gap-2">
           <button
             onClick={() => router.back()}
-            className="p-1 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+            className="p-1 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
           >
             <ArrowLeft className="h-5 w-5" />
           </button>
@@ -592,7 +592,7 @@ export default function InvoiceForm({
             {currentCustomer && (
               <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-2">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400 font-bold uppercase">Customer Snapshot</span>
+                  <span className="text-slate-500 font-bold uppercase">Customer Snapshot</span>
                   <span className="font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full uppercase tracking-wider">
                     {isInterState ? "Inter-state (IGST)" : "Intra-state (CGST + SGST)"}
                   </span>
@@ -655,12 +655,12 @@ export default function InvoiceForm({
                   >
                     {/* Index & delete */}
                     <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                      <span className="text-xs font-bold text-slate-400">Sl No. {index + 1}</span>
+                      <span className="text-xs font-bold text-slate-500">Sl No. {index + 1}</span>
                       {lineItems.length > 1 && (
                         <button
                           type="button"
                           onClick={() => removeLineItem(item.id)}
-                          className="text-slate-400 hover:text-rose-600 p-1 hover:bg-slate-100 rounded-lg transition-colors"
+                          className="text-slate-500 hover:text-rose-600 p-1 hover:bg-slate-100 rounded-lg transition-colors"
                           title="Remove item"
                         >
                           <Trash2 className="h-4.5 w-4.5" />
@@ -672,7 +672,7 @@ export default function InvoiceForm({
                     <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
                       {/* Product select & Description */}
                       <div className="sm:col-span-2 relative">
-                        <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                        <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                           Product Name / Description *
                         </label>
                         <div className="flex gap-2">
@@ -712,7 +712,7 @@ export default function InvoiceForm({
                             ref={dropdownRef}
                             className="absolute left-0 right-0 z-20 mt-1 bg-white border border-slate-100 rounded-xl shadow-lg overflow-hidden max-h-60 overflow-y-auto"
                           >
-                            <div className="p-2 border-b border-slate-100 bg-slate-50 text-[10px] font-bold text-slate-500 uppercase tracking-wider flex justify-between items-center">
+                            <div className="p-2 border-b border-slate-100 bg-slate-50 text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider flex justify-between items-center">
                               <span>Catalog Autocomplete</span>
                               <button
                                 type="button"
@@ -720,13 +720,13 @@ export default function InvoiceForm({
                                   setProductModalTargetIndex(index);
                                   setIsProductModalOpen(true);
                                 }}
-                                className="text-[10px] font-extrabold text-indigo-600 hover:text-indigo-700 bg-white border border-slate-200 px-2 py-0.5 rounded-md hover:border-indigo-400 transition-colors cursor-pointer"
+                                className="text-[0.72rem] font-extrabold text-indigo-600 hover:text-indigo-700 bg-white border border-slate-200 px-2 py-0.5 rounded-md hover:border-indigo-400 transition-colors cursor-pointer"
                               >
                                 + Add New Product
                               </button>
                             </div>
                             {filteredProducts.length === 0 ? (
-                              <div className="p-4 text-xs text-slate-400 italic flex flex-col gap-2 items-center justify-center">
+                              <div className="p-4 text-xs text-slate-500 italic flex flex-col gap-2 items-center justify-center">
                                 <span>No matching catalog items</span>
                                 <button
                                   type="button"
@@ -734,7 +734,7 @@ export default function InvoiceForm({
                                     setProductModalTargetIndex(index);
                                     setIsProductModalOpen(true);
                                   }}
-                                  className="text-[10px] font-bold text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded-lg transition-colors shadow-sm cursor-pointer"
+                                  className="text-[0.72rem] font-bold text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded-lg transition-colors shadow-sm cursor-pointer"
                                 >
                                   + Create New Product
                                 </button>
@@ -749,7 +749,7 @@ export default function InvoiceForm({
                                 >
                                   <div>
                                     <div className="font-bold text-slate-800">{prod.name}</div>
-                                    <div className="text-[10px] text-slate-500 mt-0.5 font-mono">
+                                    <div className="text-[0.72rem] text-slate-500 mt-0.5 font-mono">
                                       Code: {prod.code || "N/A"} | HSN: {prod.hsnCode || "N/A"} | Stock:{" "}
                                       {prod.stock !== undefined && prod.stock <= 0 ? (
                                         <span className="text-rose-600 font-bold">Out of stock</span>
@@ -764,7 +764,7 @@ export default function InvoiceForm({
                                     <div className="font-bold text-slate-900">
                                       {formatCurrency(prod.defaultRate)}
                                     </div>
-                                    <div className="text-[10px] text-slate-400">
+                                    <div className="text-[0.72rem] text-slate-500">
                                       GST {prod.defaultGstPercent}%
                                     </div>
                                   </div>
@@ -777,7 +777,7 @@ export default function InvoiceForm({
 
                       {/* HSN Code */}
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                        <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                           HSN/SAC Code
                         </label>
                         <input
@@ -791,7 +791,7 @@ export default function InvoiceForm({
 
                       {/* Unit */}
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                        <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                           Unit
                         </label>
                         <select
@@ -812,7 +812,7 @@ export default function InvoiceForm({
                     <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-2">
                       {/* Quantity */}
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                        <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                           Quantity
                         </label>
                         <input
@@ -831,7 +831,7 @@ export default function InvoiceForm({
                           const isStockInsufficient = linkedProd && item.quantity > (linkedProd.stock ?? 0);
                           if (isStockInsufficient) {
                             return (
-                              <span className="text-[9px] text-rose-605 font-bold block mt-0.5 leading-none">
+                              <span className="text-[0.68rem] text-rose-605 font-bold block mt-0.5 leading-none">
                                 ⚠️ Exceeds stock ({linkedProd.stock ?? 0} avail)
                               </span>
                             );
@@ -842,7 +842,7 @@ export default function InvoiceForm({
 
                       {/* Rate */}
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                        <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                           Base Rate (INR)
                         </label>
                         <input
@@ -860,7 +860,7 @@ export default function InvoiceForm({
 
                       {/* Discount % */}
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                        <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                           Discount %
                         </label>
                         <input
@@ -881,7 +881,7 @@ export default function InvoiceForm({
                       {/* GST % (only enabled/visible if GST invoice toggle is on) */}
                       {isGstInvoice ? (
                         <div>
-                          <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                          <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                             GST %
                           </label>
                           <select
@@ -902,7 +902,7 @@ export default function InvoiceForm({
                         </div>
                       ) : (
                         <div className="hidden sm:block opacity-40">
-                          <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                          <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                             GST %
                           </label>
                           <div className="w-full text-sm rounded-lg border border-slate-200 bg-slate-100 px-3 py-1.5 font-medium text-slate-500">
@@ -913,7 +913,7 @@ export default function InvoiceForm({
 
                       {/* Row calculated Total */}
                       <div className="col-span-2 sm:col-span-1 text-right sm:text-left self-end">
-                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        <div className="text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider">
                           Taxable Value
                         </div>
                         <div className="text-sm font-extrabold text-slate-800 py-1.5">
@@ -924,7 +924,7 @@ export default function InvoiceForm({
 
                     {/* Tax breakup feedback for user check */}
                     {isGstInvoice && (
-                      <div className="pt-2 border-t border-slate-100 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-slate-500 font-semibold">
+                      <div className="pt-2 border-t border-slate-100 flex flex-wrap gap-x-4 gap-y-1 text-[0.76rem] text-slate-500 font-semibold">
                         <span>GST: {item.gstPercent}%</span>
                         {!isInterState ? (
                           <>
@@ -981,7 +981,7 @@ export default function InvoiceForm({
 
             <div className="space-y-3">
               <div>
-                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                   Payment Terms *
                 </label>
                 <input
@@ -995,7 +995,7 @@ export default function InvoiceForm({
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                   Delivery Note
                 </label>
                 <input
@@ -1009,7 +1009,7 @@ export default function InvoiceForm({
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                     Buyer's Order No.
                   </label>
                   <input
@@ -1021,7 +1021,7 @@ export default function InvoiceForm({
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                     Order Date
                   </label>
                   <input
@@ -1035,7 +1035,7 @@ export default function InvoiceForm({
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                     Dispatch Doc No.
                   </label>
                   <input
@@ -1047,7 +1047,7 @@ export default function InvoiceForm({
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                     Dispatched Through
                   </label>
                   <input
@@ -1062,7 +1062,7 @@ export default function InvoiceForm({
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                     Destination
                   </label>
                   <input
@@ -1074,7 +1074,7 @@ export default function InvoiceForm({
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                     Terms of Delivery
                   </label>
                   <input
@@ -1136,25 +1136,25 @@ export default function InvoiceForm({
 
           {/* Calculations Totals Block */}
           <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6 text-white shadow-xl space-y-6">
-            <h2 className="text-base font-bold tracking-wide uppercase text-slate-400 border-b border-slate-800 pb-3 flex items-center justify-between">
+            <h2 className="text-base font-bold tracking-wide uppercase text-slate-500 border-b border-slate-800 pb-3 flex items-center justify-between">
               <span>Billing Summary</span>
               <FileSpreadsheet className="h-5 w-5 text-indigo-400" />
             </h2>
 
             <div className="space-y-3 text-sm">
-              <div className="flex justify-between text-slate-400">
+              <div className="flex justify-between text-slate-500">
                 <span>Subtotal (Base Value):</span>
                 <span className="font-semibold text-slate-200">
                   {formatCurrency(calculatedSubtotal)}
                 </span>
               </div>
-              <div className="flex justify-between text-slate-400">
+              <div className="flex justify-between text-slate-500">
                 <span>Total Discount:</span>
                 <span className="font-semibold text-rose-400">
                   -{formatCurrency(calculatedTotalDiscount)}
                 </span>
               </div>
-              <div className="flex justify-between text-slate-300 font-bold border-t border-slate-800 pt-2">
+              <div className="flex justify-between text-slate-400 font-bold border-t border-slate-800 pt-2">
                 <span>Taxable Value Total:</span>
                 <span>{formatCurrency(calculatedTaxableValueTotal)}</span>
               </div>
@@ -1164,17 +1164,17 @@ export default function InvoiceForm({
                 <div className="p-3 bg-slate-950/40 rounded-xl space-y-2 mt-2 border border-slate-800/40">
                   {!isInterState ? (
                     <>
-                      <div className="flex justify-between text-xs text-slate-400">
+                      <div className="flex justify-between text-xs text-slate-500">
                         <span>CGST Total:</span>
                         <span>{formatCurrency(calculatedCgstTotal)}</span>
                       </div>
-                      <div className="flex justify-between text-xs text-slate-400">
+                      <div className="flex justify-between text-xs text-slate-500">
                         <span>SGST Total:</span>
                         <span>{formatCurrency(calculatedSgstTotal)}</span>
                       </div>
                     </>
                   ) : (
-                    <div className="flex justify-between text-xs text-slate-400">
+                    <div className="flex justify-between text-xs text-slate-500">
                       <span>IGST Total:</span>
                       <span>{formatCurrency(calculatedIgstTotal)}</span>
                     </div>
@@ -1184,7 +1184,7 @@ export default function InvoiceForm({
 
               {/* Freight Charge input */}
               <div className="flex items-center justify-between border-t border-slate-800 pt-2">
-                <span className="text-slate-400">Freight/Transport Charges:</span>
+                <span className="text-slate-500">Freight/Transport Charges:</span>
                 <input
                   type="number"
                   min="0"
@@ -1218,7 +1218,7 @@ export default function InvoiceForm({
 
             {/* Remarks */}
             <div>
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+              <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
                 Remarks / Payment Instructions
               </label>
               <textarea

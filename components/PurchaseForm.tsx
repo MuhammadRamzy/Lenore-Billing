@@ -277,7 +277,7 @@ export default function PurchaseForm({ company, products: initialProducts, purch
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <kbd className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-500 rounded-lg text-[10px] font-mono shadow-sm">
+          <kbd className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 border border-slate-200 text-slate-500 rounded-lg text-[0.72rem] font-mono shadow-sm">
             <Keyboard className="h-3 w-3" /> Alt + Shift + S to Save
           </kbd>
         </div>
@@ -364,7 +364,7 @@ export default function PurchaseForm({ company, products: initialProducts, purch
                   >
                     {/* Item Row Header */}
                     <div className="flex justify-between items-center">
-                      <span className="text-xs font-black text-slate-400">ITEM #{index + 1}</span>
+                      <span className="text-xs font-black text-slate-500">ITEM #{index + 1}</span>
                       <button
                         type="button"
                         onClick={() => removeLineItem(item.id)}
@@ -379,7 +379,7 @@ export default function PurchaseForm({ company, products: initialProducts, purch
                     <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
                       {/* Product Name Autocomplete */}
                       <div className="md:col-span-3 relative">
-                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                        <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                           Product Name / Description *
                         </label>
                         <input
@@ -409,14 +409,14 @@ export default function PurchaseForm({ company, products: initialProducts, purch
                                 className="w-full text-left px-4 py-2 hover:bg-slate-50 text-slate-700 text-xs font-semibold flex flex-col justify-between gap-0.5"
                               >
                                 <span className="text-slate-900 font-bold">{prod.name}</span>
-                                <span className="text-slate-400 text-[10px] flex justify-between">
+                                <span className="text-slate-500 text-[0.72rem] flex justify-between">
                                   <span>Code: {prod.code || "N/A"} | HSN: {prod.hsnCode || "N/A"}</span>
                                   <span className="text-slate-500 font-bold">Stock: {prod.stock}</span>
                                 </span>
                               </button>
                             ))}
                             {filteredProducts.length === 0 && searchQuery.trim() !== "" && (
-                              <div className="p-3 text-center text-xs text-slate-400">
+                              <div className="p-3 text-center text-xs text-slate-500">
                                 No matching products in catalog.
                               </div>
                             )}
@@ -434,7 +434,7 @@ export default function PurchaseForm({ company, products: initialProducts, purch
 
                       {/* HSN Code */}
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                        <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                           HSN
                         </label>
                         <input
@@ -448,7 +448,7 @@ export default function PurchaseForm({ company, products: initialProducts, purch
 
                       {/* Quantity */}
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                        <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                           Qty *
                         </label>
                         <input
@@ -464,7 +464,7 @@ export default function PurchaseForm({ company, products: initialProducts, purch
 
                       {/* Unit */}
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                        <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                           Unit
                         </label>
                         <input
@@ -481,7 +481,7 @@ export default function PurchaseForm({ company, products: initialProducts, purch
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-1 border-t border-slate-100/50">
                       {/* Rate */}
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                        <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                           Purchase Rate *
                         </label>
                         <input
@@ -498,7 +498,7 @@ export default function PurchaseForm({ company, products: initialProducts, purch
 
                       {/* Discount % */}
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                        <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                           Discount %
                         </label>
                         <input
@@ -515,7 +515,7 @@ export default function PurchaseForm({ company, products: initialProducts, purch
 
                       {/* GST % */}
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                        <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                           GST %
                         </label>
                         <select
@@ -534,7 +534,7 @@ export default function PurchaseForm({ company, products: initialProducts, purch
 
                       {/* Calculated Amount */}
                       <div className="flex flex-col justify-end text-right pr-2">
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Line Total</span>
+                        <span className="text-[0.68rem] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Line Total</span>
                         <span className="text-sm font-black text-slate-800">
                           {formatCurrency(processedItems[index]?.amount || 0)}
                         </span>
@@ -581,7 +581,7 @@ export default function PurchaseForm({ company, products: initialProducts, purch
             <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
               <div>
                 <label className="block text-xs font-black text-slate-800 uppercase tracking-wider">GST Purchase</label>
-                <span className="text-[10px] text-slate-400">Compute Input CGST/SGST/IGST</span>
+                <span className="text-[0.72rem] text-slate-500">Compute Input CGST/SGST/IGST</span>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
@@ -630,19 +630,19 @@ export default function PurchaseForm({ company, products: initialProducts, purch
 
           {/* Totals Summary Panel */}
           <div className="bg-slate-900 rounded-2xl p-5 sm:p-6 text-slate-100 shadow-xl space-y-4">
-            <h2 className="text-xs font-black text-slate-400 uppercase tracking-wider">Financial Summary</h2>
+            <h2 className="text-xs font-black text-slate-500 uppercase tracking-wider">Financial Summary</h2>
             
             <div className="space-y-2 text-xs border-b border-slate-800 pb-3">
               <div className="flex justify-between">
-                <span className="text-slate-400">Subtotal:</span>
+                <span className="text-slate-500">Subtotal:</span>
                 <span className="font-semibold text-slate-250">{formatCurrency(totals.subtotal)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Total Discount:</span>
+                <span className="text-slate-500">Total Discount:</span>
                 <span className="font-semibold text-slate-250">-{formatCurrency(totals.totalDiscount)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Taxable Value:</span>
+                <span className="text-slate-500">Taxable Value:</span>
                 <span className="font-semibold text-slate-250">{formatCurrency(totals.taxableValueTotal)}</span>
               </div>
 
@@ -651,17 +651,17 @@ export default function PurchaseForm({ company, products: initialProducts, purch
                   {!isInterState ? (
                     <>
                       <div className="flex justify-between">
-                        <span className="text-slate-400">CGST Total:</span>
+                        <span className="text-slate-500">CGST Total:</span>
                         <span className="font-semibold text-slate-250">{formatCurrency(totals.cgstTotal)}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-400">SGST Total:</span>
+                        <span className="text-slate-500">SGST Total:</span>
                         <span className="font-semibold text-slate-250">{formatCurrency(totals.sgstTotal)}</span>
                       </div>
                     </>
                   ) : (
                     <div className="flex justify-between">
-                      <span className="text-slate-400">IGST Total:</span>
+                      <span className="text-slate-500">IGST Total:</span>
                       <span className="font-semibold text-slate-250">{formatCurrency(totals.igstTotal)}</span>
                     </div>
                   )}
@@ -670,7 +670,7 @@ export default function PurchaseForm({ company, products: initialProducts, purch
 
               {/* Freight Input */}
               <div className="flex items-center justify-between gap-4 pt-2 border-t border-slate-850 mt-1">
-                <span className="text-slate-400 font-medium">Freight charges (₹):</span>
+                <span className="text-slate-500 font-medium">Freight charges (₹):</span>
                 <input
                   type="number"
                   min="0"
@@ -684,11 +684,11 @@ export default function PurchaseForm({ company, products: initialProducts, purch
 
             <div className="space-y-1.5">
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400">Round Off:</span>
+                <span className="text-slate-500">Round Off:</span>
                 <span className="font-mono text-slate-350">{formatCurrency(totals.roundOff)}</span>
               </div>
               <div className="flex justify-between items-end">
-                <span className="text-sm font-bold text-slate-400 uppercase tracking-wider">Grand Total</span>
+                <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Grand Total</span>
                 <span className="text-2xl font-black text-white flex items-center tracking-tight">
                   <IndianRupee className="h-5.5 w-5.5 mr-0.5 text-indigo-400" />
                   {formatCurrency(totals.grandTotal).replace("₹", "")}

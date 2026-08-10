@@ -84,11 +84,11 @@ function LoginForm() {
             )}
 
             <div className="space-y-1.5">
-              <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
+              <label className="block text-[0.72rem] font-extrabold text-slate-500 uppercase tracking-wider">
                 Security Password
               </label>
               <div className="relative rounded-xl shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
                   <Lock className="h-4 w-4" />
                 </div>
                 <input
@@ -104,7 +104,7 @@ function LoginForm() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   disabled={isPending}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-650 disabled:opacity-50"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-650 disabled:opacity-50"
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -131,7 +131,7 @@ function LoginForm() {
           </form>
         </div>
 
-        <p className="text-center text-[10px] text-slate-400 font-medium">
+        <p className="text-center text-[0.72rem] text-slate-500 font-medium">
           Lenore Bath Fittings Terminal &bull; Secure Protocol
         </p>
       </div>

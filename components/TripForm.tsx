@@ -16,7 +16,7 @@ interface TripFormProps {
 const inputClass =
   "px-3 py-2 border border-slate-200 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 bg-slate-50/50 hover:bg-white rounded-xl text-xs w-full transition-colors outline-none font-semibold text-slate-800";
 
-const labelClass = "block text-[10px] font-black uppercase tracking-wide text-slate-500 mb-1.5";
+const labelClass = "block text-[0.72rem] font-black uppercase tracking-wide text-slate-500 mb-1.5";
 
 function today(): string {
   return new Date().toISOString().substring(0, 10);
@@ -114,7 +114,7 @@ export default function TripForm({ trip }: TripFormProps) {
     <div className="max-w-2xl space-y-4">
       <Link
         href="/expenses"
-        className="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-500 hover:text-slate-800 transition-colors"
+        className="inline-flex items-center gap-1.5 text-[0.76rem] font-bold text-slate-500 hover:text-slate-800 transition-colors"
       >
         <ArrowLeft size={13} />
         Back to expenses
@@ -178,17 +178,17 @@ export default function TripForm({ trip }: TripFormProps) {
           <div className="flex items-start justify-between gap-3">
             <div>
               <h3 className="text-xs font-black text-slate-900 flex items-center gap-1.5">
-                <Users size={13} className="text-slate-400" />
+                <Users size={13} className="text-slate-500" />
                 Cost split
               </h3>
-              <p className="text-[11px] text-slate-500 font-medium mt-0.5">
+              <p className="text-[0.76rem] text-slate-500 font-medium mt-0.5">
                 Leave empty if the whole trip is yours. Only your share reaches the dashboard.
               </p>
             </div>
             <button
               type="button"
               onClick={addSplit}
-              className="flex items-center gap-1 px-3 py-1.5 border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700 rounded-xl text-[11px] font-bold transition-all shrink-0"
+              className="flex items-center gap-1 px-3 py-1.5 border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700 rounded-xl text-[0.76rem] font-bold transition-all shrink-0"
             >
               <Plus size={12} />
               Add party
@@ -204,7 +204,7 @@ export default function TripForm({ trip }: TripFormProps) {
                     type="button"
                     onClick={() => setMode(m)}
                     className={cn(
-                      "px-3 py-1 rounded-lg text-[10px] font-bold transition-all",
+                      "px-3 py-1 rounded-lg text-[0.72rem] font-bold transition-all",
                       splits[0].mode === m
                         ? "bg-white text-slate-950 shadow-sm"
                         : "text-slate-500 hover:text-slate-800"
@@ -216,7 +216,7 @@ export default function TripForm({ trip }: TripFormProps) {
               </div>
 
               {splits[0].mode === "amount" && (
-                <p className="text-[11px] text-slate-500 font-medium">
+                <p className="text-[0.76rem] text-slate-500 font-medium">
                   Enter what the other parties owe. Your share is whatever remains, so it grows
                   as you add items.
                 </p>
@@ -241,12 +241,12 @@ export default function TripForm({ trip }: TripFormProps) {
                       }
                       disabled={s.isOwn && s.mode === "amount"}
                       placeholder={s.isOwn && s.mode === "amount" ? "remainder" : "0"}
-                      className={cn(inputClass, "w-28 shrink-0 disabled:bg-slate-100 disabled:text-slate-400")}
+                      className={cn(inputClass, "w-28 shrink-0 disabled:bg-slate-100 disabled:text-slate-500")}
                     />
-                    <span className="text-[11px] font-bold text-slate-400 w-4 shrink-0">
+                    <span className="text-[0.76rem] font-bold text-slate-500 w-4 shrink-0">
                       {s.mode === "percent" ? "%" : "₹"}
                     </span>
-                    <label className="flex items-center gap-1.5 text-[10px] font-bold text-slate-600 shrink-0 cursor-pointer">
+                    <label className="flex items-center gap-1.5 text-[0.72rem] font-bold text-slate-600 shrink-0 cursor-pointer">
                       <input
                         type="radio"
                         name="own-share"
@@ -259,7 +259,7 @@ export default function TripForm({ trip }: TripFormProps) {
                     <button
                       type="button"
                       onClick={() => removeSplit(s.id)}
-                      className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all shrink-0"
+                      className="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all shrink-0"
                       aria-label={`Remove ${s.party || "party"}`}
                     >
                       <Trash2 size={13} />
@@ -273,7 +273,7 @@ export default function TripForm({ trip }: TripFormProps) {
           {splitError && (
             <div className="flex items-start gap-2 p-3 bg-rose-50 border border-rose-100 rounded-xl">
               <AlertCircle size={13} className="text-rose-600 shrink-0 mt-0.5" />
-              <p className="text-[11px] font-bold text-rose-700">{splitError}</p>
+              <p className="text-[0.76rem] font-bold text-rose-700">{splitError}</p>
             </div>
           )}
         </div>
@@ -281,7 +281,7 @@ export default function TripForm({ trip }: TripFormProps) {
         {error && (
           <div className="flex items-start gap-2 p-3 bg-rose-50 border border-rose-100 rounded-xl">
             <AlertCircle size={13} className="text-rose-600 shrink-0 mt-0.5" />
-            <p className="text-[11px] font-bold text-rose-700">{error}</p>
+            <p className="text-[0.76rem] font-bold text-rose-700">{error}</p>
           </div>
         )}
 

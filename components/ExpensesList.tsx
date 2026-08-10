@@ -297,13 +297,13 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
             <DollarSign className="h-6 w-6" />
           </div>
           <div>
-            <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+            <div className="text-[0.72rem] text-slate-500 font-bold uppercase tracking-wider">
               Total Filtered Expenses
             </div>
             <div className="text-xl font-extrabold text-slate-950 mt-1">
               {formatCurrency(totalExpensesAmount)}
             </div>
-            <div className="text-[10px] text-slate-500 font-medium mt-1">
+            <div className="text-[0.72rem] text-slate-500 font-medium mt-1">
               Sum of all selected expense ledger items
             </div>
           </div>
@@ -314,13 +314,13 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
             <Receipt className="h-6 w-6" />
           </div>
           <div>
-            <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+            <div className="text-[0.72rem] text-slate-500 font-bold uppercase tracking-wider">
               Claimable Input GST
             </div>
             <div className="text-xl font-extrabold text-slate-950 mt-1">
               {formatCurrency(totalGstAmount)}
             </div>
-            <div className="text-[10px] text-slate-500 font-medium mt-1">
+            <div className="text-[0.72rem] text-slate-500 font-medium mt-1">
               VAT/GST input tax credit from overhead bills
             </div>
           </div>
@@ -331,7 +331,7 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
       <div className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
             <input
               type="text"
               placeholder="Search description, reference no, gstin..."
@@ -386,20 +386,20 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
               </select>
             </div>
             <div className="flex items-center gap-1">
-              <Calendar className="h-4 w-4 text-slate-400 shrink-0" />
+              <Calendar className="h-4 w-4 text-slate-500 shrink-0" />
               <input
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="px-2 py-1.5 border border-slate-200 rounded-lg text-[10px] w-full outline-none font-semibold text-slate-700"
+                className="px-2 py-1.5 border border-slate-200 rounded-lg text-[0.72rem] w-full outline-none font-semibold text-slate-700"
                 title="Start Date"
               />
-              <span className="text-slate-400 text-xs">-</span>
+              <span className="text-slate-500 text-xs">-</span>
               <input
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="px-2 py-1.5 border border-slate-200 rounded-lg text-[10px] w-full outline-none font-semibold text-slate-700"
+                className="px-2 py-1.5 border border-slate-200 rounded-lg text-[0.72rem] w-full outline-none font-semibold text-slate-700"
                 title="End Date"
               />
             </div>
@@ -411,16 +411,16 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
       <div className="bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden">
         {paginatedExpenses.length === 0 ? (
           <div className="p-12 text-center">
-            <Info className="h-8 w-8 text-slate-300 mx-auto mb-2" />
+            <Info className="h-8 w-8 text-slate-400 mx-auto mb-2" />
             <p className="text-sm font-semibold text-slate-800">No expense records found</p>
-            <p className="text-xs text-slate-400 mt-1">Try modifying your search query or category filters.</p>
+            <p className="text-xs text-slate-500 mt-1">Try modifying your search query or category filters.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             {/* Desktop Table View */}
             <table className="w-full text-left border-collapse hidden md:table">
               <thead>
-                <tr className="bg-slate-900 text-white text-[10px] uppercase font-bold tracking-wider">
+                <tr className="bg-slate-900 text-white text-[0.72rem] uppercase font-bold tracking-wider">
                   <th className="py-3.5 px-6 border-b border-slate-800">Date</th>
                   <th className="py-3.5 px-6 border-b border-slate-800">Category</th>
                   <th className="py-3.5 px-6 border-b border-slate-800">Description</th>
@@ -439,7 +439,7 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
                     <td className="py-3.5 px-6 whitespace-nowrap">
                       <span
                         className={cn(
-                          "px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider",
+                          "px-2.5 py-1 rounded-full text-[0.72rem] font-bold uppercase tracking-wider",
                           exp.category === "rent" && "bg-amber-55 bg-amber-50 text-amber-700",
                           exp.category === "utilities" && "bg-blue-55 bg-blue-50 text-blue-700",
                           exp.category === "salaries" && "bg-indigo-50 text-indigo-700",
@@ -455,14 +455,14 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
                     <td className="py-3.5 px-6 max-w-xs truncate">
                       <div className="font-bold text-slate-900">{exp.description}</div>
                       {exp.referenceNo && (
-                        <div className="text-[10px] text-slate-400 font-medium mt-0.5">
+                        <div className="text-[0.72rem] text-slate-500 font-medium mt-0.5">
                           Ref: {exp.referenceNo}
                         </div>
                       )}
                     </td>
                     <td className="py-3.5 px-6 whitespace-nowrap">
-                      <span className="flex items-center gap-1 text-[11px] text-slate-600 font-medium">
-                        <CreditCard className="h-3.5 w-3.5 text-slate-400" />
+                      <span className="flex items-center gap-1 text-[0.76rem] text-slate-600 font-medium">
+                        <CreditCard className="h-3.5 w-3.5 text-slate-500" />
                         {PAYMENT_MODES.find((p) => p.value === exp.paymentMode)?.label || exp.paymentMode}
                       </span>
                     </td>
@@ -470,10 +470,10 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
                       {exp.gstAmount ? (
                         <div>
                           <div className="font-bold text-slate-800">{formatCurrency(exp.gstAmount)}</div>
-                          {exp.gstin && <div className="text-[9px] text-slate-450">{exp.gstin}</div>}
+                          {exp.gstin && <div className="text-[0.68rem] text-slate-450">{exp.gstin}</div>}
                         </div>
                       ) : (
-                        <span className="text-slate-350 text-[10px] font-medium">-</span>
+                        <span className="text-slate-350 text-[0.72rem] font-medium">-</span>
                       )}
                     </td>
                     <td className="py-3.5 px-6 text-right font-extrabold text-rose-600 whitespace-nowrap">
@@ -483,14 +483,14 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
                       <div className="flex items-center justify-center gap-2">
                         <button
                           onClick={() => handleOpenEditModal(exp)}
-                          className="p-1 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-slate-100"
+                          className="p-1 rounded-lg text-slate-500 hover:text-indigo-600 hover:bg-slate-100"
                           title="Edit Record"
                         >
                           <Edit className="h-4 w-4" />
                         </button>
                         <button
                           onClick={() => handleDelete(exp.id, exp.description)}
-                          className="p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-slate-100"
+                          className="p-1 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-slate-100"
                           title="Delete Record"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -509,7 +509,7 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
                   <div className="flex justify-between items-start">
                     <div>
                       <div className="font-bold text-slate-900 text-sm">{exp.description}</div>
-                      <div className="text-[10px] text-slate-400 font-medium mt-0.5">
+                      <div className="text-[0.72rem] text-slate-500 font-medium mt-0.5">
                         {formatDate(exp.date)} &bull; {PAYMENT_MODES.find((p) => p.value === exp.paymentMode)?.label}
                       </div>
                     </div>
@@ -517,7 +517,7 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
                       {formatCurrency(exp.amount)}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center text-[10px]">
+                  <div className="flex justify-between items-center text-[0.72rem]">
                     <span className="px-2 py-0.5 bg-slate-100 rounded text-slate-600 font-bold uppercase">
                       {CATEGORIES.find((c) => c.value === exp.category)?.label || exp.category}
                     </span>
@@ -593,7 +593,7 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1.5">
+              <label className="block text-[0.72rem] text-slate-500 font-bold uppercase tracking-wider mb-1.5">
                 Date *
               </label>
               <input
@@ -606,7 +606,7 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
             </div>
 
             <div>
-              <label className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1.5">
+              <label className="block text-[0.72rem] text-slate-500 font-bold uppercase tracking-wider mb-1.5">
                 Category *
               </label>
               <select
@@ -630,7 +630,7 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
           </div>
 
           <div>
-            <label className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1.5">
+            <label className="block text-[0.72rem] text-slate-500 font-bold uppercase tracking-wider mb-1.5">
               Description *
             </label>
             <input
@@ -645,11 +645,11 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1.5">
+              <label className="block text-[0.72rem] text-slate-500 font-bold uppercase tracking-wider mb-1.5">
                 Total Amount (Inc. GST) *
               </label>
               <div className="relative">
-                <span className="absolute left-3.5 top-2.5 text-xs text-slate-400 font-bold">₹</span>
+                <span className="absolute left-3.5 top-2.5 text-xs text-slate-500 font-bold">₹</span>
                 <input
                   type="number"
                   step="0.01"
@@ -663,7 +663,7 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
             </div>
 
             <div>
-              <label className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1.5">
+              <label className="block text-[0.72rem] text-slate-500 font-bold uppercase tracking-wider mb-1.5">
                 Payment Mode *
               </label>
               <select
@@ -687,12 +687,12 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
           </div>
 
           <div className="border-t border-slate-100 pt-3">
-            <h4 className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-3">
+            <h4 className="text-[0.72rem] text-slate-500 font-bold uppercase tracking-wider mb-3">
               Tax Details (Optional - For Input Tax Credit)
             </h4>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-[10px] text-slate-450 font-bold mb-1.5">
+                <label className="block text-[0.72rem] text-slate-450 font-bold mb-1.5">
                   GSTIN (Supplier)
                 </label>
                 <input
@@ -706,11 +706,11 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
               </div>
 
               <div>
-                <label className="block text-[10px] text-slate-455 font-bold mb-1.5">
+                <label className="block text-[0.72rem] text-slate-455 font-bold mb-1.5">
                   GST Paid Component
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3.5 top-2.5 text-xs text-slate-400 font-bold">₹</span>
+                  <span className="absolute left-3.5 top-2.5 text-xs text-slate-500 font-bold">₹</span>
                   <input
                     type="number"
                     step="0.01"
@@ -725,7 +725,7 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
           </div>
 
           <div>
-            <label className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1.5">
+            <label className="block text-[0.72rem] text-slate-500 font-bold uppercase tracking-wider mb-1.5">
               Reference / Receipt No. (Optional)
             </label>
             <input

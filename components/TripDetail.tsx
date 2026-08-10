@@ -136,7 +136,7 @@ export default function TripDetail({ trip: initialTrip }: TripDetailProps) {
     <div className="max-w-3xl space-y-4">
       <Link
         href="/expenses"
-        className="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-500 hover:text-slate-800 transition-colors"
+        className="inline-flex items-center gap-1.5 text-[0.76rem] font-bold text-slate-500 hover:text-slate-800 transition-colors"
       >
         <ArrowLeft size={13} />
         Back to expenses
@@ -145,25 +145,25 @@ export default function TripDetail({ trip: initialTrip }: TripDetailProps) {
       <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm flex items-start justify-between gap-4">
         <div className="min-w-0">
           <h1 className="text-sm font-black text-slate-900">{trip.name}</h1>
-          <p className="text-[11px] text-slate-500 font-medium mt-0.5">
+          <p className="text-[0.76rem] text-slate-500 font-medium mt-0.5">
             {formatDate(trip.startDate)}
             {trip.endDate ? ` – ${formatDate(trip.endDate)}` : ""}
           </p>
           {trip.notes && (
-            <p className="text-[11px] text-slate-600 font-medium mt-2">{trip.notes}</p>
+            <p className="text-[0.76rem] text-slate-600 font-medium mt-2">{trip.notes}</p>
           )}
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <a
             href={`/api/trips/${trip.id}/pdf`}
-            className="flex items-center gap-1.5 px-3 py-2 border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700 rounded-xl text-[11px] font-bold transition-all shadow-sm"
+            className="flex items-center gap-1.5 px-3 py-2 border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700 rounded-xl text-[0.76rem] font-bold transition-all shadow-sm"
           >
             <Download size={13} />
             PDF
           </a>
           <Link
             href={`/expenses/trips/${trip.id}/edit`}
-            className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all"
+            className="p-2 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all"
             aria-label="Edit trip details"
           >
             <Pencil size={14} />
@@ -174,7 +174,7 @@ export default function TripDetail({ trip: initialTrip }: TripDetailProps) {
       {error && (
         <div className="flex items-start gap-2 p-3 bg-rose-50 border border-rose-100 rounded-xl">
           <AlertCircle size={13} className="text-rose-600 shrink-0 mt-0.5" />
-          <p className="text-[11px] font-bold text-rose-700">{error}</p>
+          <p className="text-[0.76rem] font-bold text-rose-700">{error}</p>
         </div>
       )}
 
@@ -193,14 +193,14 @@ export default function TripDetail({ trip: initialTrip }: TripDetailProps) {
                 </span>
                 <button
                   onClick={() => renameSection(section)}
-                  className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"
+                  className="p-1.5 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"
                   aria-label={`Rename ${section.name}`}
                 >
                   <Pencil size={12} />
                 </button>
                 <button
                   onClick={() => deleteSection(section)}
-                  className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
+                  className="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
                   aria-label={`Delete ${section.name}`}
                 >
                   <Trash2 size={12} />
@@ -212,7 +212,7 @@ export default function TripDetail({ trip: initialTrip }: TripDetailProps) {
               <div className="divide-y divide-slate-50">
                 {section.items.map((item) => (
                   <div key={item.id} className="flex items-center gap-3 py-2">
-                    <span className="text-[10px] font-bold text-slate-400 w-16 shrink-0">
+                    <span className="text-[0.72rem] font-bold text-slate-500 w-16 shrink-0">
                       {formatDate(item.date)}
                     </span>
                     <span className="text-xs font-semibold text-slate-800 flex-1 min-w-0 truncate">
@@ -228,7 +228,7 @@ export default function TripDetail({ trip: initialTrip }: TripDetailProps) {
                     </span>
                     <button
                       onClick={() => deleteItem(section.id, item.id)}
-                      className="p-1 text-slate-300 hover:text-rose-600 rounded transition-all shrink-0"
+                      className="p-1 text-slate-400 hover:text-rose-600 rounded transition-all shrink-0"
                       aria-label={`Delete ${item.description}`}
                     >
                       <Trash2 size={12} />
@@ -284,7 +284,7 @@ export default function TripDetail({ trip: initialTrip }: TripDetailProps) {
                 <Plus size={14} />
               </button>
             </div>
-            <p className="text-[10px] text-slate-400 font-medium">
+            <p className="text-[0.72rem] text-slate-500 font-medium">
               Use a minus sign for a refund, for example −1230 for a cancelled ticket.
             </p>
           </div>
@@ -319,7 +319,7 @@ export default function TripDetail({ trip: initialTrip }: TripDetailProps) {
                 >
                   {share.party}
                   {share.isOwn && (
-                    <span className="ml-1.5 px-1.5 py-0.5 bg-indigo-50 text-indigo-600 rounded-md text-[9px]">
+                    <span className="ml-1.5 px-1.5 py-0.5 bg-indigo-50 text-indigo-600 rounded-md text-[0.68rem]">
                       YOURS
                     </span>
                   )}
@@ -334,7 +334,7 @@ export default function TripDetail({ trip: initialTrip }: TripDetailProps) {
                 </span>
               </div>
             ))}
-            <p className="text-[10px] text-slate-400 font-medium pt-1">
+            <p className="text-[0.72rem] text-slate-500 font-medium pt-1">
               Only your share is counted in dashboard expenses.
             </p>
           </div>

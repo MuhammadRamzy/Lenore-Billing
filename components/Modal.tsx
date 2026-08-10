@@ -58,7 +58,7 @@ export default function Modal({ isOpen, onClose, title, children, className }: M
           <h3 className="text-lg font-bold text-slate-900">{title}</h3>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+            className="p-1 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-600 transition-colors"
           >
             <X className="h-5 w-5" />
           </button>

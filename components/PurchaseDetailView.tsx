@@ -144,7 +144,7 @@ export default function PurchaseDetailView({
             <h1 className="text-base font-extrabold text-slate-900 tracking-tight">
               {purchase.purchaseNo}
             </h1>
-            <p className="text-xs text-slate-400 font-medium">
+            <p className="text-xs text-slate-500 font-medium">
               Recorded on {formatDate(purchase.purchaseDate)}
             </p>
           </div>
@@ -214,7 +214,7 @@ export default function PurchaseDetailView({
         
         {/* Printable Watermarks */}
         <div className="absolute right-6 top-6 text-right print:block hidden">
-          <div className="text-[10px] text-slate-400 font-mono">
+          <div className="text-[0.72rem] text-slate-500 font-mono">
             Voucher print date: {printDateTime}
           </div>
         </div>
@@ -224,7 +224,7 @@ export default function PurchaseDetailView({
           <h2 className="text-xl font-black text-slate-900 uppercase tracking-widest">
             PURCHASE INWARD VOUCHER
           </h2>
-          <p className="text-[10px] text-slate-500 font-bold tracking-wider mt-1">
+          <p className="text-[0.72rem] text-slate-500 font-bold tracking-wider mt-1">
             INVENTORY INTAKE RECORD
           </p>
         </div>
@@ -233,7 +233,7 @@ export default function PurchaseDetailView({
         <div className="grid grid-cols-2 gap-8 text-slate-800 text-xs mb-8">
           {/* Company details */}
           <div className="space-y-2">
-            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
+            <h3 className="text-[0.72rem] font-black text-slate-500 uppercase tracking-wider flex items-center gap-1">
               <Building2 className="h-3.5 w-3.5 text-slate-500" /> Recorded Inward To:
             </h3>
             <div className="text-sm font-black text-slate-900">{company.name}</div>
@@ -248,7 +248,7 @@ export default function PurchaseDetailView({
 
           {/* Supplier details */}
           <div className="space-y-2">
-            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
+            <h3 className="text-[0.72rem] font-black text-slate-500 uppercase tracking-wider flex items-center gap-1">
               <ShoppingCart className="h-3.5 w-3.5 text-slate-500" /> Supplied By:
             </h3>
             <div className="text-sm font-black text-slate-900">{purchase.supplierName}</div>
@@ -264,19 +264,19 @@ export default function PurchaseDetailView({
         {/* Purchase Metadata Block */}
         <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs mb-8 print:bg-white print:border-slate-300">
           <div>
-            <div className="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Purchase No.</div>
+            <div className="text-slate-500 font-bold uppercase tracking-wider text-[0.68rem]">Purchase No.</div>
             <div className="font-black text-slate-900 mt-0.5">{purchase.purchaseNo}</div>
           </div>
           <div>
-            <div className="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Supplier Bill No.</div>
+            <div className="text-slate-500 font-bold uppercase tracking-wider text-[0.68rem]">Supplier Bill No.</div>
             <div className="font-black text-slate-900 mt-0.5">{purchase.supplierBillNo || "N/A"}</div>
           </div>
           <div>
-            <div className="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Purchase Date</div>
+            <div className="text-slate-500 font-bold uppercase tracking-wider text-[0.68rem]">Purchase Date</div>
             <div className="font-bold text-slate-800 mt-0.5">{formatDate(purchase.purchaseDate)}</div>
           </div>
           <div>
-            <div className="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Tax computation</div>
+            <div className="text-slate-500 font-bold uppercase tracking-wider text-[0.68rem]">Tax computation</div>
             <div className="font-bold text-slate-800 mt-0.5">
               {purchase.isGstPurchase ? "Tax Invoice (GST)" : "Simple Bill"}
             </div>
@@ -286,7 +286,7 @@ export default function PurchaseDetailView({
         {/* Products Table */}
         <div className="overflow-x-auto mb-8">
           <table className="w-full text-left text-xs border border-slate-200">
-            <thead className="bg-slate-900 text-white font-bold uppercase tracking-wider text-[9px]">
+            <thead className="bg-slate-900 text-white font-bold uppercase tracking-wider text-[0.68rem]">
               <tr>
                 <th className="py-2 px-3 text-center border border-slate-200">Sl</th>
                 <th className="py-2 px-3 border border-slate-200">Product / Description</th>
@@ -335,7 +335,7 @@ export default function PurchaseDetailView({
           <div className="space-y-4">
             {purchase.remarks && (
               <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block mb-1">
+                <span className="text-[0.72rem] font-black text-slate-500 uppercase tracking-wider block mb-1">
                   Voucher Remarks / Notes
                 </span>
                 <p className="text-slate-700 leading-relaxed font-medium">{purchase.remarks}</p>
@@ -346,7 +346,7 @@ export default function PurchaseDetailView({
                 <span className="font-bold">Payment Status:</span>
                 <span
                   className={cn(
-                    "rounded px-2 py-0.5 font-bold uppercase tracking-wider text-[10px]",
+                    "rounded px-2 py-0.5 font-bold uppercase tracking-wider text-[0.72rem]",
                     purchase.status === "paid" ? "bg-emerald-50 text-emerald-800 border border-emerald-200" : "bg-amber-50 text-amber-800 border border-amber-200"
                   )}
                 >

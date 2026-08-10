@@ -40,7 +40,7 @@ export default function ExpensesTabs({ expenses, trips }: ExpensesTabsProps) {
           <Plane size={13} />
           Trips
           {trips.length > 0 && (
-            <span className="ml-0.5 px-1.5 py-0.5 bg-slate-200 text-slate-600 rounded-md text-[10px]">
+            <span className="ml-0.5 px-1.5 py-0.5 bg-slate-200 text-slate-600 rounded-md text-[0.72rem]">
               {trips.length}
             </span>
           )}

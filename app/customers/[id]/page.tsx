@@ -129,7 +129,7 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
               {customer.name}
             </h1>
             <p className="text-xs text-slate-500 mt-0.5">
-              Customer ID: <span className="font-mono text-[10px] bg-slate-105 px-1 py-0.5 rounded">{customer.id}</span>
+              Customer ID: <span className="font-mono text-[0.72rem] bg-slate-105 px-1 py-0.5 rounded">{customer.id}</span>
             </p>
           </div>
         </div>
@@ -157,7 +157,7 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
             
             <div className="space-y-4">
               <div>
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
+                <span className="text-[0.72rem] text-slate-500 font-bold uppercase tracking-wider block">
                   Company Name
                 </span>
                 <span className="text-sm font-bold text-slate-800">{customer.name}</span>
@@ -165,7 +165,7 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
 
               {customer.gstin && (
                 <div>
-                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
+                  <span className="text-[0.72rem] text-slate-500 font-bold uppercase tracking-wider block">
                     GSTIN
                   </span>
                   <span className="text-xs font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">
@@ -175,7 +175,7 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
               )}
 
               <div>
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
+                <span className="text-[0.72rem] text-slate-500 font-bold uppercase tracking-wider block">
                   Place of Supply (State)
                 </span>
                 <span className="text-xs font-semibold text-slate-700">
@@ -192,43 +192,43 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
 
             <div className="space-y-3.5">
               <div className="flex items-center gap-3 text-slate-650">
-                <div className="p-2 bg-slate-50 rounded-lg text-slate-400">
+                <div className="p-2 bg-slate-50 rounded-lg text-slate-500">
                   <Phone className="h-3.5 w-3.5" />
                 </div>
                 <div className="text-xs">
-                  <span className="text-[9px] text-slate-450 block font-semibold">Phone</span>
+                  <span className="text-[0.68rem] text-slate-450 block font-semibold">Phone</span>
                   {customer.phone ? (
                     <a href={`tel:${customer.phone}`} className="font-bold text-slate-800 hover:text-indigo-600">
                       {customer.phone}
                     </a>
                   ) : (
-                    <span className="text-slate-400 italic">Not Provided</span>
+                    <span className="text-slate-500 italic">Not Provided</span>
                   )}
                 </div>
               </div>
 
               <div className="flex items-center gap-3 text-slate-650">
-                <div className="p-2 bg-slate-50 rounded-lg text-slate-400">
+                <div className="p-2 bg-slate-50 rounded-lg text-slate-500">
                   <Mail className="h-3.5 w-3.5" />
                 </div>
                 <div className="text-xs">
-                  <span className="text-[9px] text-slate-455 block font-semibold">Email</span>
+                  <span className="text-[0.68rem] text-slate-455 block font-semibold">Email</span>
                   {customer.email ? (
                     <a href={`mailto:${customer.email}`} className="font-bold text-slate-800 hover:text-indigo-600">
                       {customer.email}
                     </a>
                   ) : (
-                    <span className="text-slate-400 italic">Not Provided</span>
+                    <span className="text-slate-500 italic">Not Provided</span>
                   )}
                 </div>
               </div>
 
               <div className="flex items-start gap-3 text-slate-655">
-                <div className="p-2 bg-slate-50 rounded-lg text-slate-400 mt-0.5">
+                <div className="p-2 bg-slate-50 rounded-lg text-slate-500 mt-0.5">
                   <MapPin className="h-3.5 w-3.5" />
                 </div>
                 <div className="text-xs">
-                  <span className="text-[9px] text-slate-455 block font-semibold">Billing Address</span>
+                  <span className="text-[0.68rem] text-slate-455 block font-semibold">Billing Address</span>
                   <span className="text-slate-700 font-medium leading-relaxed block">
                     {[customer.address, customer.city].filter(Boolean).join(", ") || "No Address Provided"}
                     {customer.pincode ? ` - ${customer.pincode}` : ""}
@@ -248,13 +248,13 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
                 <TrendingUp className="h-5 w-5" />
               </div>
               <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                <span className="text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider block">
                   Lifetime Business
                 </span>
                 <span className="text-base font-extrabold text-slate-900 mt-0.5 block">
                   {formatCurrency(totalBusiness)}
                 </span>
-                <span className="text-[9px] text-slate-450 mt-0.5 block">
+                <span className="text-[0.68rem] text-slate-450 mt-0.5 block">
                   From {realInvoices.length} billing documents
                 </span>
               </div>
@@ -265,13 +265,13 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
                 <CheckCircle2 className="h-5 w-5" />
               </div>
               <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                <span className="text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider block">
                   Total Collected
                 </span>
                 <span className="text-base font-extrabold text-slate-900 mt-0.5 block">
                   {formatCurrency(totalCollected)}
                 </span>
-                <span className="text-[9px] text-emerald-600 font-bold mt-0.5 block">
+                <span className="text-[0.68rem] text-emerald-600 font-bold mt-0.5 block">
                   {collectionRate.toFixed(1)}% Realization Rate
                 </span>
               </div>
@@ -282,13 +282,13 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
                 <Clock className="h-5 w-5" />
               </div>
               <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                <span className="text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider block">
                   Outstanding Due
                 </span>
                 <span className="text-base font-extrabold text-slate-900 mt-0.5 block">
                   {formatCurrency(totalOutstanding)}
                 </span>
-                <span className="text-[9px] text-rose-600 font-bold mt-0.5 block">
+                <span className="text-[0.68rem] text-rose-600 font-bold mt-0.5 block">
                   Requires collection action
                 </span>
               </div>
@@ -312,7 +312,7 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
                     <div key={item.month} className="flex-1 flex flex-col items-center gap-2 group h-full justify-end">
                       <div className="relative w-full flex justify-center">
                         {/* Tooltip on hover */}
-                        <div className="absolute bottom-full mb-1.5 hidden group-hover:block bg-slate-900 text-white text-[9px] font-bold px-2 py-0.5 rounded shadow whitespace-nowrap z-10">
+                        <div className="absolute bottom-full mb-1.5 hidden group-hover:block bg-slate-900 text-white text-[0.68rem] font-bold px-2 py-0.5 rounded shadow whitespace-nowrap z-10">
                           {formatCurrency(item.amount)}
                         </div>
                       </div>
@@ -324,7 +324,7 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
                             : "bg-slate-100"
                         }`}
                       />
-                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tight shrink-0">
+                      <span className="text-[0.72rem] font-bold text-slate-500 uppercase tracking-tight shrink-0">
                         {item.month}
                       </span>
                     </div>
@@ -340,7 +340,7 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
               </h3>
 
               {topProducts.length === 0 ? (
-                <div className="h-44 flex flex-col items-center justify-center text-slate-400 text-xs">
+                <div className="h-44 flex flex-col items-center justify-center text-slate-500 text-xs">
                   <ShoppingBag className="h-10 w-10 text-slate-200 mb-2" />
                   No item sales logged yet
                 </div>
@@ -352,7 +352,7 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
                         <span className="font-semibold text-slate-800 truncate block">
                           {p.name}
                         </span>
-                        <span className="text-[10px] text-slate-400 block font-medium">
+                        <span className="text-[0.72rem] text-slate-500 block font-medium">
                           Quantity purchased: {p.quantity} units
                         </span>
                       </div>
@@ -382,7 +382,7 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
         </div>
 
         {customerInvoices.length === 0 ? (
-          <div className="p-12 text-center text-slate-400 flex flex-col items-center justify-center">
+          <div className="p-12 text-center text-slate-500 flex flex-col items-center justify-center">
             <FileSpreadsheet className="h-10 w-10 text-slate-200 mb-3" />
             <p className="font-bold text-slate-500 text-sm">No transaction records found</p>
             <p className="text-xs mt-1">Create an invoice or quotation above to start log ledger.</p>
@@ -391,7 +391,7 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-slate-600 min-w-[700px]">
               <thead>
-                <tr className="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
+                <tr className="bg-slate-50 text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
                   <th className="py-3 px-5">Document No</th>
                   <th className="py-3 px-5">Date</th>
                   <th className="py-3 px-5">Type</th>
@@ -417,7 +417,7 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
                         </td>
                         <td className="py-3.5 px-5">
                           <span
-                            className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                            className={`inline-flex items-center gap-1 text-[0.72rem] font-bold px-2 py-0.5 rounded-full ${
                               isQuote
                                 ? "bg-amber-50 text-amber-705 border border-amber-100"
                                 : "bg-indigo-50 text-indigo-705 border border-indigo-100"
@@ -434,7 +434,7 @@ export default async function CustomerDetailPage({ params }: CustomerDetailPageP
                         </td>
                         <td className="py-3.5 px-5">
                           <span
-                            className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                            className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[0.72rem] font-bold border ${
                               inv.status === "paid"
                                 ? "bg-emerald-50 text-emerald-705 border-emerald-100"
                                 : inv.status === "sent"

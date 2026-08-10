@@ -33,8 +33,11 @@ export const viewport: Viewport = {
   themeColor: "#0f172a",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  // Zoom stays enabled. Blocking it locks out anyone who needs to magnify an
+  // invoice figure, and the accessibility guidance treats pinch-zoom as a
+  // baseline right rather than something an app may switch off for polish.
+  maximumScale: 5,
+  userScalable: true,
 };
 
 export default async function RootLayout({

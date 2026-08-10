@@ -242,12 +242,12 @@ export default function StickerPrintDialog({
             <Layout className="h-5 w-5 text-indigo-600" />
             <div>
               <h2 className="font-extrabold text-slate-950 text-sm sm:text-base">Sticker Layout Center</h2>
-              <p className="text-[10px] text-slate-400 font-medium">Generate custom barcode label sheets</p>
+              <p className="text-[0.72rem] text-slate-500 font-medium">Generate custom barcode label sheets</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 hover:bg-slate-200/80 text-slate-400 hover:text-slate-700 rounded-xl transition-all"
+            className="p-1.5 hover:bg-slate-200/80 text-slate-500 hover:text-slate-700 rounded-xl transition-all"
           >
             <X className="h-5 w-5" />
           </button>
@@ -260,7 +260,7 @@ export default function StickerPrintDialog({
             className={`flex-1 py-3 text-xs font-bold border-b-2 transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "products"
                 ? "border-indigo-600 text-indigo-600"
-                : "border-transparent text-slate-400 hover:text-slate-700"
+                : "border-transparent text-slate-500 hover:text-slate-700"
             }`}
           >
             <Tag className="h-3.5 w-3.5" />
@@ -272,7 +272,7 @@ export default function StickerPrintDialog({
             className={`flex-1 py-3 text-xs font-bold border-b-2 transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "layout"
                 ? "border-indigo-600 text-indigo-600"
-                : "border-transparent text-slate-400 hover:text-slate-700"
+                : "border-transparent text-slate-500 hover:text-slate-700"
             }`}
           >
             <Sliders className="h-3.5 w-3.5" />
@@ -284,7 +284,7 @@ export default function StickerPrintDialog({
             className={`flex-1 py-3 text-xs font-bold border-b-2 transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "content"
                 ? "border-indigo-600 text-indigo-600"
-                : "border-transparent text-slate-400 hover:text-slate-700"
+                : "border-transparent text-slate-500 hover:text-slate-700"
             }`}
           >
             <FileText className="h-3.5 w-3.5" />
@@ -302,18 +302,18 @@ export default function StickerPrintDialog({
               {/* Bulk actions panel */}
               <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 space-y-3">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Quick Select</span>
+                  <span className="text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider">Quick Select</span>
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleToggleSelectAll(true)}
-                      className="text-[10px] font-bold text-indigo-600 hover:underline"
+                      className="text-[0.72rem] font-bold text-indigo-600 hover:underline"
                     >
                       Select All
                     </button>
-                    <span className="text-slate-300">|</span>
+                    <span className="text-slate-400">|</span>
                     <button
                       onClick={() => handleToggleSelectAll(false)}
-                      className="text-[10px] font-bold text-slate-500 hover:underline"
+                      className="text-[0.72rem] font-bold text-slate-500 hover:underline"
                     >
                       Deselect All
                     </button>
@@ -343,7 +343,7 @@ export default function StickerPrintDialog({
 
               {/* Search Box */}
               <div className="relative">
-                <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
                 <input
                   type="text"
                   placeholder="Search products by name or code..."
@@ -367,7 +367,7 @@ export default function StickerPrintDialog({
 
                   if (filteredProducts.length === 0) {
                     return (
-                      <div className="text-center py-8 text-slate-400 text-xs font-medium">
+                      <div className="text-center py-8 text-slate-500 text-xs font-medium">
                         No products match your search.
                       </div>
                     );
@@ -398,7 +398,7 @@ export default function StickerPrintDialog({
                           />
                           <div className="min-w-0">
                             <h4 className="text-xs font-bold text-slate-800 truncate">{prod.name}</h4>
-                            <span className="text-[10px] font-mono text-slate-400">{prod.code || "No Code"}</span>
+                            <span className="text-[0.72rem] font-mono text-slate-500">{prod.code || "No Code"}</span>
                           </div>
                         </div>
 
@@ -435,7 +435,7 @@ export default function StickerPrintDialog({
               
               {/* Sheet size toggle */}
               <div>
-                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
+                <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-2">
                   Target Paper Size
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -451,7 +451,7 @@ export default function StickerPrintDialog({
                     }`}
                   >
                     <span>A4 Sheet</span>
-                    <span className="text-[9px] opacity-80 font-normal">210mm x 297mm</span>
+                    <span className="text-[0.68rem] opacity-80 font-normal">210mm x 297mm</span>
                   </button>
                   <button
                     onClick={() => {
@@ -465,14 +465,14 @@ export default function StickerPrintDialog({
                     }`}
                   >
                     <span>A3 Sheet</span>
-                    <span className="text-[9px] opacity-80 font-normal">297mm x 420mm</span>
+                    <span className="text-[0.68rem] opacity-80 font-normal">297mm x 420mm</span>
                   </button>
                 </div>
               </div>
 
               {/* Orientation toggle */}
               <div>
-                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
+                <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-2">
                   Page Orientation
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -485,7 +485,7 @@ export default function StickerPrintDialog({
                     }`}
                   >
                     <span>Portrait</span>
-                    <span className="text-[9px] opacity-80 font-normal">Vertical layout</span>
+                    <span className="text-[0.68rem] opacity-80 font-normal">Vertical layout</span>
                   </button>
                   <button
                     onClick={() => setOrientation("landscape")}
@@ -496,7 +496,7 @@ export default function StickerPrintDialog({
                     }`}
                   >
                     <span>Landscape</span>
-                    <span className="text-[9px] opacity-80 font-normal">Horizontal layout</span>
+                    <span className="text-[0.68rem] opacity-80 font-normal">Horizontal layout</span>
                   </button>
                 </div>
               </div>
@@ -513,7 +513,7 @@ export default function StickerPrintDialog({
                 <div className="grid grid-cols-2 gap-4">
                   {/* Columns */}
                   <div>
-                    <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                    <label className="block text-[0.72rem] font-semibold text-slate-500 mb-1">
                       Columns: <span className="font-black text-slate-800">{columns}</span>
                     </label>
                     <input
@@ -529,7 +529,7 @@ export default function StickerPrintDialog({
 
                   {/* GapSpacing */}
                   <div>
-                    <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                    <label className="block text-[0.72rem] font-semibold text-slate-500 mb-1">
                       Gap spacing: <span className="font-black text-slate-800">{gapSpacing}mm</span>
                     </label>
                     <input
@@ -545,7 +545,7 @@ export default function StickerPrintDialog({
 
                   {/* Width */}
                   <div>
-                    <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                    <label className="block text-[0.72rem] font-semibold text-slate-500 mb-1">
                       Sticker Width: <span className="font-black text-slate-800">{stickerWidth}mm</span>
                     </label>
                     <input
@@ -561,7 +561,7 @@ export default function StickerPrintDialog({
 
                   {/* Height */}
                   <div>
-                    <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                    <label className="block text-[0.72rem] font-semibold text-slate-500 mb-1">
                       Sticker Height: <span className="font-black text-slate-800">{stickerHeight}mm</span>
                     </label>
                     <input
@@ -577,7 +577,7 @@ export default function StickerPrintDialog({
 
                   {/* Margins */}
                   <div>
-                    <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                    <label className="block text-[0.72rem] font-semibold text-slate-500 mb-1">
                       Page Margin: <span className="font-black text-slate-800">{pageMargin}mm</span>
                     </label>
                     <input
@@ -617,7 +617,7 @@ export default function StickerPrintDialog({
               <div className="space-y-3">
                 {/* Brand name */}
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                     Brand Name / Top Tag
                   </label>
                   <input
@@ -631,7 +631,7 @@ export default function StickerPrintDialog({
 
                 {/* Address details */}
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                     Manufacturer Address
                   </label>
                   <textarea
@@ -645,7 +645,7 @@ export default function StickerPrintDialog({
 
                 {/* Mfg Date */}
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
                     Mfg. Month & Year
                   </label>
                   <input
@@ -662,7 +662,7 @@ export default function StickerPrintDialog({
 
               {/* Toggles */}
               <div>
-                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2.5">
+                <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-2.5">
                   Print Content Toggles
                 </label>
                 <div className="grid grid-cols-2 gap-x-2 gap-y-3">
@@ -744,7 +744,7 @@ export default function StickerPrintDialog({
 
         {/* Footer actions */}
         <div className="p-4 border-t border-slate-100 bg-slate-50 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shrink-0">
-          <div className="text-[10px] text-slate-500 font-medium text-center sm:text-left">
+          <div className="text-[0.72rem] text-slate-500 font-medium text-center sm:text-left">
             Stickers: <span className="font-extrabold text-slate-900">{stickersToPrint.length}</span>
           </div>
           
@@ -781,7 +781,7 @@ export default function StickerPrintDialog({
 
       {/* Live Preview (Right side) */}
       <div className="flex-1 bg-slate-200 overflow-auto flex justify-center items-start p-6 lg:p-12 relative print:p-0">
-        <div className="absolute top-4 left-6 bg-slate-900/80 text-white font-mono text-[10px] py-1 px-3 rounded-full backdrop-blur-sm pointer-events-none z-20 print:hidden">
+        <div className="absolute top-4 left-6 bg-slate-900/80 text-white font-mono text-[0.72rem] py-1 px-3 rounded-full backdrop-blur-sm pointer-events-none z-20 print:hidden">
           Aspect-Ratio Sheet Preview ({pageSize})
         </div>
 
@@ -795,11 +795,11 @@ export default function StickerPrintDialog({
                 padding: `${pageMargin}mm`,
                 boxSizing: "border-box",
               }}
-              className="bg-white text-slate-950 font-sans print:shadow-none shadow-2xl flex flex-col items-center justify-center text-slate-400 p-24 text-center"
+              className="bg-white text-slate-950 font-sans print:shadow-none shadow-2xl flex flex-col items-center justify-center text-slate-500 p-24 text-center"
             >
-              <Eye className="h-10 w-10 text-slate-300 mb-3" />
+              <Eye className="h-10 w-10 text-slate-400 mb-3" />
               <h4 className="font-bold text-slate-700 text-sm">Preview is empty</h4>
-              <p className="text-[10px] max-w-[200px] mt-1 text-slate-500">
+              <p className="text-[0.72rem] max-w-[200px] mt-1 text-slate-500">
                 Select one or more products and add copies on the left panel to render stickers.
               </p>
             </div>
@@ -854,7 +854,7 @@ export default function StickerPrintDialog({
                         <div className="flex flex-col items-center justify-center w-[30%] h-full shrink-0 border-r border-slate-100 pr-2.5">
                           <ProductQrCode data={product.code || product.id} size={stickerHeight * 2.6} />
                           {showCode && (
-                            <span className="text-[6.5px] font-bold font-mono text-slate-400 mt-1 uppercase tracking-wider truncate w-full text-center">
+                            <span className="text-[6.5px] font-bold font-mono text-slate-500 mt-1 uppercase tracking-wider truncate w-full text-center">
                               {product.code || "N/A"}
                             </span>
                           )}
@@ -899,19 +899,19 @@ export default function StickerPrintDialog({
                           <div className="flex items-end justify-between gap-1.5 mt-auto pt-1.5 border-t border-slate-100">
                             {showMRP && (
                               <div className="flex flex-col">
-                                <span className="text-[5.5px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
+                                <span className="text-[5.5px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">
                                   Retail Price
                                 </span>
                                 <div className="inline-flex items-center gap-1 bg-slate-950 text-white px-2 py-0.5 rounded text-[8.5px] font-black tracking-wide leading-none">
                                   {formatCurrency(mrpAmount)}
-                                  <span className="text-[5px] text-slate-300 font-normal">incl. tax</span>
+                                  <span className="text-[5px] text-slate-400 font-normal">incl. tax</span>
                                 </div>
                               </div>
                             )}
 
                             {showMfgDate && (
                               <div className="text-right flex flex-col">
-                                <span className="text-[5.5px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
+                                <span className="text-[5.5px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">
                                   Mfg Date
                                 </span>
                                 <span className="text-[7.5px] font-extrabold text-slate-800 leading-none">
@@ -923,7 +923,7 @@ export default function StickerPrintDialog({
 
                           {/* Address box footer */}
                           {showAddress && (
-                            <div className="text-[5.5px] text-slate-400 truncate mt-1 pt-1 border-t border-slate-50 w-full font-medium">
+                            <div className="text-[5.5px] text-slate-500 truncate mt-1 pt-1 border-t border-slate-50 w-full font-medium">
                               {address}
                             </div>
                           )}
@@ -935,7 +935,7 @@ export default function StickerPrintDialog({
                 </div>
 
                 {/* Page indicator at bottom */}
-                <div className="absolute bottom-2 right-4 text-[9px] text-slate-400 print:hidden">
+                <div className="absolute bottom-2 right-4 text-[0.68rem] text-slate-500 print:hidden">
                   Page {pageIdx + 1} of {previewPages.length}
                 </div>
               </div>

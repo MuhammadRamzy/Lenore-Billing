@@ -11,11 +11,9 @@ html {
   color-scheme: light !important;
 }
 
-@media (max-width: 768px) {
-  html {
-    font-size: 15px !important; /* Stacked layout base for mobile screens */
-  }
-}
+/* Mobile previously dropped the root to 15px, which shrank every rem-based size
+   on the smallest screens — the opposite of what a phone needs. Holding the root
+   at 17px keeps text legible at arm's length and keeps controls thumb-sized. */
 
 @theme inline {
   --color-background: var(--background);
@@ -25,6 +23,32 @@ html {
   --color-indigo-650: #463cd5;
   --color-indigo-750: #3b31c1;
   --color-indigo-755: #372db8;
+}
+
+/* text-xs is the workhorse size across this app (300+ uses). At the stock 0.75rem
+   it rendered under 13px, below the readable floor for body copy on a phone.
+   Raising the token lifts every one of those call sites at once. */
+@theme {
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.15rem;
+}
+
+/* Touch targets. Coarse pointers (fingers) need a materially bigger hit area than
+   a mouse, so controls are floored at 44px on touch devices only — desktop keeps
+   its denser layout. Many icon buttons here sat at 20-26px, which is below even
+   the 28px absolute minimum. */
+@media (pointer: coarse) {
+  button,
+  a[role="button"],
+  [type="button"],
+  [type="submit"] {
+    min-height: 44px;
+  }
+
+  /* Icon-only controls need width as well as height; text buttons are already wide. */
+  button:not(:has(span)):not(:has(p)) {
+    min-width: 44px;
+  }
 }
 body {
   background: var(--background);
@@ -118,9 +142,27 @@ textarea {
   padding-bottom: 0.55rem !important;
 }
 
-/* Ensure placeholder text remains readable */
+/* Ensure placeholder text remains readable. #94a3b8 was only 2.56:1 on white,
+   well under the 4.5:1 floor; #64748b reaches 4.76:1. */
 input::placeholder, textarea::placeholder {
-  color: #94a3b8 !important; /* text-slate-400 */
+  color: #64748b !important; /* text-slate-500 */
+}
+
+/* iOS Safari zooms the whole page when a focused field's text is under 16px.
+   Now that pinch-zoom is enabled again, every tap into an input would trigger
+   that jump, so form controls are floored at 16px on touch devices. The 44px
+   minimum height gives the same fields a thumb-sized target. */
+@media (pointer: coarse) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+    min-height: 44px;
+  }
+
+  textarea {
+    min-height: 66px;
+  }
 }
 
 /* Allow dark overlays for specific header inputs */

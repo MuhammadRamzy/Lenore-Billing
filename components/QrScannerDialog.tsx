@@ -226,7 +226,7 @@ export default function QrScannerDialog({
               stopCamera();
               onClose();
             }}
-            className="p-1.5 hover:bg-slate-100 text-slate-400 hover:text-slate-700 rounded-xl transition-all"
+            className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-slate-700 rounded-xl transition-all"
           >
             <X className="h-5 w-5" />
           </button>
@@ -251,7 +251,7 @@ export default function QrScannerDialog({
               />
 
               {/* Live HUD overlay */}
-              <div className="absolute bottom-3 left-3 right-3 bg-slate-950/80 text-[10px] text-indigo-400 font-mono py-1 px-2.5 rounded-lg border border-slate-800 text-center select-none pointer-events-none z-30 tracking-tight">
+              <div className="absolute bottom-3 left-3 right-3 bg-slate-950/80 text-[0.72rem] text-indigo-400 font-mono py-1 px-2.5 rounded-lg border border-slate-800 text-center select-none pointer-events-none z-30 tracking-tight">
                 {debugInfo}
               </div>
 

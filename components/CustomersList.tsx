@@ -178,7 +178,7 @@ export default function CustomersList({ initialCustomers }: CustomersListProps) 
         {/* Filter controls row */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 pt-1">
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
               GST Registration
             </label>
             <select
@@ -193,7 +193,7 @@ export default function CustomersList({ initialCustomers }: CustomersListProps) 
           </div>
 
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
               Filter by State
             </label>
             <select
@@ -211,7 +211,7 @@ export default function CustomersList({ initialCustomers }: CustomersListProps) 
           </div>
 
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-[0.72rem] font-bold text-slate-500 uppercase tracking-wider mb-1">
               Sort Directory
             </label>
             <select
@@ -246,7 +246,7 @@ export default function CustomersList({ initialCustomers }: CustomersListProps) 
 
       {/* Customers Table / Cards */}
       {filteredCustomers.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center text-slate-400 flex flex-col items-center justify-center shadow-sm">
+        <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center text-slate-500 flex flex-col items-center justify-center shadow-sm">
           <Search className="h-12 w-12 text-slate-200 mb-3" />
           <p className="font-semibold text-slate-500">No customers found</p>
           <p className="text-xs mt-1">Try refining your search query or add a new customer.</p>
@@ -257,7 +257,7 @@ export default function CustomersList({ initialCustomers }: CustomersListProps) 
           <div className="hidden md:block bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
             <div className="overflow-x-auto w-full">
               <table className="w-full border-collapse text-left text-sm text-slate-600">
-                <thead className="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
+                <thead className="bg-slate-50 text-[0.76rem] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
                   <tr>
                     <th className="py-3.5 px-5">Name</th>
                     <th className="py-3.5 px-5">Contact Details</th>
@@ -273,18 +273,18 @@ export default function CustomersList({ initialCustomers }: CustomersListProps) 
                         <Link href={`/customers/${cust.id}`} className="font-bold text-slate-900 hover:text-indigo-600 hover:underline transition-all">
                           {cust.name}
                         </Link>
-                        <div className="text-xs text-slate-400 mt-1 max-w-xs truncate" title={cust.address || undefined}>
+                        <div className="text-xs text-slate-500 mt-1 max-w-xs truncate" title={cust.address || undefined}>
                           {cust.address}
                         </div>
                       </td>
                       <td className="py-4 px-5">
                         <div className="flex items-center gap-1.5 text-slate-700 font-medium">
-                          <Phone className="h-3.5 w-3.5 text-slate-400" />
+                          <Phone className="h-3.5 w-3.5 text-slate-500" />
                           {cust.phone || "N/A"}
                         </div>
                         {cust.email && (
-                          <div className="flex items-center gap-1.5 text-xs text-slate-400 mt-1">
-                            <Mail className="h-3.5 w-3.5 text-slate-300" />
+                          <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-1">
+                            <Mail className="h-3.5 w-3.5 text-slate-400" />
                             {cust.email}
                           </div>
                         )}
@@ -299,21 +299,21 @@ export default function CustomersList({ initialCustomers }: CustomersListProps) 
                       </td>
                       <td className="py-4 px-5 font-mono text-xs font-bold text-slate-800">
                         {cust.gstin || (
-                          <span className="text-slate-300 italic font-sans font-normal">None</span>
+                          <span className="text-slate-400 italic font-sans font-normal">None</span>
                         )}
                       </td>
                       <td className="py-4 px-5 text-center">
                         <div className="flex items-center justify-center gap-1">
                           <button
                             onClick={() => handleEdit(cust)}
-                            className="p-2 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg text-slate-400 transition-colors"
+                            className="p-2 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg text-slate-500 transition-colors"
                             title="Edit Customer"
                           >
                             <Edit className="h-4.5 w-4.5" />
                           </button>
                           <button
                             onClick={() => handleDelete(cust)}
-                            className="p-2 hover:bg-rose-50 hover:text-rose-600 rounded-lg text-slate-400 transition-colors"
+                            className="p-2 hover:bg-rose-50 hover:text-rose-600 rounded-lg text-slate-500 transition-colors"
                             title="Remove Customer"
                           >
                             <Trash2 className="h-4.5 w-4.5" />
@@ -338,7 +338,7 @@ export default function CustomersList({ initialCustomers }: CustomersListProps) 
                   <Link href={`/customers/${cust.id}`} className="font-bold text-slate-900 leading-snug hover:text-indigo-600 hover:underline transition-all block">
                     {cust.name}
                   </Link>
-                  <div className="flex items-center gap-1 text-[11px] text-indigo-500 font-bold mt-1 bg-indigo-50 px-2 py-0.5 rounded-full w-max">
+                  <div className="flex items-center gap-1 text-[0.76rem] text-indigo-500 font-bold mt-1 bg-indigo-50 px-2 py-0.5 rounded-full w-max">
                     State Code: {cust.stateCode || "N/A"} ({cust.state || "N/A"})
                   </div>
                 </div>
@@ -347,14 +347,14 @@ export default function CustomersList({ initialCustomers }: CustomersListProps) 
                 <div className="absolute top-4 right-4 flex gap-1">
                   <button
                     onClick={() => handleEdit(cust)}
-                    className="p-2 bg-slate-50 hover:bg-indigo-50 text-slate-400 hover:text-indigo-600 rounded-xl transition-colors"
+                    className="p-2 bg-slate-50 hover:bg-indigo-50 text-slate-500 hover:text-indigo-600 rounded-xl transition-colors"
                     title="Edit Customer"
                   >
                     <Edit className="h-4 w-4" />
                   </button>
                   <button
                     onClick={() => handleDelete(cust)}
-                    className="p-2 bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-xl transition-colors"
+                    className="p-2 bg-slate-50 hover:bg-rose-50 text-slate-500 hover:text-rose-600 rounded-xl transition-colors"
                     title="Remove Customer"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -363,19 +363,19 @@ export default function CustomersList({ initialCustomers }: CustomersListProps) 
 
                 <div className="space-y-1.5 text-sm text-slate-600 pt-2 border-t border-slate-50">
                   <div className="flex gap-2">
-                    <MapPin className="h-4 w-4 text-slate-400 shrink-0 mt-0.5" />
+                    <MapPin className="h-4 w-4 text-slate-500 shrink-0 mt-0.5" />
                     <span>
                       {[cust.address, cust.city].filter(Boolean).join(", ") || "No Address Provided"}
                       {cust.pincode ? ` - ${cust.pincode}` : ""}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-slate-400 shrink-0" />
+                    <Phone className="h-4 w-4 text-slate-500 shrink-0" />
                     <span>{cust.phone || "No Phone Provided"}</span>
                   </div>
                   {cust.email && (
                     <div className="flex items-center gap-2">
-                      <Mail className="h-4 w-4 text-slate-400 shrink-0" />
+                      <Mail className="h-4 w-4 text-slate-500 shrink-0" />
                       <span className="truncate">{cust.email}</span>
                     </div>
                   )}

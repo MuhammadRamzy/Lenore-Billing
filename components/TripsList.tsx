@@ -34,7 +34,7 @@ export default function TripsList({ trips }: TripsListProps) {
       <div className="flex items-center justify-between gap-3">
         <div>
           <h2 className="text-sm font-black text-slate-900">Trips</h2>
-          <p className="text-[11px] text-slate-500 font-medium">
+          <p className="text-[0.76rem] text-slate-500 font-medium">
             Group many small costs under one trip, then share the breakdown.
           </p>
         </div>
@@ -53,7 +53,7 @@ export default function TripsList({ trips }: TripsListProps) {
             <Plane size={20} />
           </div>
           <p className="text-xs font-bold text-slate-800">No trips yet</p>
-          <p className="text-[11px] text-slate-500 font-medium mt-1">
+          <p className="text-[0.76rem] text-slate-500 font-medium mt-1">
             Create one to group travel costs together.
           </p>
         </div>
@@ -77,10 +77,10 @@ export default function TripsList({ trips }: TripsListProps) {
                     </p>
                     <ChevronRight
                       size={13}
-                      className="text-slate-300 group-hover:text-indigo-600 transition-colors shrink-0"
+                      className="text-slate-400 group-hover:text-indigo-600 transition-colors shrink-0"
                     />
                   </div>
-                  <p className="text-[11px] text-slate-500 font-medium mt-0.5">
+                  <p className="text-[0.76rem] text-slate-500 font-medium mt-0.5">
                     {formatDate(trip.startDate)}
                     {trip.endDate ? ` – ${formatDate(trip.endDate)}` : ""}
                     {" · "}
@@ -90,11 +90,11 @@ export default function TripsList({ trips }: TripsListProps) {
                   </p>
                   {isSplit && (
                     <div className="flex items-center gap-1.5 mt-2 flex-wrap">
-                      <Users size={11} className="text-slate-400 shrink-0" />
+                      <Users size={11} className="text-slate-500 shrink-0" />
                       {splitShares(trip).map((s) => (
                         <span
                           key={s.party}
-                          className="px-1.5 py-0.5 bg-slate-50 border border-slate-100 rounded-md text-[10px] font-bold text-slate-600"
+                          className="px-1.5 py-0.5 bg-slate-50 border border-slate-100 rounded-md text-[0.72rem] font-bold text-slate-600"
                         >
                           {s.party} {formatCurrency(s.amount)}
                         </span>
@@ -106,7 +106,7 @@ export default function TripsList({ trips }: TripsListProps) {
                 <div className="text-right shrink-0">
                   <p className="text-sm font-black text-slate-900">{formatCurrency(total)}</p>
                   {isSplit && (
-                    <p className="text-[10px] text-slate-500 font-bold mt-0.5">
+                    <p className="text-[0.72rem] text-slate-500 font-bold mt-0.5">
                       your share {formatCurrency(share)}
                     </p>
                   )}
@@ -115,7 +115,7 @@ export default function TripsList({ trips }: TripsListProps) {
                 <button
                   onClick={() => handleDelete(trip)}
                   disabled={isPending && deletingId === trip.id}
-                  className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all shrink-0 disabled:opacity-40"
+                  className="p-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all shrink-0 disabled:opacity-40"
                   aria-label={`Delete ${trip.name}`}
                 >
                   <Trash2 size={14} />
