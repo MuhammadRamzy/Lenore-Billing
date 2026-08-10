@@ -8,7 +8,8 @@ import {
   ShoppingCart,
   TrendingDown,
 } from "lucide-react";
-import { getInvoices, getCustomers, getProducts, getPurchases, getExpenses } from "@/lib/db";
+import { getInvoices, getCustomers, getProducts, getPurchases, getExpenses, getTrips } from "@/lib/db";
+import { ownShare } from "@/lib/trip-calculations";
 import { formatCurrency, cn } from "@/lib/utils";
 import DashboardTabs from "@/components/DashboardTabs";
 
@@ -20,6 +21,7 @@ export default async function DashboardPage() {
   const products = await getProducts();
   const purchases = await getPurchases();
   const expenses = await getExpenses();
+  const trips = await getTrips();
 
   // Statistics calculations
   const now = new Date();
@@ -125,6 +127,27 @@ export default async function DashboardPage() {
     expenseCategoriesMap[exp.category] = (expenseCategoriesMap[exp.category] || 0) + exp.amount;
   }
 
+  // Trips contribute only our own split share — 13,550 of a 27,100 trip, not the whole
+  // figure. Trips live outside the expenses collection, so nothing here double-counts.
+  // The share lands in the month the trip started: trips run for days and rarely straddle
+  // a month boundary, so per-item attribution is not worth the complexity.
+  for (const trip of trips) {
+    const share = ownShare(trip);
+    if (share === 0) continue;
+
+    const tripDate = new Date(trip.startDate);
+    if (tripDate.getMonth() === currentMonth && tripDate.getFullYear() === currentYear) {
+      totalExpensesThisMonth += share;
+    }
+
+    const monthKey = trip.startDate.substring(0, 7);
+    monthlyExpensesMap[monthKey] = (monthlyExpensesMap[monthKey] || 0) + share;
+
+    // Section names are free text, so trips roll up under the existing travel category
+    // rather than scattering the breakdown with one-off labels.
+    expenseCategoriesMap["travel"] = (expenseCategoriesMap["travel"] || 0) + share;
+  }
+
   // Net GST Liability = Collected GST - (Paid Purchases GST + Paid Expenses GST)
   const netGstLiability = totalTax - (totalPurchaseTax + totalExpenseTax);
 
@@ -196,7 +219,9 @@ export default async function DashboardPage() {
   // Profitability Analysis
   const totalSales = invoices.filter((i) => i.status !== "draft").reduce((acc, curr) => acc + curr.grandTotal, 0);
   const totalPurchases = purchases.reduce((acc, curr) => acc + curr.grandTotal, 0);
-  const totalExpenses = expenses.reduce((acc, curr) => acc + curr.amount, 0);
+  const totalExpenses =
+    expenses.reduce((acc, curr) => acc + curr.amount, 0) +
+    trips.reduce((acc, curr) => acc + ownShare(curr), 0);
   const operatingProfit = totalSales - (totalPurchases + totalExpenses);
   const profitMarginPercent = totalSales === 0 ? 0 : (operatingProfit / totalSales) * 100;
 
