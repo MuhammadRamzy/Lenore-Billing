@@ -1,4 +1,14 @@
-const SECRET = process.env.SESSION_SECRET || "lenore-billing-system-fallback-secret-2026";
+// No fallback on purpose. A hardcoded default in a public repo lets anyone
+// forge a signed `{authenticated: true}` cookie and bypass the login entirely,
+// so an unset secret must fail closed rather than silently accept a known key.
+const SECRET = process.env.SESSION_SECRET;
+if (!SECRET) {
+  throw new Error(
+    "SESSION_SECRET is not configured. Generate one with " +
+      "`node -e \"console.log(require('crypto').randomBytes(48).toString('base64url'))\"` " +
+      "and set it in .env.local and in your hosting provider's environment variables."
+  );
+}
 
 async function getCryptoKey() {
   const encoder = new TextEncoder();

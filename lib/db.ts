@@ -1,4 +1,3 @@
-import { doc, getDoc, setDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 import { Company, Customer, Product, Invoice, Counters, Purchase, Expense, StockLog } from "./types";
 
@@ -57,10 +56,9 @@ export async function getCompany(): Promise<Company> {
   }
 
   try {
-    const docRef = doc(db, "settings", "company");
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const data = docSnap.data();
+    const docSnap = await db.collection("settings").doc("company").get();
+    const data = docSnap.data();
+    if (data) {
       cachedCompany = {
         ...defaultCompany,
         ...data,
@@ -78,7 +76,7 @@ export async function getCompany(): Promise<Company> {
 }
 
 export async function saveCompany(company: Company): Promise<void> {
-  await setDoc(doc(db, "settings", "company"), company);
+  await db.collection("settings").doc("company").set(company);
   cachedCompany = company;
   lastCompanyFetch = Date.now();
 }
@@ -90,12 +88,12 @@ export async function getCustomers(): Promise<Customer[]> {
   }
 
   try {
-    const querySnapshot = await getDocs(collection(db, "customers"));
+    const querySnapshot = await db.collection("customers").get();
     const list: Customer[] = [];
     querySnapshot.forEach((doc) => {
       list.push(doc.data() as Customer);
     });
-    
+
     // Sort by creation date to maintain consistent UI sorting
     const sorted = list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     cachedCustomers = sorted;
@@ -108,14 +106,14 @@ export async function getCustomers(): Promise<Customer[]> {
 }
 
 export async function saveCustomer(customer: Customer): Promise<void> {
-  await setDoc(doc(db, "customers", customer.id), customer);
+  await db.collection("customers").doc(customer.id).set(customer);
   // Clear cache to force next load to be fresh
   cachedCustomers = null;
   lastCustomersFetch = 0;
 }
 
 export async function deleteCustomer(id: string): Promise<void> {
-  await deleteDoc(doc(db, "customers", id));
+  await db.collection("customers").doc(id).delete();
   // Clear cache to force next load to be fresh
   cachedCustomers = null;
   lastCustomersFetch = 0;
@@ -128,12 +126,12 @@ export async function getProducts(): Promise<Product[]> {
   }
 
   try {
-    const querySnapshot = await getDocs(collection(db, "products"));
+    const querySnapshot = await db.collection("products").get();
     const list: Product[] = [];
     querySnapshot.forEach((doc) => {
       list.push(doc.data() as Product);
     });
-    
+
     const sorted = list.sort((a, b) => a.name.localeCompare(b.name));
     cachedProducts = sorted;
     lastProductsFetch = Date.now();
@@ -145,14 +143,14 @@ export async function getProducts(): Promise<Product[]> {
 }
 
 export async function saveProduct(product: Product): Promise<void> {
-  await setDoc(doc(db, "products", product.id), product);
+  await db.collection("products").doc(product.id).set(product);
   // Clear cache to force next load to be fresh
   cachedProducts = null;
   lastProductsFetch = 0;
 }
 
 export async function deleteProduct(id: string): Promise<void> {
-  await deleteDoc(doc(db, "products", id));
+  await db.collection("products").doc(id).delete();
   // Clear cache to force next load to be fresh
   cachedProducts = null;
   lastProductsFetch = 0;
@@ -165,12 +163,12 @@ export async function getInvoices(): Promise<Invoice[]> {
   }
 
   try {
-    const querySnapshot = await getDocs(collection(db, "invoices"));
+    const querySnapshot = await db.collection("invoices").get();
     const list: Invoice[] = [];
     querySnapshot.forEach((doc) => {
       list.push(doc.data() as Invoice);
     });
-    
+
     const sorted = list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     cachedInvoices = sorted;
     lastInvoicesFetch = Date.now();
@@ -182,14 +180,14 @@ export async function getInvoices(): Promise<Invoice[]> {
 }
 
 export async function saveInvoice(invoice: Invoice): Promise<void> {
-  await setDoc(doc(db, "invoices", invoice.id), invoice);
+  await db.collection("invoices").doc(invoice.id).set(invoice);
   // Clear cache to force next load to be fresh
   cachedInvoices = null;
   lastInvoicesFetch = 0;
 }
 
 export async function deleteInvoice(id: string): Promise<void> {
-  await deleteDoc(doc(db, "invoices", id));
+  await db.collection("invoices").doc(id).delete();
   // Clear cache to force next load to be fresh
   cachedInvoices = null;
   lastInvoicesFetch = 0;
@@ -208,10 +206,9 @@ export async function getCounters(): Promise<Counters> {
   }
 
   try {
-    const docRef = doc(db, "settings", "counters");
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const data = docSnap.data();
+    const docSnap = await db.collection("settings").doc("counters").get();
+    const data = docSnap.data();
+    if (data) {
       cachedCounters = {
         invoiceCounters: data.invoiceCounters || {},
         quotationCounters: data.quotationCounters || {},
@@ -227,7 +224,7 @@ export async function getCounters(): Promise<Counters> {
 }
 
 export async function saveCounters(counters: Counters): Promise<void> {
-  await setDoc(doc(db, "settings", "counters"), counters);
+  await db.collection("settings").doc("counters").set(counters);
   cachedCounters = counters;
   lastCountersFetch = Date.now();
 }
@@ -239,12 +236,12 @@ export async function getPurchases(): Promise<Purchase[]> {
   }
 
   try {
-    const querySnapshot = await getDocs(collection(db, "purchases"));
+    const querySnapshot = await db.collection("purchases").get();
     const list: Purchase[] = [];
     querySnapshot.forEach((doc) => {
       list.push(doc.data() as Purchase);
     });
-    
+
     const sorted = list.sort((a, b) => new Date(b.purchaseDate).getTime() - new Date(a.purchaseDate).getTime());
     cachedPurchases = sorted;
     lastPurchasesFetch = Date.now();
@@ -256,14 +253,14 @@ export async function getPurchases(): Promise<Purchase[]> {
 }
 
 export async function savePurchase(purchase: Purchase): Promise<void> {
-  await setDoc(doc(db, "purchases", purchase.id), purchase);
+  await db.collection("purchases").doc(purchase.id).set(purchase);
   // Clear cache to force next load to be fresh
   cachedPurchases = null;
   lastPurchasesFetch = 0;
 }
 
 export async function deletePurchase(id: string): Promise<void> {
-  await deleteDoc(doc(db, "purchases", id));
+  await db.collection("purchases").doc(id).delete();
   // Clear cache to force next load to be fresh
   cachedPurchases = null;
   lastPurchasesFetch = 0;
@@ -279,7 +276,7 @@ export async function getExpenses(): Promise<Expense[]> {
   }
 
   try {
-    const querySnapshot = await getDocs(collection(db, "expenses"));
+    const querySnapshot = await db.collection("expenses").get();
     const list: Expense[] = [];
     querySnapshot.forEach((doc) => {
       list.push(doc.data() as Expense);
@@ -296,13 +293,13 @@ export async function getExpenses(): Promise<Expense[]> {
 }
 
 export async function saveExpense(expense: Expense): Promise<void> {
-  await setDoc(doc(db, "expenses", expense.id), expense);
+  await db.collection("expenses").doc(expense.id).set(expense);
   cachedExpenses = null;
   lastExpensesFetch = 0;
 }
 
 export async function deleteExpense(id: string): Promise<void> {
-  await deleteDoc(doc(db, "expenses", id));
+  await db.collection("expenses").doc(id).delete();
   cachedExpenses = null;
   lastExpensesFetch = 0;
 }
@@ -318,7 +315,7 @@ export async function getStockLogs(productId?: string): Promise<StockLog[]> {
   }
 
   try {
-    const querySnapshot = await getDocs(collection(db, "stockLogs"));
+    const querySnapshot = await db.collection("stockLogs").get();
     const list: StockLog[] = [];
     querySnapshot.forEach((doc) => {
       list.push(doc.data() as StockLog);
@@ -336,7 +333,7 @@ export async function getStockLogs(productId?: string): Promise<StockLog[]> {
 }
 
 export async function saveStockLog(log: StockLog): Promise<void> {
-  await setDoc(doc(db, "stockLogs", log.id), log);
+  await db.collection("stockLogs").doc(log.id).set(log);
   cachedStockLogs = null;
   lastStockLogsFetch = 0;
 }
@@ -344,10 +341,10 @@ export async function saveStockLog(log: StockLog): Promise<void> {
 // Authentication Password Hash Operations
 export async function getPasswordHash(): Promise<string> {
   try {
-    const docRef = doc(db, "settings", "auth");
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists() && docSnap.data().passwordHash) {
-      return docSnap.data().passwordHash;
+    const docSnap = await db.collection("settings").doc("auth").get();
+    const data = docSnap.data();
+    if (data?.passwordHash) {
+      return data.passwordHash;
     }
   } catch (error) {
     console.error("Error reading password hash from Firestore:", error);
@@ -358,6 +355,5 @@ export async function getPasswordHash(): Promise<string> {
 }
 
 export async function savePasswordHash(hash: string): Promise<void> {
-  await setDoc(doc(db, "settings", "auth"), { passwordHash: hash });
+  await db.collection("settings").doc("auth").set({ passwordHash: hash });
 }
-
