@@ -165,6 +165,43 @@ export const ExpenseSchema = z.object({
   updatedAt: z.string().datetime(),
 });
 
+export const TripItemSchema = z.object({
+  id: z.string().uuid(),
+  date: z.string(),
+  description: z.string().min(1, "Description is required"),
+  // Negative amounts are valid and represent refunds, such as a cancelled ticket.
+  amount: z.number(),
+});
+
+export const TripSectionSchema = z.object({
+  id: z.string().uuid(),
+  // Free text: the team's own names (Transportation, Food, Rooms, By Safwan) do not
+  // map onto the fixed expense category enum.
+  name: z.string().min(1, "Section name is required"),
+  items: z.array(TripItemSchema).default([]),
+});
+
+export const TripSplitSchema = z.object({
+  id: z.string().uuid(),
+  party: z.string().min(1, "Party name is required"),
+  mode: z.enum(["percent", "amount"]),
+  value: z.number().nonnegative(),
+  // Marks the share belonging to this business; determines what reaches the dashboard.
+  isOwn: z.boolean(),
+});
+
+export const TripSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(1, "Trip name is required"),
+  startDate: z.string(),
+  endDate: z.string().nullable(),
+  notes: z.string().optional().nullable().or(z.literal("")),
+  sections: z.array(TripSectionSchema).default([]),
+  splits: z.array(TripSplitSchema).default([]),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+
 export const StockLogSchema = z.object({
   id: z.string().uuid(),
   productId: z.string().uuid(),
@@ -190,4 +227,8 @@ export type Invoice = z.infer<typeof InvoiceSchema>;
 export type Purchase = z.infer<typeof PurchaseSchema>;
 export type Counters = z.infer<typeof CountersSchema>;
 export type Expense = z.infer<typeof ExpenseSchema>;
+export type TripItem = z.infer<typeof TripItemSchema>;
+export type TripSection = z.infer<typeof TripSectionSchema>;
+export type TripSplit = z.infer<typeof TripSplitSchema>;
+export type Trip = z.infer<typeof TripSchema>;
 export type StockLog = z.infer<typeof StockLogSchema>;
