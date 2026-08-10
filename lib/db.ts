@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { Company, Customer, Product, Invoice, Counters, Purchase, Expense, StockLog } from "./types";
+import { Company, Customer, Product, Invoice, Counters, Purchase, Expense, StockLog, Trip } from "./types";
 
 // In-Memory Server Cache for Firestore Reads Optimization
 let cachedCompany: Company | null = null;
@@ -336,6 +336,46 @@ export async function saveStockLog(log: StockLog): Promise<void> {
   await db.collection("stockLogs").doc(log.id).set(log);
   cachedStockLogs = null;
   lastStockLogsFetch = 0;
+}
+
+// Trips DB Operations
+let cachedTrips: Trip[] | null = null;
+let lastTripsFetch = 0;
+
+export async function getTrips(): Promise<Trip[]> {
+  if (cachedTrips && isCacheValid(lastTripsFetch)) {
+    return cachedTrips;
+  }
+
+  try {
+    const querySnapshot = await db.collection("trips").get();
+    const list: Trip[] = [];
+    querySnapshot.forEach((doc) => {
+      list.push(doc.data() as Trip);
+    });
+
+    const sorted = list.sort(
+      (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+    );
+    cachedTrips = sorted;
+    lastTripsFetch = Date.now();
+    return sorted;
+  } catch (error) {
+    console.error("Error reading trips from Firestore:", error);
+    return cachedTrips || [];
+  }
+}
+
+export async function saveTrip(trip: Trip): Promise<void> {
+  await db.collection("trips").doc(trip.id).set(trip);
+  cachedTrips = null;
+  lastTripsFetch = 0;
+}
+
+export async function deleteTrip(id: string): Promise<void> {
+  await db.collection("trips").doc(id).delete();
+  cachedTrips = null;
+  lastTripsFetch = 0;
 }
 
 // Authentication Password Hash Operations

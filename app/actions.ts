@@ -28,6 +28,8 @@ import {
   deleteExpense,
   getPasswordHash,
   savePasswordHash,
+  saveTrip,
+  deleteTrip,
 } from "@/lib/db";
 import {
   Company,
@@ -43,8 +45,11 @@ import {
   Expense,
   ExpenseSchema,
   StockLog,
+  Trip,
+  TripSchema,
 } from "@/lib/types";
 import { calculateLineItem, calculateInvoiceTotals } from "@/lib/calculations";
+import { validateSplits } from "@/lib/trip-calculations";
 import { numberToWords } from "@/lib/numberToWords";
 
 // --- Stock Logging Helper ---
@@ -1112,6 +1117,50 @@ export async function recordManualStockAdjustmentAction(productId: string, quant
 }
 
 // --- Auth Actions ---
+// --- Trip Actions ---
+export async function createTripAction(
+  data: Omit<Trip, "id" | "createdAt" | "updatedAt">
+) {
+  await verifyAuthSessionOrThrow();
+  const now = new Date().toISOString();
+
+  const trip: Trip = { ...data, id: uuidv4(), createdAt: now, updatedAt: now };
+
+  const validated = TripSchema.parse(trip);
+  const splitError = validateSplits(validated);
+  if (splitError) {
+    return { success: false as const, error: splitError };
+  }
+
+  await saveTrip(validated);
+  revalidatePath("/expenses");
+  revalidatePath("/dashboard");
+  return { success: true as const, trip: validated };
+}
+
+export async function updateTripAction(trip: Trip) {
+  await verifyAuthSessionOrThrow();
+
+  const validated = TripSchema.parse({ ...trip, updatedAt: new Date().toISOString() });
+  const splitError = validateSplits(validated);
+  if (splitError) {
+    return { success: false as const, error: splitError };
+  }
+
+  await saveTrip(validated);
+  revalidatePath("/expenses");
+  revalidatePath("/dashboard");
+  return { success: true as const, trip: validated };
+}
+
+export async function deleteTripAction(id: string) {
+  await verifyAuthSessionOrThrow();
+  await deleteTrip(id);
+  revalidatePath("/expenses");
+  revalidatePath("/dashboard");
+  return { success: true as const };
+}
+
 // Rate limiting keys on the caller's IP rather than a single global counter,
 // so a flood of guesses cannot lock the real owner out of their own app.
 async function getClientIp(): Promise<string> {
