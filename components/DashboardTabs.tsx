@@ -14,7 +14,6 @@ import {
   TrendingUp,
   ShoppingCart,
   TrendingDown,
-  DollarSign,
   Percent,
   Receipt,
   Activity,

@@ -13,7 +13,7 @@ import {
   ChevronRight,
   TrendingDown,
   Info,
-  DollarSign,
+  IndianRupee,
   Receipt,
   CreditCard,
 } from "lucide-react";
@@ -294,7 +294,7 @@ export default function ExpensesList({ initialExpenses }: ExpensesListProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm flex items-center gap-4">
           <div className="p-3.5 bg-rose-50 text-rose-600 rounded-2xl shrink-0">
-            <DollarSign className="h-6 w-6" />
+            <IndianRupee className="h-6 w-6" />
           </div>
           <div>
             <div className="text-[0.72rem] text-slate-500 font-bold uppercase tracking-wider">
